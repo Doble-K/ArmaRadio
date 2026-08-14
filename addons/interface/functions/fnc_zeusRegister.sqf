@@ -103,6 +103,40 @@ if (!isClass (configFile >> "CfgPatches" >> "zen_custom_modules")) exitWith {};
     }, {}, _object] call zen_dialog_fnc_create;
 }] call zen_custom_modules_fnc_register;
 
+// Combined module: power + volume + station in a single dialog
+["Live Radio", LLSTRING(ModuleRadioControl), {
+    params ["", "_object"];
+    if (isNull _object) exitWith {
+        [LLSTRING(SelectObject)] call zen_common_fnc_showMessage;
+    };
+
+    private _active = _object getVariable [QEGVAR(manager,active), []];
+    private _currentURL = _active param [1, ""];
+    private _volume = _object getVariable [QEGVAR(manager,volume), DEFAULT_VOLUME];
+    private _powered = _active isNotEqualTo [];
+    private _names = GVAR(stations) apply { _x param [0, ""] };
+    private _defaultIndex = (GVAR(stations) findIf { (_x param [2, ""]) isEqualTo _currentURL }) max 0;
+
+    [LLSTRING(ModuleRadioControl), [
+        ["CHECKBOX", [LLSTRING(Power), format ["%1", _powered]], _powered],
+        ["COMBO", [LLSTRING(Station), format ["%1", _currentURL]], [_names, [], _defaultIndex]],
+        ["SLIDER", [LLSTRING(Volume), format ["%1", _volume]], [MIN_VOLUME, MAX_VOLUME, _volume, 2]]
+    ], {
+        params ["_values", "_args"];
+        _values params ["_powered", "_station", "_volume"];
+        [_args, _volume] call EFUNC(manager,volume);
+        if (_powered) then {
+            private _index = GVAR(stations) findIf { (_x param [0, ""]) isEqualTo _station };
+            private _url = (GVAR(stations) param [_index, []]) param [2, ""];
+            if (_url != "") then {
+                [_args, _url] call EFUNC(manager,play);
+            };
+        } else {
+            [_args, ""] call EFUNC(manager,play);
+        };
+    }, {}, _object] call zen_dialog_fnc_create;
+}] call zen_custom_modules_fnc_register;
+
 // --- Context menu (right-click actions) ---
 // Statement/condition receive [_position, _objects, _groups, _waypoints,
 // _markers, _hoveredEntity, _args]

@@ -49,6 +49,10 @@
             <English>FM Radio</English>
             <Spanish>Radio FM</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_ModuleRadioControl">
+            <English>Radio Control (All Options)</English>
+            <Spanish>Control de radio (todas las opciones)</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_ModuleToggleRadio">
             <English>Toggle Radio</English>
             <Spanish>Encender/Apagar Radio</Spanish>
