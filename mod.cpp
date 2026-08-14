@@ -1,4 +1,4 @@
-name = "Arma 3 Radio";
+name = "Live Radio";
 dir = "@live_radio";
 author = "BrettMayson, Doble-K";
 description = "Positional internet radio for Arma 3. Live FM stations with 3D audio, in-game interface, CBA settings, ACE and Zeus integration, and stream status.";
