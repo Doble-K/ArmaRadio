@@ -13,6 +13,30 @@
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowers">
+            <English>Interference towers</English>
+            <Spanish>Torres de interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowersDescription">
+            <English>Classnames of radio towers that generate interference, as SQF array, e.g. ["Land_Communication_F"].</English>
+            <Spanish>Clases de torres de radio que generan interferencia, como array SQF, p.ej. ["Land_Communication_F"].</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadius">
+            <English>Interference Tower Radius (m)</English>
+            <Spanish>Radio de la torre de interferencia (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerStrength">
+            <English>Interference Tower Strength</English>
+            <Spanish>Intensidad de la torre de interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerSideFilter">
+            <English>Interference Tower Side Filter</English>
+            <Spanish>Filtro por bando de la torre de interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerSideFilterDescription">
+            <English>When enabled, only enemy towers generate interference. When disabled, any tower in the list generates interference.</English>
+            <Spanish>Al activarlo, solo las torres enemigas generan interferencia. Al desactivarlo, cualquier torre de la lista genera interferencia.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_PlayClickSound">
             <English>Play Click Sound</English>
             <Spanish>Sonido de clic</Spanish>

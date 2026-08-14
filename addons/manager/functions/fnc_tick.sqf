@@ -16,6 +16,9 @@ private _data = if (_inZeus) then {
 };
 EXT callExtension ["listener:dir", _data];
 
+// Radio tower interference (TFAR/Antistasi), throttled in FUNC(towerFactor)
+private _towerFactor = [_player] call FUNC(towerFactor);
+
 {
     if (alive _y) then {
         private _pos = getPosASL _y;
@@ -42,7 +45,7 @@ EXT callExtension ["listener:dir", _data];
         private _quality = linearConversion [0, 1, getDammage _y, 0, 1, true];
         private _storm = 0.2 * rain;
         private _explosion = linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true];
-        _quality = (_quality + _storm + _explosion) min 1;
+        _quality = (_quality + _storm + _explosion + _towerFactor) min 1;
         if (_quality != (_y getVariable [QGVAR(quality), 0])) then {
             _y setVariable [QGVAR(quality), _quality];
             EXT callExtension ["source:quality", [_x, _quality]];
