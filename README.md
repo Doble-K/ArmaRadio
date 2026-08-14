@@ -9,25 +9,31 @@ This repository is a working fork of [BrettMayson/ArmaRadio](https://github.com/
 - Live internet radio streams (ICY metadata / Shoutcast-style MP3) decoded inside the extension.
 - Fully positional 3D audio via OpenAL: distance attenuation, Doppler, listener orientation driven by the player (or Zeus curator camera).
 - In-game interface (list of stations, search, power toggle, volume bar) and stream status indicator (ONLINE/OFFLINE).
+- Configurable station list (`customStations` setting, SQF array of `[name, url]`), combined with `CfgRadioStations` from config/campaign/mission and deduplicated by URL.
 - Per-vehicle volume stored on the object (persisted on the network variable) and restored when a mission starts.
 - CBA settings:
   - Volume Multiplier (default 30%)
   - Streamer Mode (mute everything)
   - Sound Range (m)
-  - Auto Off Range / Auto Off Time (idle radios power down)
+  - Auto Off Range / Auto Off Time (idle radios power down — currently disabled pending a spontaneous power-off bug)
   - Driver and Commander Only (default ON)
   - Configurable vehicle categories (Cars, Armored, Helicopters, Planes, Ships) + custom classes
-- ACE integration: self-interaction quick controls (power, volume up/down, next/prev station), actions on static radios (`Land_FMradio_F`), Zeus module and Zeus actions, and hearing attenuation (earplugs/deafness).
+  - Radio tower interference (TFAR/Antistasi): tower classes, radius, strength and enemy-side filter
+  - Burned radio: damage threshold (`radioBurnDamage`) and underwater time (`underwaterBurnTime`)
+- ACE integration: self-interaction quick controls (power, volume up/down, next/prev station), actions on static radios (`Land_FMradio_F`), Zeus module and Zeus actions, burned-radio repair (engineer + toolkit), and hearing attenuation (earplugs/deafness).
+- ZEN (Zeus Enhanced) integration: custom modules, right-click context menu and dialogs to control radios when ZEN is loaded.
 - Fallback player actions when ACE is not loaded.
-- Interference: vehicle damage, rain, and recent explosions degrade the audio (static/distortion).
-- Short static click when powering a radio on or off.
+- Interference: vehicle damage, rain, recent explosions, radio towers, and radio jammers (Crows-EW jamMap or TFAR fallback) degrade the audio (static/distortion).
+- Burned radios: progressive static from damage/underwater, then the radio turns off until repaired by an engineer with a toolkit.
+- Short static click when powering a radio on or off (toggleable).
 - Multilanguage strings (English / Spanish) via stringtables.
 
 ## Requirements
 
 - Arma 3 (2.04+)
 - [CBA](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997)
-- [ACE](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) — optional; quick actions, Zeus and hearing integration are skipped when it is not loaded
+- [ACE](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) — optional; quick actions, Zeus, repair and hearing integration are skipped when it is not loaded
+- [ZEN](https://steamcommunity.com/sharedfiles/filedetails/?id=883326841) (Zeus Enhanced) — optional; adds ZEN modules, context menu and dialogs when loaded
 - [HEMTT](https://hemtt.dev/) — to build the SQF addons (PBOs)
 - Rust toolchain (stable) with the `i686` and `x86_64` MSVC targets — to build the extension DLLs
 - OpenAL32.dll (bundled in `resources/`; extracted automatically next to the extension at runtime)
@@ -89,7 +95,7 @@ The GitHub Actions workflow (`arma.yaml`) builds both DLLs on Windows, packs the
 ├── .hemtt/project.toml         # HEMTT project config
 ├── .github/workflows/          # CI (build + package) and release (GitHub + Workshop)
 ├── mod.cpp                     # Mod name / dir (@live_radio)
-├── roadmap.md                  # Improvement plan and status (P0–P3)
+├── roadmap.md                  # Improvement plan and status (Fase 1–3)
 └── BLOQUEADOS.md               # Tracked blocked items and decisions required
 ```
 
@@ -115,9 +121,9 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full command protocol, 
 
 ## Roadmap and status
 
-- [roadmap.md](roadmap.md) — prioritized plan (P0 quick wins → P3 far-future) with checkboxes for what is done.
+- [roadmap.md](roadmap.md) — phased plan (Fase 1 simple SQF/UI/Config → Fase 3 backend/decoder, not implemented) with checkboxes for what is done.
 - [BLOQUEADOS.md](BLOQUEADOS.md) — items that were intentionally left unfinished, why, and what is needed to unblock them.
-- [docs/WORKFLOW.md](docs/WORKFLOW.md) — the reproducible workflow used to plan, implement, verify and track this feature set (36 commits), including the full commit log.
+- [docs/WORKFLOW.md](docs/WORKFLOW.md) — the reproducible workflow used to plan, implement, verify and track this feature set, including the full commit log.
 
 ## License / attribution
 
