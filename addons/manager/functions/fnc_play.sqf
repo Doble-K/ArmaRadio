@@ -6,10 +6,11 @@ private _ret = "";
 
 private _existing = _source getVariable [QGVAR(active), []];
 if !(_existing isEqualTo []) then {
-    if ((_existing select 1) isEqualTo _url) then {
-        _ret = _existing select 0;
+    private _id = _existing select 0;
+    if (((_existing select 1) isEqualTo _url) && {GVAR(sourcesStatus) getOrDefault [_id, "online"] isNotEqualTo "offline"}) then {
+        _ret = _id;
     } else {
-        [QGVAR(stop), [_existing select 0]] call CBA_fnc_globalEvent;
+        [QGVAR(stop), [_id]] call CBA_fnc_globalEvent;
     };
 };
 
