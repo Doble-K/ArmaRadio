@@ -32,21 +32,9 @@
         condition = RADIO_CONDITION; \
     };
 
-#define RADIO_ZEUS_ACTIONS \
-    class GVAR(zeusPower) { \
-        displayName = CSTRING(Power); \
-        statement = QUOTE([_target] call FUNC(power)); \
-        condition = QUOTE(_target call FUNC(isCompatible)); \
-    };
-
 #define RADIO_SELF_ACTIONS \
     class ACE_SelfActions { \
         RADIO_QUICK_ACTIONS \
-    }; \
-    class ACE_ZeusActions { \
-        class ACE_MainActions { \
-            RADIO_ZEUS_ACTIONS \
-        }; \
     };
 
 #define RADIO_STATIC_ACTIONS \
@@ -77,14 +65,6 @@
             class GVAR(stationPrev) { \
                 displayName = CSTRING(StationPrev); \
                 statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
-            }; \
-        }; \
-    }; \
-    class ACE_ZeusActions { \
-        class ACE_MainActions { \
-            class GVAR(zeusPower) { \
-                displayName = CSTRING(Power); \
-                statement = QUOTE([_target] call FUNC(power)); \
             }; \
         }; \
     };

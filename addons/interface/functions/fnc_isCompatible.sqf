@@ -17,6 +17,8 @@
 
 params ["_object"];
 
+if (_object isKindOf "Land_FMradio_F") exitWith {true};
+
 private _categories = [
     [QGVAR(enableCars), "Car"],
     [QGVAR(enableArmored), "Tank"],

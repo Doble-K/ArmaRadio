@@ -17,6 +17,10 @@
 
 params ["_object"];
 
+if (_object isKindOf "Man") then {
+    _object = vehicle _object;
+};
+
 private _active = _object getVariable [QEGVAR(manager,active), []];
 
 if (_active isEqualTo []) then {

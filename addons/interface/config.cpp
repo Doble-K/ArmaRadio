@@ -17,4 +17,5 @@ class CfgPatches {
 #include "CfgEventHandlers.hpp"
 #include "CfgRadioStations.hpp"
 #include "CfgVehicles.hpp"
+#include "CfgZeusActions.hpp"
 #include "gui.hpp"

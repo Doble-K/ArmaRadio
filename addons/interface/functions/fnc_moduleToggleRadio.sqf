@@ -16,7 +16,7 @@
  * Public: No
  */
 
-params ["_logic", "", "_activated"];
+params ["_logic", "_activated"];
 
 if !(_activated) exitWith { deleteVehicle _logic; };
 
@@ -24,8 +24,5 @@ private _object = attachedTo _logic;
 deleteVehicle _logic;
 
 if (isNull _object) exitWith {};
-if (_object isKindOf "Man") then {
-    _object = vehicle _object;
-};
 
 [_object] call FUNC(power);
