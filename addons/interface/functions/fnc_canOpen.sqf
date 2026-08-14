@@ -25,6 +25,12 @@ private _player = call CBA_fnc_currentUnit;
 if (driver _object == _player) exitWith {true};
 if (commander _object == _player) exitWith {true};
 
+// Main gunner controls only with the setting on and for armored/aircraft classes
+if (gunner _object == _player) exitWith {
+    (missionNamespace getVariable [QGVAR(allGunnersCanControl), false])
+    && {_object isKindOf "Tank" || {_object isKindOf "Helicopter"} || {_object isKindOf "Plane"}}
+};
+
 // Vehicles without a commander position: delegate control to the first two passengers
 if (fullCrew [_object, "commander", true] isEqualTo []) exitWith {
     private _passengers = fullCrew [_object, "cargo", false];
