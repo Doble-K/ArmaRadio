@@ -1,6 +1,9 @@
 #include "script_component.hpp"
 
 if (hasInterface) then {
+    private _gain = if (GVAR(streamerMode)) then { 0 } else { GVAR(volumeMultiplier) };
+    EXT callExtension ["source:global_gain", [_gain]];
+
     [QGVAR(start), {
         params ["_id", "_url", "_source"];
         EXT callExtension ["source:new", [_id, _url, _source getVariable [QGVAR(volume), 1]]];
