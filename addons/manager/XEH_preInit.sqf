@@ -14,7 +14,7 @@ EXT callExtension "";
     "SLIDER",
     "Volume Multiplier",
     "Live Radio",
-    [0.1, 1, 0.5, 2, true],
+    [0.1, 1, 0.3, 2, true],
     0,
     {
         EXT callExtension ["source:global_gain", [_this]];
