@@ -1,5 +1,6 @@
 PREP(canOpen);
 PREP(handleListSelect);
+PREP(isCompatible);
 PREP(handlePower);
 PREP(handleSearchButton);
 PREP(handleSearchClick);
