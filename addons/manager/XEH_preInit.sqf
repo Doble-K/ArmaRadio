@@ -17,6 +17,21 @@ EXT callExtension "";
     [0.1, 1, 0.3, 2, true],
     0,
     {
-        EXT callExtension ["source:global_gain", [_this]];
+        if !(GVAR(streamerMode)) then {
+            EXT callExtension ["source:global_gain", [_this]];
+        };
+    }
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(streamerMode),
+    "CHECKBOX",
+    "Streamer Mode",
+    "Live Radio",
+    false,
+    2,
+    {
+        private _gain = if (_this) then { 0 } else { GVAR(volumeMultiplier) };
+        EXT callExtension ["source:global_gain", [_gain]];
     }
 ] call CBA_fnc_addSetting;
