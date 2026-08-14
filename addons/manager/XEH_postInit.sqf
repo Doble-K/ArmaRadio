@@ -52,7 +52,7 @@ if (hasInterface) then {
     } forEach allMissionObjects "";
 };
 
-if (isServer && !hasInterface) then {
+if (isServer) then {
     GVAR(autoOffLastCheck) = 0;
     [{
         if (time - GVAR(autoOffLastCheck) < 2) exitWith {};
