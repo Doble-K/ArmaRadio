@@ -5,6 +5,14 @@
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_CustomStations">
+            <English>Custom stations</English>
+            <Spanish>Emisoras personalizadas</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_CustomStationsDescription">
+            <English>List of stations as SQF array of [name, URL] pairs, e.g. [["Classic Rock 109","http://listen.classicrock109.com:10042"],["PulseEDM","http://pulseedm.cdnstream1.com:8124/1373_128"]]. Combined with CfgRadioStations from config, campaign and mission (deduplicated by URL). If empty or invalid, the default stations are used.</English>
+            <Spanish>Lista de emisoras como array SQF de pares [nombre, URL], p.ej. [["Classic Rock 109","http://listen.classicrock109.com:10042"],["PulseEDM","http://pulseedm.cdnstream1.com:8124/1373_128"]]. Se combina con CfgRadioStations de config, campaña y misión (sin duplicados por URL). Si está vacía o es inválida, se usan las emisoras por defecto.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_CustomVehicleClasses">
             <English>Custom vehicle classes</English>
             <Spanish>Clases de vehículo personalizadas</Spanish>
