@@ -7,7 +7,7 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
         requiredAddons[] = {"cba_settings"};
-        author = "BrettMayson";
+        author = "BrettMayson, Doble-K";
         VERSION_CONFIG;
     };
 };

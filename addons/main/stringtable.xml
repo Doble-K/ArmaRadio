@@ -2,8 +2,8 @@
 <Project name="Live Radio">
     <Package name="Main">
         <Key ID="STR_Live_Radio_Main_Author">
-            <English>BrettMayson</English>
-            <Spanish>BrettMayson</Spanish>
+            <English>BrettMayson, Doble-K</English>
+            <Spanish>BrettMayson, Doble-K</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Main_URL">
             <English>https://github.com/BrettMayson/ArmaRadio</English>

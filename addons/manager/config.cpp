@@ -7,7 +7,7 @@ class CfgPatches {
         weapons[] = {};
         requiredVersion = REQUIRED_VERSION;
         requiredAddons[] = {"live_radio_main"};
-        author = "BrettMayson";
+        author = "BrettMayson, Doble-K";
         VERSION_CONFIG;
     };
 };

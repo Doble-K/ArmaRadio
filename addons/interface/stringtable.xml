@@ -41,6 +41,10 @@
             <English>FM Radio</English>
             <Spanish>Radio FM</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_ModuleToggleRadio">
+            <English>Toggle Radio</English>
+            <Spanish>Encender/Apagar Radio</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_Off">
             <English>Off</English>
             <Spanish>Apagado</Spanish>
@@ -68,10 +72,6 @@
         <Key ID="STR_Live_Radio_Interface_StationPrev">
             <English>Previous Station</English>
             <Spanish>Estación Anterior</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_ModuleToggleRadio">
-            <English>Toggle Radio</English>
-            <Spanish>Encender/Apagar Radio</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_VolumeDown">
             <English>Volume Down</English>

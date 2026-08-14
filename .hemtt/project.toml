@@ -1,12 +1,15 @@
 name = "Live Radio"
 prefix = "live_radio"
-author = "Brett"
+author = "BrettMayson, Doble-K"
 mainprefix = "z"
 
 [files]
 include = [
     "live_radio.dll",
-    "live_radio_x64.dll"
+    "live_radio_x64.dll",
+    "logo_ca.paa",
+    "logo_over_ca.paa",
+    "picture_ca.paa"
 ]
 
 [hemtt.launch]
