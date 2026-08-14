@@ -41,6 +41,7 @@ impl Sources {
 enum SoundCommand {
     SetPos(Vector3, Vector3),
     SetGain(f32),
+    SetQuality(f32),
     RefreshGain,
     Destroy,
 }
@@ -79,6 +80,7 @@ impl SoundSource {
                 )
                 .expect("Error setting gain");
             let mut specific_gain = gain;
+            let mut quality = 0.0_f32;
             let mut online = false;
             let mut last_freq: i32 = 44100;
             'outer: loop {
@@ -94,6 +96,10 @@ impl SoundSource {
                             {
                                 error!("Error setting velocity for {}", id);
                             }
+                        }
+                        SoundCommand::SetQuality(new_quality) => {
+                            debug!("Setting quality to {} for {}", new_quality, id);
+                            quality = new_quality.clamp(0.0, 1.0);
                         }
                         SoundCommand::SetGain(gain) => {
                             debug!("Setting gain to {} for {}", gain, id);
@@ -145,6 +151,18 @@ impl SoundSource {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
                                 last_freq = freq;
+                                let samples = if quality > 0.0 {
+                                    samples
+                                        .into_iter()
+                                        .map(|mut sample| {
+                                            sample.center = sample.center * (1.0 - quality)
+                                                + (rand::random::<f32>() * 2.0 - 1.0) * quality;
+                                            sample
+                                        })
+                                        .collect::<Vec<_>>()
+                                } else {
+                                    samples
+                                };
                                 if !online {
                                     online = true;
                                     if ctx
@@ -328,6 +346,16 @@ impl SoundSource {
         }
     }
 
+    pub fn set_quality(&self, quality: f32) {
+        if self
+            .channel
+            .send(SoundCommand::SetQuality(quality))
+            .is_err()
+        {
+            error!("error sending quality update");
+        }
+    }
+
     pub fn refresh_gain(&self) {
         self.channel
             .send(SoundCommand::RefreshGain)
@@ -356,6 +384,7 @@ pub fn group() -> Group {
         .command("destroy", command_destroy)
         .command("pos", command_set_position)
         .command("gain", command_set_gain)
+        .command("quality", command_set_quality)
         .command("global_gain", command_set_global_gain)
         .state(global_gain)
 }
@@ -385,6 +414,12 @@ pub fn command_set_position(id: String, x: f32, y: f32, z: f32) {
 pub fn command_set_gain(id: String, gain: f32) {
     if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
         src.lock().expect("not poisoned").set_gain(gain);
+    }
+}
+
+pub fn command_set_quality(id: String, quality: f32) {
+    if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
+        src.lock().expect("not poisoned").set_quality(quality);
     }
 }
 

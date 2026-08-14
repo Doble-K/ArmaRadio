@@ -38,6 +38,12 @@ EXT callExtension ["listener:dir", _data];
             ];
         };
         EXT callExtension ["source:pos", _data];
+
+        private _quality = linearConversion [0, 1, getDammage _y, 0, 1, true];
+        if (_quality != (_y getVariable [QGVAR(quality), 0])) then {
+            _y setVariable [QGVAR(quality), _quality];
+            EXT callExtension ["source:quality", [_x, _quality]];
+        };
     } else {
         [QGVAR(stop), [_x]] call CBA_fnc_localEvent;
     };
