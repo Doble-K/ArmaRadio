@@ -45,14 +45,19 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         };
         EXT callExtension ["source:pos", _data];
 
-        private _quality = linearConversion [0, 1, getDammage _y, 0, 1, true];
+        private _damage = linearConversion [0, 1, getDammage _y, 0, 1, true];
         private _storm = 0.2 * rain;
         private _explosion = linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true];
         private _burn = [_y] call FUNC(burn);
-        _quality = (_quality + _storm + _explosion + _towerFactor + _jamFactor + _burn) min 1;
-        if (_quality != (_y getVariable [QGVAR(quality), 0])) then {
-            _y setVariable [QGVAR(quality), _quality];
-            EXT callExtension ["source:quality", [_x, _quality]];
+        private _target = (_damage + _storm + _explosion + _towerFactor + _jamFactor + _burn) min 1;
+
+        private _current = _y getVariable [QGVAR(quality), 0];
+        private _step = diag_deltaTime * 2;
+        private _delta = _target - _current;
+        private _smoothed = _current + (_delta min _step max -_step);
+        if (abs (_smoothed - _current) > 0.005) then {
+            _y setVariable [QGVAR(quality), _smoothed];
+            EXT callExtension ["source:quality", [_x, _smoothed]];
         };
 
         if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {
