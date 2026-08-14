@@ -247,7 +247,7 @@ impl SoundSource {
                         }
                     }
                     Err(TryRecvError::Empty) => {
-                        if stream.alive.load(std::sync::atomic::Ordering::Relaxed) {
+                        if stream.running.load(std::sync::atomic::Ordering::Relaxed) > 0 {
                             std::thread::sleep(std::time::Duration::from_millis(16));
                             continue;
                         }
