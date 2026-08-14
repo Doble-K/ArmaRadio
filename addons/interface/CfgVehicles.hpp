@@ -1,36 +1,51 @@
 #define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
 
+#define RADIO_QUICK_ACTIONS \
+    class GVAR(open) { \
+        displayName = CSTRING(DisplayName); \
+        statement = QUOTE(_target call FUNC(open)); \
+        condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(power) { \
+        displayName = CSTRING(Power); \
+        statement = QUOTE([_target] call FUNC(power)); \
+        condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(volumeUp) { \
+        displayName = CSTRING(VolumeUp); \
+        statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
+        condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(volumeDown) { \
+        displayName = CSTRING(VolumeDown); \
+        statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
+        condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(stationNext) { \
+        displayName = CSTRING(StationNext); \
+        statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
+        condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(stationPrev) { \
+        displayName = CSTRING(StationPrev); \
+        statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
+        condition = RADIO_CONDITION; \
+    };
+
+#define RADIO_ZEUS_ACTIONS \
+    class GVAR(zeusPower) { \
+        displayName = CSTRING(Power); \
+        statement = QUOTE([_target] call FUNC(power)); \
+        condition = QUOTE(_target call FUNC(isCompatible)); \
+    };
+
 #define RADIO_SELF_ACTIONS \
     class ACE_SelfActions { \
-        class GVAR(open) { \
-            displayName = CSTRING(DisplayName); \
-            statement = QUOTE(_target call FUNC(open)); \
-            condition = RADIO_CONDITION; \
-        }; \
-        class GVAR(power) { \
-            displayName = CSTRING(Power); \
-            statement = QUOTE([_target] call FUNC(power)); \
-            condition = RADIO_CONDITION; \
-        }; \
-        class GVAR(volumeUp) { \
-            displayName = CSTRING(VolumeUp); \
-            statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
-            condition = RADIO_CONDITION; \
-        }; \
-        class GVAR(volumeDown) { \
-            displayName = CSTRING(VolumeDown); \
-            statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
-            condition = RADIO_CONDITION; \
-        }; \
-        class GVAR(stationNext) { \
-            displayName = CSTRING(StationNext); \
-            statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
-            condition = RADIO_CONDITION; \
-        }; \
-        class GVAR(stationPrev) { \
-            displayName = CSTRING(StationPrev); \
-            statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
-            condition = RADIO_CONDITION; \
+        RADIO_QUICK_ACTIONS \
+    }; \
+    class ACE_ZeusActions { \
+        class ACE_MainActions { \
+            RADIO_ZEUS_ACTIONS \
         }; \
     };
 
@@ -64,6 +79,14 @@
                 statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
             }; \
         }; \
+    }; \
+    class ACE_ZeusActions { \
+        class ACE_MainActions { \
+            class GVAR(zeusPower) { \
+                displayName = CSTRING(Power); \
+                statement = QUOTE([_target] call FUNC(power)); \
+            }; \
+        }; \
     };
 
 class CfgVehicles {
@@ -89,5 +112,19 @@ class CfgVehicles {
     class Items_base_F;
     class Land_FMradio_F: Items_base_F {
         RADIO_STATIC_ACTIONS
+    };
+
+    class Module_F;
+    class GVAR(moduleToggleRadio): Module_F {
+        scope = 2;
+        scopeCurator = 2;
+        displayName = CSTRING(ModuleToggleRadio);
+        icon = QPATHTOF(ui\music_ca.paa);
+        category = "Live Radio";
+        function = QFUNC(moduleToggleRadio);
+        curatorCanAttach = 1;
+        isGlobal = 0;
+        isDisposable = 1;
+        isTriggerActivated = 0;
     };
 };

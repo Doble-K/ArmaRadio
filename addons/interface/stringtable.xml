@@ -69,6 +69,10 @@
             <English>Previous Station</English>
             <Spanish>Estación Anterior</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_ModuleToggleRadio">
+            <English>Toggle Radio</English>
+            <Spanish>Encender/Apagar Radio</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_VolumeDown">
             <English>Volume Down</English>
             <Spanish>Bajar Volumen</Spanish>

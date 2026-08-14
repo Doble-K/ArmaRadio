@@ -9,6 +9,7 @@ PREP(handleVolume);
 PREP(handleVolumeButtonDown);
 PREP(handleVolumeButtonUp);
 PREP(handleVolumeMouse);
+PREP(moduleToggleRadio);
 PREP(open);
 PREP(power);
 PREP(refresh);
