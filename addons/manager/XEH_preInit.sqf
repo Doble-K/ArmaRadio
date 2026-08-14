@@ -109,9 +109,9 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
-    QGVAR(radioBurnDamage),
+    QGVAR(radioMotorDamageThreshold),
     "SLIDER",
-    LLSTRING(RadioBurnDamage),
+    LLSTRING(RadioMotorDamageThreshold),
     LLSTRING(Category),
     [0, 1, 0.8, 2, false],
     1

@@ -4,7 +4,7 @@
  * Tracks and applies the "burned radio" state for a source object.
  *
  * Two causes burn the radio:
- * - Vehicle damage above GVAR(radioBurnDamage).
+ * - Engine damage above GVAR(radioMotorDamageThreshold).
  * - Staying underwater for longer than GVAR(underwaterBurnTime).
  *
  * Before burning, a growing factor (0..1) is returned so fnc_tick can mix
@@ -28,8 +28,10 @@ params ["_object"];
 
 if (_object getVariable [QGVAR(burned), false]) exitWith { 1 };
 
-// Damage factor: reaches 1 exactly at the burn threshold
-private _damageFactor = linearConversion [0, GVAR(radioBurnDamage), getDammage _object, 0, 1, true];
+// Damage factor: reaches 1 exactly at the motor burn threshold
+private _engineDamage = _object getHitPointDamage "HitEngine";
+if (isNil "_engineDamage") then { _engineDamage = 0; };
+private _damageFactor = linearConversion [0, GVAR(radioMotorDamageThreshold), _engineDamage, 0, 1, true];
 
 // Underwater factor with gradual decay when out of the water
 private _underwaterFactor = _object getVariable [QGVAR(underwaterFactor), 0];
