@@ -103,10 +103,10 @@ class GVAR(display) {
         };
         class Status: ctrlStatic {
             idc = IDC_STATUS;
-            style = ST_CENTER;
+            style = ST_RIGHT;
             x = QUOTE(CENTER_X + GRID_W(140/2 - 59));
-            y = QUOTE(CENTER_Y - GRID_H(110/2 - 85));
-            w = QUOTE(GRID_W(58));
+            y = QUOTE(CENTER_Y + GRID_H(110/2 - 5 - 7 - 13));
+            w = QUOTE(GRID_W(23));
             h = QUOTE(GRID_H(5));
             sizeEx = QUOTE(GRID_H(5));
         };
