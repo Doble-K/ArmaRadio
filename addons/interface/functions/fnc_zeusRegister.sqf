@@ -78,7 +78,8 @@ if (!isClass (configFile >> "CfgPatches" >> "zen_custom_modules")) exitWith {};
 
     [LLSTRING(SetStation), [["COMBO", [LLSTRING(Station), format ["%1", _currentURL]], [_names, [], _defaultIndex]]], {
         params ["_values", "_args"];
-        _values params ["_index"];
+        _values params ["_name"];
+        private _index = GVAR(stations) findIf { (_x param [0, ""]) isEqualTo _name };
         private _url = (GVAR(stations) param [_index, []]) param [2, ""];
         if (_url != "") then {
             [_args, _url] call EFUNC(manager,play);
