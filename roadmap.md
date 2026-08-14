@@ -153,6 +153,15 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 - [x] **Causa raíz**: `source.rs` solo emitía `status=offline` si previamente había estado online (`if online`); un stream que moría antes de mandar data nunca reportaba.
 - [x] **Fix (Rust)**: flag `reported` — reporta `offline` la primera vez aunque nunca haya estado online, y `online` al recibir data.
 
+### Buffer de audio y cortes por falta de datos
+
+- [x] **Síntoma**: cortes/artefactos "de procesado" al reproducir, sobre todo con red inestable o streams que pierden frames (underrun de OpenAL).
+- [x] **Causa raíz**: el relleno inicial era de solo ~2 s (`buffers_queued() > 75`); tras un underrun se esperaban otros ~2 s de silencio para re-anudar. Cada frame MP3 ≈ 26 ms.
+- [x] **Fix (Rust, `src/source.rs`)**:
+  - Pre-roll de estática: al recibir el primer frame de audio, se encola un buffer de ruido blanco de ~4 s y se inicia reproducción de inmediato — el arranque suena como "sintonizar" la FM en vez de silencio, mientras el audio real se acumula detrás.
+  - Reanudación rápida: tras un underrun, se re-anuda apenas `buffers_queued() > 30` (~0.8 s) en vez de esperar 75 (~2 s).
+- [ ] **Pendiente (futuro)**: sincronización fina del audio entre jugadores que escuchan la misma radio (arranque coordinado con el evento global `start`); el buffer consistente de ~4 s ya reduce el desfase.
+
 ## P3 — Futuro medio/lejano
 
 ### Sonido de encendido/apagado

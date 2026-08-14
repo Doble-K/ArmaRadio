@@ -19,6 +19,10 @@ use crate::{
     vector3::Vector3,
 };
 
+const PRE_ROLL_SECONDS: usize = 4;
+const PLAY_RESTART_BUFFERS: i32 = 30;
+const STATIC_AMPLITUDE: f32 = 0.05;
+
 pub struct Sources();
 
 type SourceMap = RwLock<HashMap<String, Mutex<SoundSource>>>;
@@ -83,6 +87,7 @@ impl SoundSource {
             let mut quality = 0.0_f32;
             let mut online = false;
             let mut reported = false;
+            let mut started = false;
             let mut has_data = false;
             let mut last_freq: i32 = 44100;
             'outer: loop {
@@ -184,6 +189,31 @@ impl SoundSource {
                                         break;
                                     }
                                 }
+                                // First data: queue a pre-roll of static so the buffering
+                                // period sounds like tuning a radio instead of silence, then
+                                // start playback immediately. Real audio accumulates behind it.
+                                if !started {
+                                    started = true;
+                                    let Some(listener) = Listener::get() else {
+                                        return;
+                                    };
+                                    let pre_roll = (0..(freq as usize * PRE_ROLL_SECONDS))
+                                        .map(|_| alto::Mono {
+                                            center: (rand::random::<f32>() * 2.0 - 1.0)
+                                                * STATIC_AMPLITUDE,
+                                        })
+                                        .collect::<Vec<_>>();
+                                    if let Ok(buffer) = listener.new_buffer(pre_roll, freq) {
+                                        if let Err(e) = source.queue_buffer(buffer) {
+                                            error!(
+                                                "Error queueing pre-roll buffer for {}: {}",
+                                                id, e
+                                            );
+                                            return;
+                                        }
+                                        source.play();
+                                    }
+                                }
                                 let buffer = if source.buffers_processed() > 200 {
                                     if let Ok(mut buffer) = source.unqueue_buffer() {
                                         if let Err(e) = buffer.set_data(samples, freq) {
@@ -221,10 +251,11 @@ impl SoundSource {
                                     );
                                     return;
                                 }
-                                if source.state() != alto::SourceState::Playing
-                                    && source.buffers_queued() > 75
+                                if started
+                                    && source.state() != alto::SourceState::Playing
+                                    && source.buffers_queued() > PLAY_RESTART_BUFFERS
                                 {
-                                    info!("Playing source for {}, {:?}", id, source.state());
+                                    info!("Resuming source for {}, {:?}", id, source.state());
                                     source.play();
                                 }
                             }
