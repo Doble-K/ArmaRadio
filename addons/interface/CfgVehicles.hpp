@@ -1,9 +1,68 @@
+#define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
+
 #define RADIO_SELF_ACTIONS \
     class ACE_SelfActions { \
         class GVAR(open) { \
             displayName = CSTRING(DisplayName); \
             statement = QUOTE(_target call FUNC(open)); \
-            condition = QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)}); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(power) { \
+            displayName = CSTRING(Power); \
+            statement = QUOTE([_target] call FUNC(power)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(volumeUp) { \
+            displayName = CSTRING(VolumeUp); \
+            statement = QUOTE([_target, 0.1] call FUNC(volumeChange)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(volumeDown) { \
+            displayName = CSTRING(VolumeDown); \
+            statement = QUOTE([_target, -0.1] call FUNC(volumeChange)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(stationNext) { \
+            displayName = CSTRING(StationNext); \
+            statement = QUOTE([_target, 1] call FUNC(stationChange)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(stationPrev) { \
+            displayName = CSTRING(StationPrev); \
+            statement = QUOTE([_target, -1] call FUNC(stationChange)); \
+            condition = RADIO_CONDITION; \
+        }; \
+    };
+
+#define RADIO_STATIC_ACTIONS \
+    class ACE_Actions { \
+        class ACE_MainActions { \
+            selection = "interaction_point"; \
+            distance = 5; \
+            class GVAR(open) { \
+                displayName = CSTRING(DisplayName); \
+                statement = QUOTE(_target call FUNC(open)); \
+            }; \
+            class GVAR(power) { \
+                displayName = CSTRING(Power); \
+                statement = QUOTE([_target] call FUNC(power)); \
+            }; \
+            class GVAR(volumeUp) { \
+                displayName = CSTRING(VolumeUp); \
+                statement = QUOTE([_target, 0.1] call FUNC(volumeChange)); \
+            }; \
+            class GVAR(volumeDown) { \
+                displayName = CSTRING(VolumeDown); \
+                statement = QUOTE([_target, -0.1] call FUNC(volumeChange)); \
+            }; \
+            class GVAR(stationNext) { \
+                displayName = CSTRING(StationNext); \
+                statement = QUOTE([_target, 1] call FUNC(stationChange)); \
+            }; \
+            class GVAR(stationPrev) { \
+                displayName = CSTRING(StationPrev); \
+                statement = QUOTE([_target, -1] call FUNC(stationChange)); \
+            }; \
         }; \
     };
 
@@ -29,15 +88,6 @@ class CfgVehicles {
 
     class Items_base_F;
     class Land_FMradio_F: Items_base_F {
-        class ACE_Actions {
-            class ACE_MainActions {
-                selection = "interaction_point";
-                distance = 5;
-                class GVAR(open) {
-                    displayName = CSTRING(DisplayName);
-                    statement = QUOTE(_target call FUNC(open));
-                };
-            };
-        };
+        RADIO_STATIC_ACTIONS
     };
 };

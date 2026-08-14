@@ -10,5 +10,8 @@ PREP(handleVolumeButtonDown);
 PREP(handleVolumeButtonUp);
 PREP(handleVolumeMouse);
 PREP(open);
+PREP(power);
+PREP(stationChange);
 PREP(updateInfo);
+PREP(volumeChange);
 PREP(updateList);

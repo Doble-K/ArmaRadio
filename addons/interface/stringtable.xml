@@ -57,5 +57,25 @@
             <English>Custom vehicle classes</English>
             <Spanish>Clases de vehículo personalizadas</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_Power">
+            <English>Power</English>
+            <Spanish>Encender/Apagar</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_VolumeUp">
+            <English>Volume Up</English>
+            <Spanish>Subir Volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_VolumeDown">
+            <English>Volume Down</English>
+            <Spanish>Bajar Volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_StationNext">
+            <English>Next Station</English>
+            <Spanish>Estación Siguiente</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_StationPrev">
+            <English>Previous Station</English>
+            <Spanish>Estación Anterior</Spanish>
+        </Key>
     </Package>
 </Project>
