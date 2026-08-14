@@ -10,6 +10,7 @@ if !(_existing isEqualTo []) then {
     if (((_existing select 1) isEqualTo _url) && {GVAR(sourcesStatus) getOrDefault [_id, "online"] isNotEqualTo "offline"}) then {
         _ret = _id;
     } else {
+        _source setVariable [QGVAR(active), nil, true];
         [QGVAR(stop), [_id]] call CBA_fnc_globalEvent;
     };
 };
