@@ -17,6 +17,8 @@
 
 params ["_display"];
 
+if (isNil "_display" || isNull _display) exitWith {};
+
 private _object = _display getVariable QGVAR(object);
 
 private _ctrlList = _display displayCtrl IDC_LIST;

@@ -32,7 +32,12 @@ private _categories = [
     if ((missionNamespace getVariable [_setting, false]) && {_object isKindOf _cfgClass}) exitWith {true};
 } forEach _categories;
 
-private _customClasses = parseSimpleArray (missionNamespace getVariable [QGVAR(customVehicleClasses), "[]"]);
+private _text = missionNamespace getVariable [QGVAR(customVehicleClasses), "[]"];
+private _customClasses = if (count _text > 0 && {(toArray _text) param [0, 91] == 91}) then {
+    parseSimpleArray _text
+} else {
+    []
+};
 {
     if (_object isKindOf _x) exitWith {true};
 } forEach _customClasses;
