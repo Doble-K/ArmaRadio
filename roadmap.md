@@ -125,8 +125,8 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 ### Volumen baja con ACE hearing / tinnitus (#11) — futuro cercano
 
 - [ ] El DLL usa su propio contexto OpenAL, separado del audio del juego → no baja con tinnitus/tapones.
-- [ ] Hook: leer el volumen de hearing de ACE (módulo `ace_hearing`) y multiplicar `global_gain` (igual que `volumeMultiplier`).
-- [ ] Nota: verificar en implementación la API exacta de ACE (setting/evento de hearing).
+- [x] Hook: leer el volumen de hearing de ACE (módulo `ace_hearing`) y multiplicar `global_gain` (igual que `volumeMultiplier`).
+- [x] Nota: verificar en implementación la API exacta de ACE (setting/evento de hearing).
 
 ## P3 — Futuro medio/lejano
 
