@@ -70,6 +70,15 @@ GVAR(stations) sort true;
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(mainGunnerAndCopilotCanControl),
+    "CHECKBOX",
+    [LLSTRING(MainGunnerAndCopilotCanControl), LLSTRING(MainGunnerAndCopilotCanControlDescription)],
+    LLSTRING(Category),
+    true,
+    1
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(allGunnersCanControl),
     "CHECKBOX",
     [LLSTRING(AllGunnersCanControl), LLSTRING(AllGunnersCanControlDescription)],

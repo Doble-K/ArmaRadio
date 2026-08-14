@@ -6,8 +6,8 @@
             <Spanish>Todos los artilleros pueden controlar la radio</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_AllGunnersCanControlDescription">
-            <English>Allow the main gunner to open the radio and change the station in armored and aircraft vehicles. Door gunners stay excluded.</English>
-            <Spanish>Permite que el artillero principal abra la radio y cambie de emisora en blindados y aeronaves. Los artilleros de puerta quedan excluidos.</Spanish>
+            <English>Allow door gunners and secondary turret gunners to open the radio and change the station. The main gunner / co-pilot always can.</English>
+            <Spanish>Permite que los artilleros de puerta y de torretas secundarias abran la radio y cambien de emisora. El artillero principal / copiloto siempre puede.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_Category">
             <English>Live Radio</English>
@@ -84,6 +84,14 @@
         <Key ID="STR_Live_Radio_Interface_FMRadio">
             <English>FM Radio</English>
             <Spanish>Radio FM</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_MainGunnerAndCopilotCanControl">
+            <English>Main Gunner and Co-pilot Can Control Radio</English>
+            <Spanish>El artillero principal y el copiloto pueden controlar la radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_MainGunnerAndCopilotCanControlDescription">
+            <English>Allow the main gunner / co-pilot seat to open the radio and change the station.</English>
+            <Spanish>Permite que el asiento de artillero principal / copiloto abra la radio y cambie de emisora.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_ModuleRadioControl">
             <English>Radio Control (All Options)</English>
