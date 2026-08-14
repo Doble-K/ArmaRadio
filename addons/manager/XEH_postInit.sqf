@@ -4,9 +4,18 @@ if (hasInterface) then {
     [GVAR(volumeMultiplier)] call FUNC(applyGain);
 
     GVAR(lastExplosion) = -999;
-    addMissionEventHandler ["Explosion", {
-        GVAR(lastExplosion) = time;
-    }];
+    [{
+        private _unit = call CBA_fnc_currentUnit;
+        private _vehicle = vehicle _unit;
+        if (isNil {_unit getVariable QGVAR(explosionHandler)}) then {
+            _unit setVariable [QGVAR(explosionHandler),
+                _unit addEventHandler ["Explosion", { GVAR(lastExplosion) = time; }]];
+        };
+        if (_vehicle != _unit && {isNil {_vehicle getVariable QGVAR(explosionHandler)}}) then {
+            _vehicle setVariable [QGVAR(explosionHandler),
+                _vehicle addEventHandler ["Explosion", { GVAR(lastExplosion) = time; }]];
+        };
+    }] call CBA_fnc_addPerFrameHandler;
 
     GVAR(hearingFactor) = -1;
     [{

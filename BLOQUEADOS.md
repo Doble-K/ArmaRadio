@@ -2,6 +2,15 @@
 
 Registro de puntos del `roadmap.md` que quedaron sin completar en la sesión de trabajo del 14/8/2026, con el motivo y qué se necesita para resolverlos.
 
+## P2 — Interferencia ambiental por explosiones — nota
+
+- **Estado**: COMPLETADO con fix de `addMissionEventHandler ["Explosion"]` → object handlers.
+- **Problema original**: `addMissionEventHandler ["Explosion", ...]` en `addons/manager/XEH_postInit.sqf` lanzaba `Error externo: Unknown enum value: "Explosion"` en partida (Arma 3 v2.22). `Explosion` NO es un mission event handler; solo existe como object/unit event handler (`_objeto addEventHandler ["Explosion", ...]`). El lint de HEMTT (`L-S02IC`) tenía razón.
+- **Fix aplicado**: se anclan `addEventHandler ["Explosion"]` sobre la unidad y el vehículo del jugador vía per-frame (re-ancla en respawn/cambio de vehículo), escribiendo `GVAR(lastExplosion) = time`.
+- **Limitación**: solo detecta explosiones que dañan la unidad o el vehículo del jugador. No detecta explosiones cercanas que no lo tocan.
+- **Para mejorarlo (futuro)**: detección por distancia con polling de `nearObjects` (radio configurable, más costoso por frame), o revisar si una versión futura de Arma 3 agrega `Explosion` como mission event handler.
+
+
 ## P2.2 (opcional) — Interferencia por distancia del jugador a la radio
 
 - **Qué se intentó**: la interferencia por distancia era un sub-item "(Opcional)" del punto de interferencia por daño. Se implementó la interferencia por daño (`source:quality`) y la ambiental (lluvia + explosiones cercanas).
