@@ -61,6 +61,10 @@
             <English>Online</English>
             <Spanish>En línea</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_Open">
+            <English>Open</English>
+            <Spanish>Abrir</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_Power">
             <English>Power</English>
             <Spanish>Encender/Apagar</Spanish>

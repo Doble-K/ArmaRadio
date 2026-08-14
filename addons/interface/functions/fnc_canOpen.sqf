@@ -15,9 +15,11 @@
  * Public: No
  */
 
+params ["_object"];
+
+if (_object isKindOf "Land_FMradio_F") exitWith {true};
 if !(missionNamespace getVariable [QGVAR(driverAndCommanderOnly), false]) exitWith {true};
 
-params ["_object"];
 private _player = call CBA_fnc_currentUnit;
 
 if (driver _object == _player) exitWith {true};

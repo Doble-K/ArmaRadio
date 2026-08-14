@@ -2,7 +2,7 @@
 
 #define RADIO_QUICK_ACTIONS \
     class GVAR(open) { \
-        displayName = CSTRING(DisplayName); \
+        displayName = CSTRING(Open); \
         statement = QUOTE(_target call FUNC(open)); \
         condition = RADIO_CONDITION; \
     }; \
@@ -34,7 +34,11 @@
 
 #define RADIO_SELF_ACTIONS \
     class ACE_SelfActions { \
-        RADIO_QUICK_ACTIONS \
+        class GVAR(menu) { \
+            displayName = CSTRING(FMRadio); \
+            condition = RADIO_CONDITION; \
+            RADIO_QUICK_ACTIONS \
+        }; \
     };
 
 #define RADIO_STATIC_ACTIONS \
@@ -42,29 +46,9 @@
         class ACE_MainActions { \
             selection = "interaction_point"; \
             distance = 5; \
-            class GVAR(open) { \
-                displayName = CSTRING(DisplayName); \
-                statement = QUOTE(_target call FUNC(open)); \
-            }; \
-            class GVAR(power) { \
-                displayName = CSTRING(Power); \
-                statement = QUOTE([_target] call FUNC(power)); \
-            }; \
-            class GVAR(volumeUp) { \
-                displayName = CSTRING(VolumeUp); \
-                statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
-            }; \
-            class GVAR(volumeDown) { \
-                displayName = CSTRING(VolumeDown); \
-                statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
-            }; \
-            class GVAR(stationNext) { \
-                displayName = CSTRING(StationNext); \
-                statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
-            }; \
-            class GVAR(stationPrev) { \
-                displayName = CSTRING(StationPrev); \
-                statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
+            class GVAR(menu) { \
+                displayName = CSTRING(FMRadio); \
+                RADIO_QUICK_ACTIONS \
             }; \
         }; \
     };
@@ -84,8 +68,8 @@ class CfgVehicles {
     class Plane: Air {
         RADIO_SELF_ACTIONS
     };
-    class StaticObject;
-    class Ship: StaticObject {
+    class AllVehicles;
+    class Ship: AllVehicles {
         RADIO_SELF_ACTIONS
     };
 
