@@ -4,8 +4,10 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
     private _staticActions = [
         [localize LSTRING(FMRadio), { [cursorTarget] call FUNC(open) }],
         [localize LSTRING(Power), { [cursorTarget] call FUNC(power) }],
-        [localize LSTRING(VolumeUp), { [cursorTarget, 0.1] call FUNC(volumeChange) }],
-        [localize LSTRING(VolumeDown), { [cursorTarget, -0.1] call FUNC(volumeChange) }],
+        [localize LSTRING(SetVolume) + " 0%", { [cursorTarget, 0] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 25%", { [cursorTarget, 0.25] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 50%", { [cursorTarget, 0.5] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 100%", { [cursorTarget, 1] call EFUNC(manager,volume) }],
         [localize LSTRING(StationNext), { [cursorTarget, 1] call FUNC(stationChange) }],
         [localize LSTRING(StationPrev), { [cursorTarget, -1] call FUNC(stationChange) }]
     ];
@@ -37,8 +39,10 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
     private _vehicleActions = [
         [localize LSTRING(FMRadio), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(open) }],
         [localize LSTRING(Power), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(power) }],
-        [localize LSTRING(VolumeUp), { [vehicle (call CBA_fnc_currentUnit), 0.1] call FUNC(volumeChange) }],
-        [localize LSTRING(VolumeDown), { [vehicle (call CBA_fnc_currentUnit), -0.1] call FUNC(volumeChange) }],
+        [localize LSTRING(SetVolume) + " 0%", { [vehicle (call CBA_fnc_currentUnit), 0] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 25%", { [vehicle (call CBA_fnc_currentUnit), 0.25] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 50%", { [vehicle (call CBA_fnc_currentUnit), 0.5] call EFUNC(manager,volume) }],
+        [localize LSTRING(SetVolume) + " 100%", { [vehicle (call CBA_fnc_currentUnit), 1] call EFUNC(manager,volume) }],
         [localize LSTRING(StationNext), { [vehicle (call CBA_fnc_currentUnit), 1] call FUNC(stationChange) }],
         [localize LSTRING(StationPrev), { [vehicle (call CBA_fnc_currentUnit), -1] call FUNC(stationChange) }]
     ];

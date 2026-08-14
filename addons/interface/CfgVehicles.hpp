@@ -15,15 +15,29 @@
         statement = QUOTE([_target] call FUNC(power)); \
         condition = RADIO_CONDITION; \
     }; \
-    class GVAR(volumeUp) { \
-        displayName = CSTRING(VolumeUp); \
-        statement = QUOTE(RADIO_ARR_2(_target,0.1) call FUNC(volumeChange)); \
+    class GVAR(setVolume) { \
+        displayName = CSTRING(SetVolume); \
         condition = RADIO_CONDITION; \
-    }; \
-    class GVAR(volumeDown) { \
-        displayName = CSTRING(VolumeDown); \
-        statement = QUOTE(RADIO_ARR_2(_target,-0.1) call FUNC(volumeChange)); \
-        condition = RADIO_CONDITION; \
+        class GVAR(setVolume0) { \
+            displayName = "0%"; \
+            statement = QUOTE(RADIO_ARR_2(_target,0) call EFUNC(manager,volume)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(setVolume25) { \
+            displayName = "25%"; \
+            statement = QUOTE(RADIO_ARR_2(_target,0.25) call EFUNC(manager,volume)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(setVolume50) { \
+            displayName = "50%"; \
+            statement = QUOTE(RADIO_ARR_2(_target,0.5) call EFUNC(manager,volume)); \
+            condition = RADIO_CONDITION; \
+        }; \
+        class GVAR(setVolume100) { \
+            displayName = "100%"; \
+            statement = QUOTE(RADIO_ARR_2(_target,1) call EFUNC(manager,volume)); \
+            condition = RADIO_CONDITION; \
+        }; \
     }; \
     class GVAR(stationNext) { \
         displayName = CSTRING(StationNext); \
