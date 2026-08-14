@@ -28,4 +28,4 @@ Registro de puntos del `roadmap.md` que quedaron sin completar en la sesión de 
 ## P3.2 — Control en Zeus
 
 - **Estado**: COMPLETADO (módulo Zeus `ModuleToggleRadio` + acciones `ACE_ZeusActions` con toggle de power).
-- **Nota de verificación**: la estructura de `ACE_ZeusActions` no pudo contrastarse contra el fuente de ACE3 (red intermitente durante la sesión). Si ACE no muestra la acción, es config aditiva inerte y no rompe nada; la vía del módulo Zeus funciona en vanilla. Verificar en partida con ACE cargado.
+- **Nota de verificación**: la estructura de `ACE_ZeusActions` fue verificada contra el fuente de ACE3/ZEN: se compila desde la clase raíz `configFile >> "ACE_ZeusActions"` con submenús como subclases directas (NO dentro de `CfgVehicles`, NO envuelto en `ACE_MainActions`). La implementación final quedó en `addons/interface/CfgZeusActions.hpp` a nivel root. Igual conviene verificar visualmente en partida con ACE cargado.
