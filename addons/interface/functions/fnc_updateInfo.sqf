@@ -28,8 +28,12 @@ private _ctrlName = _display displayCtrl IDC_NAME;
 _ctrlName ctrlSetText _name;
 
 private _ctrlDescription = _display displayCtrl IDC_DESCRIPTION;
-private _activeID = _object getVariable [QEGVAR(manager,active), []] param [0, ""];
-_ctrlDescription ctrlSetText (EGVAR(manager,sourcesTitles) getOrDefault [_activeID, ""]);
+if (_object getVariable [QEGVAR(manager,burned), false]) then {
+    _ctrlDescription ctrlSetText localize LSTRING(RadioDamaged);
+} else {
+    private _activeID = _object getVariable [QEGVAR(manager,active), []] param [0, ""];
+    _ctrlDescription ctrlSetText (EGVAR(manager,sourcesTitles) getOrDefault [_activeID, ""]);
+};
 
 private _ctrlStatus = _display displayCtrl IDC_STATUS;
 private _status = EGVAR(manager,sourcesStatus) getOrDefault [_activeID, ""];

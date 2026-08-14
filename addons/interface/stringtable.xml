@@ -77,6 +77,10 @@
             <English>Power</English>
             <Spanish>Encender/Apagar</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_RadioDamaged">
+            <English>Radio damaged / not responding</English>
+            <Spanish>Radio dañada / no responde</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_SelectObject">
             <English>Select an object first</English>
             <Spanish>Seleccioná primero un objeto</Spanish>

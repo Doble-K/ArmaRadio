@@ -39,6 +39,10 @@ _display setVariable [QGVAR(powered), _activeURL != ""];
 
 [_ctrlPower, false] call FUNC(handlePower);
 
+if (_object getVariable [QEGVAR(manager,burned), false]) then {
+    _ctrlPower ctrlEnable false;
+};
+
 // Initialize the search bar and button
 private _ctrlSearchBar = _display displayCtrl IDC_SEARCH_BAR;
 _ctrlSearchBar ctrlAddEventHandler ["KeyUp", {call FUNC(handleSearchKeyUp)}];

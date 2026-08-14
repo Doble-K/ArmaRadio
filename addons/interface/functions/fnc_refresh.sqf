@@ -26,6 +26,7 @@ _display setVariable [QGVAR(powered), _active isNotEqualTo []];
 
 private _ctrlPower = _display displayCtrl IDC_POWER;
 [_ctrlPower, false] call FUNC(handlePower);
+_ctrlPower ctrlEnable !(_object getVariable [QEGVAR(manager,burned), false]);
 
 private _volume = _object getVariable [QEGVAR(manager,volume), DEFAULT_VOLUME];
 [_display, _volume] call FUNC(handleVolume);
