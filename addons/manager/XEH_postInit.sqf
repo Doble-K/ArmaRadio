@@ -1,7 +1,7 @@
 #include "script_component.hpp"
 
 if (hasInterface) then {
-    private _gain = if (GVAR(streamerMode)) then { 0 } else { GVAR(volumeMultiplier) };
+    private _gain = [GVAR(volumeMultiplier), 0] select (GVAR(streamerMode));
     EXT callExtension ["source:global_gain", [_gain]];
 
     [QGVAR(start), {

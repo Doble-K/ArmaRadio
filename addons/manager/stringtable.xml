@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="Live Radio">
     <Package name="Manager">
-        <Key ID="STR_Live_Radio_Manager_Category">
-            <English>Live Radio</English>
-            <Spanish>Live Radio</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Manager_VolumeMultiplier">
-            <English>Volume Multiplier</English>
-            <Spanish>Multiplicador de volumen</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Manager_StreamerMode">
-            <English>Streamer Mode</English>
-            <Spanish>Modo streamer</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Manager_SoundRange">
-            <English>Sound Range (m)</English>
-            <Spanish>Rango de sonido (m)</Spanish>
-        </Key>
         <Key ID="STR_Live_Radio_Manager_AutoOffRange">
             <English>Auto Off Range (m)</English>
             <Spanish>Rango de apagado automático (m)</Spanish>
@@ -24,6 +8,22 @@
         <Key ID="STR_Live_Radio_Manager_AutoOffTime">
             <English>Auto Off Time (s)</English>
             <Spanish>Tiempo de apagado automático (s)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Category">
+            <English>Live Radio</English>
+            <Spanish>Live Radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_SoundRange">
+            <English>Sound Range (m)</English>
+            <Spanish>Rango de sonido (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_StreamerMode">
+            <English>Streamer Mode</English>
+            <Spanish>Modo streamer</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_VolumeMultiplier">
+            <English>Volume Multiplier</English>
+            <Spanish>Multiplicador de volumen</Spanish>
         </Key>
     </Package>
 </Project>

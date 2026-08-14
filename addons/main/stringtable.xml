@@ -9,9 +9,5 @@
             <English>https://github.com/BrettMayson/ArmaRadio</English>
             <Spanish>https://github.com/BrettMayson/ArmaRadio</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Main_Category">
-            <English>Live Radio</English>
-            <Spanish>Live Radio</Spanish>
-        </Key>
     </Package>
 </Project>

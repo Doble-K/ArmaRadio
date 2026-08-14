@@ -14,22 +14,22 @@
         }; \
         class GVAR(volumeUp) { \
             displayName = CSTRING(VolumeUp); \
-            statement = QUOTE([_target, 0.1] call FUNC(volumeChange)); \
+            statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
             condition = RADIO_CONDITION; \
         }; \
         class GVAR(volumeDown) { \
             displayName = CSTRING(VolumeDown); \
-            statement = QUOTE([_target, -0.1] call FUNC(volumeChange)); \
+            statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
             condition = RADIO_CONDITION; \
         }; \
         class GVAR(stationNext) { \
             displayName = CSTRING(StationNext); \
-            statement = QUOTE([_target, 1] call FUNC(stationChange)); \
+            statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
             condition = RADIO_CONDITION; \
         }; \
         class GVAR(stationPrev) { \
             displayName = CSTRING(StationPrev); \
-            statement = QUOTE([_target, -1] call FUNC(stationChange)); \
+            statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
             condition = RADIO_CONDITION; \
         }; \
     };
@@ -49,19 +49,19 @@
             }; \
             class GVAR(volumeUp) { \
                 displayName = CSTRING(VolumeUp); \
-                statement = QUOTE([_target, 0.1] call FUNC(volumeChange)); \
+                statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
             }; \
             class GVAR(volumeDown) { \
                 displayName = CSTRING(VolumeDown); \
-                statement = QUOTE([_target, -0.1] call FUNC(volumeChange)); \
+                statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
             }; \
             class GVAR(stationNext) { \
                 displayName = CSTRING(StationNext); \
-                statement = QUOTE([_target, 1] call FUNC(stationChange)); \
+                statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
             }; \
             class GVAR(stationPrev) { \
                 displayName = CSTRING(StationPrev); \
-                statement = QUOTE([_target, -1] call FUNC(stationChange)); \
+                statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
             }; \
         }; \
     };

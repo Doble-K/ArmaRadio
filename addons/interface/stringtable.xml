@@ -5,41 +5,25 @@
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_CustomVehicleClasses">
+            <English>Custom vehicle classes</English>
+            <Spanish>Clases de vehículo personalizadas</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_DisplayName">
             <English>FM Radio</English>
             <Spanish>Radio FM</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_FMRadio">
-            <English>FM Radio</English>
-            <Spanish>Radio FM</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_On">
-            <English>On</English>
-            <Spanish>Encendido</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_Off">
-            <English>Off</English>
-            <Spanish>Apagado</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_Online">
-            <English>Online</English>
-            <Spanish>En línea</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_Offline">
-            <English>Offline</English>
-            <Spanish>Sin conexión</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_DriverAndCommanderOnly">
             <English>Driver and Commander Only</English>
             <Spanish>Solo conductor y comandante</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Interface_EnableCars">
-            <English>Enable for Cars</English>
-            <Spanish>Habilitar para autos</Spanish>
-        </Key>
         <Key ID="STR_Live_Radio_Interface_EnableArmored">
             <English>Enable for Armored</English>
             <Spanish>Habilitar para blindados</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_EnableCars">
+            <English>Enable for Cars</English>
+            <Spanish>Habilitar para autos</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_EnableHelicopters">
             <English>Enable for Helicopters</English>
@@ -53,21 +37,29 @@
             <English>Enable for Ships</English>
             <Spanish>Habilitar para barcos</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Interface_CustomVehicleClasses">
-            <English>Custom vehicle classes</English>
-            <Spanish>Clases de vehículo personalizadas</Spanish>
+        <Key ID="STR_Live_Radio_Interface_FMRadio">
+            <English>FM Radio</English>
+            <Spanish>Radio FM</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Off">
+            <English>Off</English>
+            <Spanish>Apagado</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Offline">
+            <English>Offline</English>
+            <Spanish>Sin conexión</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_On">
+            <English>On</English>
+            <Spanish>Encendido</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Online">
+            <English>Online</English>
+            <Spanish>En línea</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_Power">
             <English>Power</English>
             <Spanish>Encender/Apagar</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_VolumeUp">
-            <English>Volume Up</English>
-            <Spanish>Subir Volumen</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_VolumeDown">
-            <English>Volume Down</English>
-            <Spanish>Bajar Volumen</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_StationNext">
             <English>Next Station</English>
@@ -76,6 +68,14 @@
         <Key ID="STR_Live_Radio_Interface_StationPrev">
             <English>Previous Station</English>
             <Spanish>Estación Anterior</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_VolumeDown">
+            <English>Volume Down</English>
+            <Spanish>Bajar Volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_VolumeUp">
+            <English>Volume Up</English>
+            <Spanish>Subir Volumen</Spanish>
         </Key>
     </Package>
 </Project>

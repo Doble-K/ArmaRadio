@@ -32,7 +32,7 @@ EXT callExtension "";
     false,
     2,
     {
-        private _gain = if (_this) then { 0 } else { GVAR(volumeMultiplier) };
+        private _gain = [GVAR(volumeMultiplier), 0] select (_this);
         EXT callExtension ["source:global_gain", [_gain]];
     }
 ] call CBA_fnc_addSetting;
