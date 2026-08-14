@@ -35,6 +35,36 @@ if (hasInterface) then {
     } forEach allMissionObjects "";
 };
 
+if (isServer && !hasInterface) then {
+    GVAR(autoOffLastCheck) = 0;
+    [{
+        if (time - GVAR(autoOffLastCheck) < 2) exitWith {};
+        GVAR(autoOffLastCheck) = time;
+
+        if (GVAR(autoOffRange) <= 0 || GVAR(autoOffTime) <= 0) exitWith {};
+
+        private _players = allUnits select { isPlayer _x };
+        {
+            private _object = _x;
+            if (_object getVariable [QGVAR(active), []] isNotEqualTo []) then {
+                private _near = false;
+                {
+                    if ((_x distance _object) < GVAR(autoOffRange)) exitWith { _near = true; };
+                } forEach _players;
+
+                if (_near) then {
+                    _object setVariable [QGVAR(autoOffLastSeen), time];
+                } else {
+                    private _lastSeen = _object getVariable [QGVAR(autoOffLastSeen), time];
+                    if (time - _lastSeen >= GVAR(autoOffTime)) then {
+                        [_object, ""] call FUNC(play);
+                    };
+                };
+            };
+        } forEach allMissionObjects "";
+    }] call CBA_fnc_addPerFrameHandler;
+};
+
 addMissionEventHandler ["ExtensionCallback", {
     params ["_name", "_function", "_data"];
 

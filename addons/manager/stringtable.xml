@@ -17,5 +17,13 @@
             <English>Sound Range (m)</English>
             <Spanish>Rango de sonido (m)</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_AutoOffRange">
+            <English>Auto Off Range (m)</English>
+            <Spanish>Rango de apagado automático (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AutoOffTime">
+            <English>Auto Off Time (s)</English>
+            <Spanish>Tiempo de apagado automático (s)</Spanish>
+        </Key>
     </Package>
 </Project>
