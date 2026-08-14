@@ -63,7 +63,7 @@ GVAR(stations) sort true;
 [
     QGVAR(driverAndCommanderOnly),
     "CHECKBOX",
-    LLSTRING(DriverAndCommanderOnly),
+    [LLSTRING(DriverAndCommanderOnly), LLSTRING(DriverAndCommanderOnlyDescription)],
     LLSTRING(Category),
     true,
     1
@@ -72,7 +72,7 @@ GVAR(stations) sort true;
 [
     QGVAR(allGunnersCanControl),
     "CHECKBOX",
-    LLSTRING(AllGunnersCanControl),
+    [LLSTRING(AllGunnersCanControl), LLSTRING(AllGunnersCanControlDescription)],
     LLSTRING(Category),
     false,
     1
@@ -81,7 +81,7 @@ GVAR(stations) sort true;
 [
     QGVAR(enableCars),
     "CHECKBOX",
-    LLSTRING(EnableCars),
+    [LLSTRING(EnableCars), LLSTRING(EnableCarsDescription)],
     LLSTRING(Category),
     true,
     1
@@ -90,7 +90,7 @@ GVAR(stations) sort true;
 [
     QGVAR(enableArmored),
     "CHECKBOX",
-    LLSTRING(EnableArmored),
+    [LLSTRING(EnableArmored), LLSTRING(EnableArmoredDescription)],
     LLSTRING(Category),
     false,
     1
@@ -99,7 +99,7 @@ GVAR(stations) sort true;
 [
     QGVAR(enableHelicopters),
     "CHECKBOX",
-    LLSTRING(EnableHelicopters),
+    [LLSTRING(EnableHelicopters), LLSTRING(EnableHelicoptersDescription)],
     LLSTRING(Category),
     false,
     1
@@ -108,7 +108,7 @@ GVAR(stations) sort true;
 [
     QGVAR(enablePlanes),
     "CHECKBOX",
-    LLSTRING(EnablePlanes),
+    [LLSTRING(EnablePlanes), LLSTRING(EnablePlanesDescription)],
     LLSTRING(Category),
     false,
     1
@@ -117,7 +117,7 @@ GVAR(stations) sort true;
 [
     QGVAR(enableShips),
     "CHECKBOX",
-    LLSTRING(EnableShips),
+    [LLSTRING(EnableShips), LLSTRING(EnableShipsDescription)],
     LLSTRING(Category),
     false,
     1
@@ -126,7 +126,7 @@ GVAR(stations) sort true;
 [
     QGVAR(customVehicleClasses),
     "EDITBOX",
-    LLSTRING(CustomVehicleClasses),
+    [LLSTRING(CustomVehicleClasses), LLSTRING(CustomVehicleClassesDescription)],
     LLSTRING(Category),
     "[]",
     1

@@ -5,29 +5,29 @@
             <English>Auto Off Range (m)</English>
             <Spanish>Rango de apagado automático (m)</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_AutoOffRangeDescription">
+            <English>Distance that must be free of players around a powered radio before the automatic power-off timer counts down. Set to 0 to disable.</English>
+            <Spanish>Distancia que debe quedar libre de jugadores alrededor de una radio encendida para que cuente el temporizador de apagado automático. Poné 0 para desactivar.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_AutoOffTime">
             <English>Auto Off Time (s)</English>
             <Spanish>Tiempo de apagado automático (s)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AutoOffTimeDescription">
+            <English>Seconds with no player within the auto-off range before the radio turns off automatically. Set to 0 to disable.</English>
+            <Spanish>Segundos sin jugadores dentro del rango de apagado antes de que la radio se apague automáticamente. Poné 0 para desactivar.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_Category">
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Manager_InterferenceTowers">
-            <English>Interference towers</English>
-            <Spanish>Torres de interferencia</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Manager_InterferenceTowersDescription">
-            <English>Classnames of radio towers that generate interference, as SQF array, e.g. ["Land_Communication_F"].</English>
-            <Spanish>Clases de torres de radio que generan interferencia, como array SQF, p.ej. ["Land_Communication_F"].</Spanish>
-        </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadius">
             <English>Interference Tower Radius (m)</English>
             <Spanish>Radio de la torre de interferencia (m)</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Manager_InterferenceTowerStrength">
-            <English>Interference Tower Strength</English>
-            <Spanish>Intensidad de la torre de interferencia</Spanish>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadiusDescription">
+            <English>Radius around each radio tower inside which it generates interference.</English>
+            <Spanish>Radio alrededor de cada torre de radio dentro del cual genera interferencia.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerSideFilter">
             <English>Interference Tower Side Filter</English>
@@ -37,29 +37,69 @@
             <English>When enabled, only enemy towers generate interference. When disabled, any tower in the list generates interference.</English>
             <Spanish>Al activarlo, solo las torres enemigas generan interferencia. Al desactivarlo, cualquier torre de la lista genera interferencia.</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Manager_RadioMotorDamageThreshold">
-            <English>Radio Motor Damage Threshold</English>
-            <Spanish>Umbral de daño del motor para quemar la radio</Spanish>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerStrength">
+            <English>Interference Tower Strength</English>
+            <Spanish>Intensidad de la torre de interferencia</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Manager_UnderwaterBurnTime">
-            <English>Underwater Burn Time (s)</English>
-            <Spanish>Tiempo bajo el agua para quemarse (s)</Spanish>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowerStrengthDescription">
+            <English>Interference strength factor produced by towers at full power. Typical values are 0.5 to 1.</English>
+            <Spanish>Factor de intensidad de interferencia que producen las torres a plena potencia. Los valores típicos son 0.5 a 1.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowers">
+            <English>Interference towers</English>
+            <Spanish>Torres de interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_InterferenceTowersDescription">
+            <English>Classnames of radio towers that generate interference, as SQF array, e.g. ["Land_Communication_F"].</English>
+            <Spanish>Clases de torres de radio que generan interferencia, como array SQF, p.ej. ["Land_Communication_F"].</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_PlayClickSound">
             <English>Play Click Sound</English>
             <Spanish>Sonido de clic</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_PlayClickSoundDescription">
+            <English>Play a static click sound when the radio is powered on or off.</English>
+            <Spanish>Reproduce un clic de estática al encender o apagar la radio.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_RadioMotorDamageThreshold">
+            <English>Radio Motor Damage Threshold</English>
+            <Spanish>Umbral de daño del motor para quemar la radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_RadioMotorDamageThresholdDescription">
+            <English>Engine damage at which the radio burns out and stops working until it is repaired.</English>
+            <Spanish>Daño del motor con el que la radio se quema y deja de funcionar hasta repararla.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_SoundRange">
             <English>Sound Range (m)</English>
             <Spanish>Rango de sonido (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_SoundRangeDescription">
+            <English>Maximum distance at which the radio audio is heard. Set to 0 to disable the limit.</English>
+            <Spanish>Distancia máxima a la que se escucha el audio de la radio. Poné 0 para desactivar el límite.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_StreamerMode">
             <English>Streamer Mode</English>
             <Spanish>Modo streamer</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_StreamerModeDescription">
+            <English>Mute all radio sources, including new ones. Useful for streaming or recording without copyrighted music.</English>
+            <Spanish>Silencia todas las fuentes de radio, incluidas las nuevas. Útil para streaming o grabaciones sin música con derechos.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_UnderwaterBurnTime">
+            <English>Underwater Burn Time (s)</English>
+            <Spanish>Tiempo bajo el agua para quemarse (s)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_UnderwaterBurnTimeDescription">
+            <English>Seconds the radio stays submerged before it burns out and stops working until it is repaired.</English>
+            <Spanish>Segundos que la radio permanece sumergida antes de quemarse y dejar de funcionar hasta repararla.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_VolumeMultiplier">
             <English>Volume Multiplier</English>
             <Spanish>Multiplicador de volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_VolumeMultiplierDescription">
+            <English>Master volume for all radios. Default is 30%.</English>
+            <Spanish>Volumen maestro de todas las radios. El default es 30%.</Spanish>
         </Key>
     </Package>
 </Project>

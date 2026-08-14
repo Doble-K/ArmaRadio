@@ -15,7 +15,7 @@ EXT callExtension "";
 [
     QGVAR(volumeMultiplier),
     "SLIDER",
-    LLSTRING(VolumeMultiplier),
+    [LLSTRING(VolumeMultiplier), LLSTRING(VolumeMultiplierDescription)],
     LLSTRING(Category),
     [0.1, 1, 0.3, 2, true],
     0,
@@ -27,7 +27,7 @@ EXT callExtension "";
 [
     QGVAR(streamerMode),
     "CHECKBOX",
-    LLSTRING(StreamerMode),
+    [LLSTRING(StreamerMode), LLSTRING(StreamerModeDescription)],
     LLSTRING(Category),
     false,
     2,
@@ -39,7 +39,7 @@ EXT callExtension "";
 [
     QGVAR(soundRange),
     "SLIDER",
-    LLSTRING(SoundRange),
+    [LLSTRING(SoundRange), LLSTRING(SoundRangeDescription)],
     LLSTRING(Category),
     [0, 1000, 200, 0, false],
     0
@@ -48,7 +48,7 @@ EXT callExtension "";
 [
     QGVAR(playClickSound),
     "CHECKBOX",
-    LLSTRING(PlayClickSound),
+    [LLSTRING(PlayClickSound), LLSTRING(PlayClickSoundDescription)],
     LLSTRING(Category),
     false,
     2
@@ -57,7 +57,7 @@ EXT callExtension "";
 [
     QGVAR(autoOffRange),
     "SLIDER",
-    LLSTRING(AutoOffRange),
+    [LLSTRING(AutoOffRange), LLSTRING(AutoOffRangeDescription)],
     LLSTRING(Category),
     [0, 500, 30, 0, false],
     1
@@ -66,7 +66,7 @@ EXT callExtension "";
 [
     QGVAR(autoOffTime),
     "SLIDER",
-    LLSTRING(AutoOffTime),
+    [LLSTRING(AutoOffTime), LLSTRING(AutoOffTimeDescription)],
     LLSTRING(Category),
     [0, 600, 120, 0, false],
     1
@@ -84,7 +84,7 @@ EXT callExtension "";
 [
     QGVAR(interferenceTowerRadius),
     "SLIDER",
-    LLSTRING(InterferenceTowerRadius),
+    [LLSTRING(InterferenceTowerRadius), LLSTRING(InterferenceTowerRadiusDescription)],
     LLSTRING(Category),
     [0, 3000, 1000, 0, false],
     1
@@ -93,7 +93,7 @@ EXT callExtension "";
 [
     QGVAR(interferenceTowerStrength),
     "SLIDER",
-    LLSTRING(InterferenceTowerStrength),
+    [LLSTRING(InterferenceTowerStrength), LLSTRING(InterferenceTowerStrengthDescription)],
     LLSTRING(Category),
     [0, 1, 0.5, 2, false],
     1
@@ -111,7 +111,7 @@ EXT callExtension "";
 [
     QGVAR(radioMotorDamageThreshold),
     "SLIDER",
-    LLSTRING(RadioMotorDamageThreshold),
+    [LLSTRING(RadioMotorDamageThreshold), LLSTRING(RadioMotorDamageThresholdDescription)],
     LLSTRING(Category),
     [0, 1, 0.8, 2, false],
     1
@@ -120,7 +120,7 @@ EXT callExtension "";
 [
     QGVAR(underwaterBurnTime),
     "SLIDER",
-    LLSTRING(UnderwaterBurnTime),
+    [LLSTRING(UnderwaterBurnTime), LLSTRING(UnderwaterBurnTimeDescription)],
     LLSTRING(Category),
     [0, 120, 10, 0, false],
     1

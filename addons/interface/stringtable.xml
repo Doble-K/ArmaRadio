@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="Live Radio">
     <Package name="Interface">
+        <Key ID="STR_Live_Radio_Interface_AllGunnersCanControl">
+            <English>All Gunners Can Control Radio</English>
+            <Spanish>Todos los artilleros pueden controlar la radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_AllGunnersCanControlDescription">
+            <English>Allow the main gunner to open the radio and change the station in armored and aircraft vehicles. Door gunners stay excluded.</English>
+            <Spanish>Permite que el artillero principal abra la radio y cambie de emisora en blindados y aeronaves. Los artilleros de puerta quedan excluidos.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_Category">
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
@@ -13,13 +21,13 @@
             <English>List of stations as SQF array of [name, URL] pairs, e.g. [["Classic Rock 109","http://listen.classicrock109.com:10042"],["PulseEDM","http://pulseedm.cdnstream1.com:8124/1373_128"]]. Combined with CfgRadioStations from config, campaign and mission (deduplicated by URL). If empty or invalid, the default stations are used.</English>
             <Spanish>Lista de emisoras como array SQF de pares [nombre, URL], p.ej. [["Classic Rock 109","http://listen.classicrock109.com:10042"],["PulseEDM","http://pulseedm.cdnstream1.com:8124/1373_128"]]. Se combina con CfgRadioStations de config, campaña y misión (sin duplicados por URL). Si está vacía o es inválida, se usan las emisoras por defecto.</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Interface_AllGunnersCanControl">
-            <English>All Gunners Can Control Radio</English>
-            <Spanish>Todos los artilleros pueden controlar la radio</Spanish>
-        </Key>
         <Key ID="STR_Live_Radio_Interface_CustomVehicleClasses">
             <English>Custom vehicle classes</English>
             <Spanish>Clases de vehículo personalizadas</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_CustomVehicleClassesDescription">
+            <English>Additional vehicle classnames as SQF array, e.g. [""My_Heli""]. Combined with the enabled categories.</English>
+            <Spanish>Clases de vehículo adicionales como array SQF, p.ej. [""Mi_Heli""]. Se combinan con las categorías habilitadas.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_DisplayName">
             <English>FM Radio</English>
@@ -29,25 +37,49 @@
             <English>Driver and Commander Only</English>
             <Spanish>Solo conductor y comandante</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_DriverAndCommanderOnlyDescription">
+            <English>Only the driver and commander can open the radio and change the station. Everyone nearby still hears it.</English>
+            <Spanish>Solo el conductor y el comandante pueden abrir la radio y cambiar de emisora. Todos los que estén cerca la siguen escuchando.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_EnableArmored">
             <English>Enable for Armored</English>
             <Spanish>Habilitar para blindados</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_EnableArmoredDescription">
+            <English>Allow radios in armored vehicles (Tank base class).</English>
+            <Spanish>Permite radios en blindados (clase base Tank).</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_EnableCars">
             <English>Enable for Cars</English>
             <Spanish>Habilitar para autos</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_EnableCarsDescription">
+            <English>Allow radios in cars (Car base class).</English>
+            <Spanish>Permite radios en autos (clase base Car).</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_EnableHelicopters">
             <English>Enable for Helicopters</English>
             <Spanish>Habilitar para helicópteros</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_EnableHelicoptersDescription">
+            <English>Allow radios in helicopters (Helicopter base class).</English>
+            <Spanish>Permite radios en helicópteros (clase base Helicopter).</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_EnablePlanes">
             <English>Enable for Planes</English>
             <Spanish>Habilitar para aviones</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_EnablePlanesDescription">
+            <English>Allow radios in planes (Plane base class).</English>
+            <Spanish>Permite radios en aviones (clase base Plane).</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_EnableShips">
             <English>Enable for Ships</English>
             <Spanish>Habilitar para barcos</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_EnableShipsDescription">
+            <English>Allow radios in ships (Ship base class).</English>
+            <Spanish>Permite radios en barcos (clase base Ship).</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_FMRadio">
             <English>FM Radio</English>
@@ -89,6 +121,10 @@
             <English>Radio damaged / not responding</English>
             <Spanish>Radio dañada / no responde</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_Repair">
+            <English>Repair Radio</English>
+            <Spanish>Reparar radio</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_SelectObject">
             <English>Select an object first</English>
             <Spanish>Seleccioná primero un objeto</Spanish>
@@ -105,14 +141,6 @@
             <English>Station</English>
             <Spanish>Emisora</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Interface_Volume">
-            <English>Volume</English>
-            <Spanish>Volumen</Spanish>
-        </Key>
-        <Key ID="STR_Live_Radio_Interface_Repair">
-            <English>Repair Radio</English>
-            <Spanish>Reparar radio</Spanish>
-        </Key>
         <Key ID="STR_Live_Radio_Interface_StationNext">
             <English>Next Station</English>
             <Spanish>Estación Siguiente</Spanish>
@@ -120,6 +148,10 @@
         <Key ID="STR_Live_Radio_Interface_StationPrev">
             <English>Previous Station</English>
             <Spanish>Estación Anterior</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Volume">
+            <English>Volume</English>
+            <Spanish>Volumen</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_VolumeDown">
             <English>Volume Down</English>
