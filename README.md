@@ -19,7 +19,7 @@ This repository is a working fork of [BrettMayson/ArmaRadio](https://github.com/
   - Driver and Commander Only (default ON)
   - Configurable vehicle categories (Cars, Armored, Helicopters, Planes, Ships) + custom classes
   - Radio tower interference (TFAR/Antistasi): tower classes, radius, strength and enemy-side filter
-  - Burned radio: damage threshold (`radioBurnDamage`) and underwater time (`underwaterBurnTime`)
+  - Burned radio: engine damage threshold (`radioMotorDamageThreshold`) and underwater time (`underwaterBurnTime`)
 - ACE integration: self-interaction quick controls (power, volume up/down, next/prev station), actions on static radios (`Land_FMradio_F`), Zeus module and Zeus actions, burned-radio repair (engineer + toolkit), and hearing attenuation (earplugs/deafness).
 - ZEN (Zeus Enhanced) integration: custom modules, right-click context menu and dialogs to control radios when ZEN is loaded.
 - Fallback player actions when ACE is not loaded.
@@ -95,6 +95,9 @@ The GitHub Actions workflow (`arma.yaml`) builds both DLLs on Windows, packs the
 ├── .hemtt/project.toml         # HEMTT project config
 ├── .github/workflows/          # CI (build + package) and release (GitHub + Workshop)
 ├── mod.cpp                     # Mod name / dir (@live_radio)
+├── CHANGELOG.md                # All changes since upstream v0.9.1
+├── LICENSE                     # GPL-3.0 — fork contributions by Doble-K
+├── LICENSE-MIT                 # MIT notice — upstream code (BrettMayson/ArmaRadio)
 ├── roadmap.md                  # Improvement plan and status (Fase 1–3)
 └── BLOQUEADOS.md               # Tracked blocked items and decisions required
 ```
@@ -123,8 +126,19 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full command protocol, 
 
 - [roadmap.md](roadmap.md) — phased plan (Fase 1 simple SQF/UI/Config → Fase 3 backend/decoder, not implemented) with checkboxes for what is done.
 - [BLOQUEADOS.md](BLOQUEADOS.md) — items that were intentionally left unfinished, why, and what is needed to unblock them.
+- [CHANGELOG.md](CHANGELOG.md) — all changes since upstream v0.9.1.
 - [docs/WORKFLOW.md](docs/WORKFLOW.md) — the reproducible workflow used to plan, implement, verify and track this feature set, including the full commit log.
 
-## License / attribution
+## Contributors
 
-Original project by BrettMayson (MIT). Contributions from mharis001 (interface overhaul, metadata) and matidp4 (several improvements implemented in this fork).
+- **BrettMayson** — original project author and upstream maintainer.
+- **mharis001** — interface overhaul and stream metadata (upstream).
+- **matidp4** (Matías Di Palma) — driver/commander-only restriction and several improvements incorporated into this fork.
+- **Doble-K** — fork author and maintainer: feature set, fixes, CBA settings, ACE/Zeus/ZEN integration, licensing and documentation in this fork.
+
+## License
+
+- **Upstream code** (BrettMayson/ArmaRadio): [MIT](LICENSE-MIT).
+- **Fork contributions** (Doble-K): [GPL-3.0-or-later](LICENSE).
+
+The combined work is distributed under GPL-3.0, with the upstream MIT portions keeping their license and copyright notices.

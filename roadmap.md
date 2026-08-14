@@ -222,6 +222,93 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 - [ ] Ya funciona durante la sesión: `addons/manager/functions/fnc_volume.sqf` guarda `QGVAR(volume)` en el objeto con `setVariable ... true` (red); el panel lo lee al abrir (`fnc_open.sqf`).
 - [ ] (Opcional) Persistencia entre misiones: guardar volumen por clase de vehículo en el perfil. Complejo — puede pisar volúmenes entre vehículos iguales. Pendiente de definir.
 
+## Siguiente iteración — Tareas simples (autónomas, 1 commit cada una) — COMPLETADO
+
+> Las 10 tareas quedaron implementadas (14/8/2026) en commits individuales. La verificación en partida es manual y futura (QA). No se tocó `src/` (Rust).
+
+### T1 — Fix: menú ACE "FM Radio" siempre visible
+
+- [x] Quitar la dependencia del estado `burned` en las condiciones del menú ACE (`CfgVehicles.hpp` / `fnc_canOpen.sqf`).
+- [x] Criterio done: con la radio dañada el menú FM sigue apareciendo; `hemtt build` OK. Verificación en partida manual y futura.
+- Nota: ya estaba satisfecho por el estado actual — las condiciones del menú ACE nunca dependieron de `burned` (implementado en `db72927`). Sin cambios → sin commit.
+
+### T2 — Estado "Radio dañada" al abrir el panel
+
+- [x] En `fnc_open.sqf` / `fnc_updateInfo.sqf`, si el objeto está `burned`, mostrar "Radio dañada / no responde" y deshabilitar Power visualmente.
+- [x] Criterio done: al abrir el panel con radio dañada se ve el aviso; build OK. Verificación en partida manual y futura.
+- Commit: `33f1af8`.
+
+### T3 — Radio dañada ligada al daño del MOTOR
+
+- [x] En `fnc_burn.sqf`, reemplazar el trigger genérico `getDammage` por lectura del daño del motor (`HitEngine`).
+- [x] Nuevo setting CBA `radioMotorDamageThreshold` (default 0.8) en `addons/manager/XEH_preInit.sqf` + stringtable (reemplaza a `radioBurnDamage`).
+- [x] Criterio done: el quemado ocurre solo con el motor dañado; build OK. Verificación en partida manual y futura.
+- Commit: `98252d2`.
+
+### T4 — Estática progresiva (fade)
+
+- [x] Suavizar el factor `quality` en `fnc_tick.sqf` (interpolación temporal por `diag_deltaTime`) para que no corte de golpe ruido↔música.
+- [x] Criterio done: la interferencia entra/sale gradualmente; build OK. Verificación en partida manual y futura.
+- Commit: `7d3cf86`.
+
+### T5 — Reparación de radio como item aparte + acción ACE externa
+
+- [x] Nueva acción ACE externa "Repair Radio" en `CfgVehicles.hpp` (Car/Tank/Helicopter/Plane/Ship) que funciona desde fuera del vehículo (5 m); independiente de sanar el vehículo.
+- [x] Criterio done: se puede reparar la radio parándose fuera con ingeniero + kit; build OK. Verificación en partida manual y futura.
+- Commit: `3bd1bdc`.
+
+### T6 — ZEN: módulo combinado "todas las opciones"
+
+- [x] En `fnc_zeusRegister.sqf`, módulo único "Radio Control (All Options)" con power + volumen + estación (diálogo ZEN agrupado).
+- [x] Criterio done: el módulo aparece y cambia todo junto; build OK. Verificación en partida manual y futura.
+- Commit: `7059c35`.
+
+### T7 — Volumen ACE: submenú de porcentajes (0/25/50/100)
+
+- [x] En `CfgVehicles.hpp`, "Set Volume" como submenú con opciones fijas (0%, 25%, 50%, 100%).
+- [x] El slider progresivo queda solo para hotkey (Zeus/ZEN), fuera del menú ACE y del fallback no-ACE.
+- [x] Criterio done: el menú ACE muestra el submenú con los 4 porcentajes; build OK. Verificación en partida manual y futura.
+- Commit: `004ac0a`.
+
+### T8 — Pasajeros controlan si el vehículo NO tiene asiento de comandante
+
+- [x] En `fnc_canOpen.sqf`, si `fullCrew [_object, "commander", true]` está vacío → delegar control al primer pasajero del crew.
+- [x] Regla actual (sin cambio): asiento de comandante vacío → solo conductor. Excepción nueva: sin asiento de comandante → pasajero 1 (o 2, según el vehículo).
+- [x] Criterio done: en autos sin asiento de comandante el pasajero 1/2 controla; build OK. Verificación en partida manual y futura.
+- Commit: `16f18f4`.
+
+### T9 — Setting "All Gunners Can Control Radio"
+
+- [x] Setting CHECKBOX (default OFF) en `addons/interface/XEH_preInit.sqf` + stringtable (descripciones EN/ES).
+- [x] Lógica en `fnc_canOpen.sqf`: gunner principal (`gunner _object`) controla solo con setting ON y clase `Tank`/`Helicopter`/`Plane`.
+- [x] Door gunners (turrets secundarios) quedan excluidos.
+- [x] Criterio done: gunner controla solo con setting ON y clase válida; build OK. Verificación en partida manual y futura.
+- Commit: `5d6792a`.
+
+### T10 — Tooltips de settings (implementar la tabla de descripciones)
+
+- [x] Pasar la tabla de descripciones a `stringtable.xml` (manager + interface) como tooltips EN/ES de cada setting; stringtables ordenados con `hemtt ln sort`.
+- [x] Criterio done: todos los settings muestran tooltip en Addon Options; build OK. Verificación en partida manual y futura.
+- Commit: `f9aefe1`.
+
+### Confirmaciones del tester (funcionan bien, sin cambios)
+
+- [x] Tapones ACE / tinnitus: bajan el volumen de la radio correctamente.
+- [x] Streamer Mode: silencia correctamente.
+- [x] Módulos ZEN individuales: funcionan.
+- [x] Interferencia ambiental (lluvia/explosiones/daño): presente y audible.
+
+## Decisiones humanas requeridas (bloqueadas, NO son tarea del agente)
+
+- **ClassicRock109**: ¿reemplazar, quitar o mantener la estación caída?
+- **Apagado automático**: diagnosticar el bug de apagado espontáneo (requiere partida) antes de re-habilitarlo.
+- **Verificación ACE en partida**: QA manual (controles rápidos, repair, gunner).
+- **Radios de mano / mochila radio**: definir items concretos y alcance.
+- **Volumen persistente por perfil**: decisión de diseño (por clase / objeto / solo sesión).
+- **Integración Antistasi (curación/garage) y vehículo de reparaciones**: definir cómo detecta la radio que el vehículo fue "curado"/reparado antes de implementar.
+- **Inmersión como causa de quemado**: T3 mantuvo la causa por inmersión (`underwaterBurnTime`); decidir a futuro si se conserva o se elimina.
+- **Licencia del fork**: DECIDIDA (14/8/2026) — contribuciones del fork (Doble-K) bajo GPL-3.0 (`LICENSE`); código de upstream bajo MIT (`LICENSE-MIT`). Nota: el código GPL-3.0 no es mergeable en el repo MIT de upstream.
+
 ## Fase 3 — Backend / decoder (ÚLTIMO paso — NO implementar por ahora)
 
 > Todo lo de esta fase está **documentado pero NO se implementa** en esta iteración. La idea: recuperar el decoder upstream que funciona y, más adelante, re-integrar con cuidado los enhancements. Lo único que interesa recuperar es la **estática offline**, pero aplica solo cuando el stream está offline → no es prioridad; si resulta fácil de integrar, se implementa, y si no, queda pendiente.
@@ -313,7 +400,7 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 
 - Interferencia ambiental: ¿qué eventos exactos (tormenta, explosiones, ECM)?
 - Interferencia por torres: valores default de `strength` (0.5) y radio (1000m) elegidos en implementación; filtro de bando resuelto con detección genérica de lado (`getVariable`/`getSide`) — se puede extender con la API de Antistasi (`A3A_antennaMap`/`sidesX`) si se quiere.
-- Quemado de la radio: valores elegidos en implementación (`radioBurnDamage` = 0.8, `underwaterBurnTime` = 10s, reparación con ACE+ingeniero o kit vanilla). Pendiente: definir si "se vuelve a quemar" debe re-emitir estática al volver a encender con daño alto (hoy el daño ya aporta estática vía `quality`).
+- Quemado de la radio: valores elegidos en implementación (`radioMotorDamageThreshold` = 0.8, `underwaterBurnTime` = 10s, reparación con ACE+ingeniero o kit vanilla). **Rediseño implementado (feedback tester 14/8/2026)**: quemado ligado solo al daño de MOTOR (`HitEngine`) con umbral configurable, estática progresiva con fade, y reparación como item aparte con acción ACE externa (T1–T5, commits `33f1af8`–`3bd1bdc`). Pendiente de decisión humana: integración Antistasi (curación/garage, vehículo de reparaciones) — ver "Decisiones humanas requeridas".
 - Crows-EW: el jammer físico jammea al jugador (variables TFAR por jugador), pero `quality` es por fuente/objeto → el jammeo afecta a todos los que escuchan esa radio. Decidir si se quiere granularidad por jugador en el DLL (cambio de arquitectura) o mantener el alcance por fuente (actual). Pendiente además: duración de "jammer sostenido" para quemar la radio.
 - ZEN: las acciones de radio coexisten como ACE_ZeusActions (actual) + módulos/contexto ZEN cuando está cargado. Verificar en partida que no haya solapamiento/duplicados.
 - Apagado automático: confirmar valores R/T o dejarlos como settings. DESHABILITADO hasta diagnosticar el apagado espontáneo.
