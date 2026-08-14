@@ -19,10 +19,6 @@ use crate::{
     vector3::Vector3,
 };
 
-const PRE_ROLL_SECONDS: usize = 4;
-const PLAY_RESTART_BUFFERS: i32 = 30;
-const STATIC_AMPLITUDE: f32 = 0.05;
-
 pub struct Sources();
 
 type SourceMap = RwLock<HashMap<String, Mutex<SoundSource>>>;
@@ -87,9 +83,6 @@ impl SoundSource {
             let mut quality = 0.0_f32;
             let mut online = false;
             let mut reported = false;
-            let mut started = false;
-            let mut has_data = false;
-            let mut last_freq: i32 = 44100;
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
@@ -157,8 +150,6 @@ impl SoundSource {
                     Ok(recv) => {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
-                                last_freq = freq;
-                                has_data = true;
                                 let samples = if quality > 0.0 {
                                     samples
                                         .into_iter()
@@ -187,31 +178,6 @@ impl SoundSource {
                                     {
                                         // arma is probably closed
                                         break;
-                                    }
-                                }
-                                // First data: queue a pre-roll of static so the buffering
-                                // period sounds like tuning a radio instead of silence, then
-                                // start playback immediately. Real audio accumulates behind it.
-                                if !started {
-                                    started = true;
-                                    let Some(listener) = Listener::get() else {
-                                        return;
-                                    };
-                                    let pre_roll = (0..(freq as usize * PRE_ROLL_SECONDS))
-                                        .map(|_| alto::Mono {
-                                            center: (rand::random::<f32>() * 2.0 - 1.0)
-                                                * STATIC_AMPLITUDE,
-                                        })
-                                        .collect::<Vec<_>>();
-                                    if let Ok(buffer) = listener.new_buffer(pre_roll, freq) {
-                                        if let Err(e) = source.queue_buffer(buffer) {
-                                            error!(
-                                                "Error queueing pre-roll buffer for {}: {}",
-                                                id, e
-                                            );
-                                            return;
-                                        }
-                                        source.play();
                                     }
                                 }
                                 let buffer = if source.buffers_processed() > 200 {
@@ -251,11 +217,10 @@ impl SoundSource {
                                     );
                                     return;
                                 }
-                                if started
-                                    && source.state() != alto::SourceState::Playing
-                                    && source.buffers_queued() > PLAY_RESTART_BUFFERS
+                                if source.state() != alto::SourceState::Playing
+                                    && source.buffers_queued() > 75
                                 {
-                                    info!("Resuming source for {}, {:?}", id, source.state());
+                                    info!("Playing source for {}, {:?}", id, source.state());
                                     source.play();
                                 }
                             }
@@ -272,17 +237,38 @@ impl SoundSource {
                                     break;
                                 }
                             }
+                            StreamPacket::Close => {
+                                if online || !reported {
+                                    reported = true;
+                                    online = false;
+                                    if ctx
+                                        .callback_data(
+                                            "live_radio",
+                                            "status",
+                                            Some(vec![
+                                                id.to_string(),
+                                                "offline".to_string(),
+                                            ]),
+                                        )
+                                        .is_err()
+                                    {
+                                        // arma is probably closed
+                                        break;
+                                    }
+                                }
+                                source.stop();
+                                break;
+                            }
                             StreamPacket::Check => {
                                 // noop
                             }
                         }
                     }
                     Err(TryRecvError::Empty) => {
-                        if stream.active.load(std::sync::atomic::Ordering::Relaxed) {
-                            std::thread::sleep(std::time::Duration::from_millis(16));
-                            continue;
-                        }
-                        // Stream is not producing frames, mark offline once
+                        std::thread::sleep(std::time::Duration::from_millis(16));
+                    }
+                    Err(TryRecvError::Disconnected) => {
+                        error!("Stream receiver disconnected for {}", id);
                         if online || !reported {
                             reported = true;
                             online = false;
@@ -298,44 +284,8 @@ impl SoundSource {
                                 .is_err()
                             {
                                 // arma is probably closed
-                                break;
                             }
                         }
-                        // Emit static until new data or close arrives
-                        if has_data {
-                            debug!("Stream inactive for {}, playing static", id);
-                            while source.buffers_processed() > 0 {
-                                let _ = source.unqueue_buffer();
-                            }
-                        }
-                        if has_data && source.buffers_queued() < 100 {
-                            let samples = (0..(last_freq / 30))
-                                .map(|_| alto::Mono {
-                                    center: (rand::random::<f32>() * 2.0 - 1.0) * 0.05,
-                                })
-                                .collect::<Vec<_>>();
-                            let Some(listener) = Listener::get() else {
-                                return;
-                            };
-                            let Ok(buffer) = listener.new_buffer(samples, last_freq) else {
-                                error!("Error creating static buffer for {}", id);
-                                continue;
-                            };
-                            if let Err(e) = source.queue_buffer(buffer) {
-                                error!(
-                                    "Error queueing static buffer for {}: {}",
-                                    id, e
-                                );
-                                return;
-                            }
-                            if source.state() != alto::SourceState::Playing {
-                                let _ = source.play();
-                            }
-                        }
-                        std::thread::sleep(std::time::Duration::from_millis(16));
-                    }
-                    Err(TryRecvError::Disconnected) => {
-                        error!("Stream receiver disconnected for {}", id);
                         break;
                     }
                 }
