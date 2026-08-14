@@ -62,24 +62,41 @@
         }; \
     };
 
+#define RADIO_EXTERNAL_REPAIR \
+    class ACE_Actions { \
+        class ACE_MainActions { \
+            class GVAR(repairRadio) { \
+                displayName = CSTRING(Repair); \
+                statement = QUOTE([_target] call FUNC(repair)); \
+                condition = REPAIR_CONDITION; \
+                distance = 5; \
+            }; \
+        }; \
+    };
+
 class CfgVehicles {
     class LandVehicle;
     class Car: LandVehicle {
         RADIO_SELF_ACTIONS
+        RADIO_EXTERNAL_REPAIR
     };
     class Tank: LandVehicle {
         RADIO_SELF_ACTIONS
+        RADIO_EXTERNAL_REPAIR
     };
     class Air;
     class Helicopter: Air {
         RADIO_SELF_ACTIONS
+        RADIO_EXTERNAL_REPAIR
     };
     class Plane: Air {
         RADIO_SELF_ACTIONS
+        RADIO_EXTERNAL_REPAIR
     };
     class AllVehicles;
     class Ship: AllVehicles {
         RADIO_SELF_ACTIONS
+        RADIO_EXTERNAL_REPAIR
     };
 
     class Items_base_F;
