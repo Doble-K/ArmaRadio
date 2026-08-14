@@ -82,6 +82,7 @@ impl SoundSource {
             let mut specific_gain = gain;
             let mut quality = 0.0_f32;
             let mut online = false;
+            let mut has_data = false;
             let mut last_freq: i32 = 44100;
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
@@ -151,6 +152,7 @@ impl SoundSource {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
                                 last_freq = freq;
+                                has_data = true;
                                 let samples = if quality > 0.0 {
                                     samples
                                         .into_iter()
@@ -237,44 +239,42 @@ impl SoundSource {
                                     break;
                                 }
                             }
-                            StreamPacket::Close => {
-                                debug!("Stream closed for {}", id);
-                                if online {
-                                    online = false;
-                                    if ctx
-                                        .callback_data(
-                                            "live_radio",
-                                            "status",
-                                            Some(vec![
-                                                id.to_string(),
-                                                "offline".to_string(),
-                                            ]),
-                                        )
-                                        .is_err()
-                                    {
-                                        // arma is probably closed
-                                        break;
-                                    }
-                                }
-                                source.stop();
-                                break;
-                            }
                             StreamPacket::Check => {
                                 // noop
                             }
                         }
                     }
                     Err(TryRecvError::Empty) => {
-                        if stream.running.load(std::sync::atomic::Ordering::Relaxed) > 0 {
+                        if stream.active.load(std::sync::atomic::Ordering::Relaxed) {
                             std::thread::sleep(std::time::Duration::from_millis(16));
                             continue;
                         }
-                        // Stream decoder has died, emit static until new data or close arrives
-                        debug!("Stream thread dead for {}, playing static", id);
-                        while source.buffers_processed() > 0 {
-                            let _ = source.unqueue_buffer();
+                        // Stream is not producing frames, mark offline once
+                        if online {
+                            online = false;
+                            if ctx
+                                .callback_data(
+                                    "live_radio",
+                                    "status",
+                                    Some(vec![
+                                        id.to_string(),
+                                        "offline".to_string(),
+                                    ]),
+                                )
+                                .is_err()
+                            {
+                                // arma is probably closed
+                                break;
+                            }
                         }
-                        if source.buffers_queued() < 100 {
+                        // Emit static until new data or close arrives
+                        if has_data {
+                            debug!("Stream inactive for {}, playing static", id);
+                            while source.buffers_processed() > 0 {
+                                let _ = source.unqueue_buffer();
+                            }
+                        }
+                        if has_data && source.buffers_queued() < 100 {
                             let samples = (0..(last_freq / 30))
                                 .map(|_| alto::Mono {
                                     center: (rand::random::<f32>() * 2.0 - 1.0) * 0.05,

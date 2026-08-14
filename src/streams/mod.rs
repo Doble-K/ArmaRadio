@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
     mem::MaybeUninit,
     sync::{
-        atomic::{AtomicU8, AtomicUsize, Ordering},
+        atomic::{AtomicBool, AtomicU8, AtomicUsize, Ordering},
         Arc, RwLock,
     },
 };
@@ -26,8 +26,8 @@ impl Senders {
 pub struct Stream {
     pub count: Arc<AtomicU8>,
     pub senders: Senders,
-    /// Number of decoder threads currently running for this stream
-    pub running: Arc<AtomicUsize>,
+    /// True while a decoder is actively producing frames for this stream
+    pub active: Arc<AtomicBool>,
     generation: Arc<AtomicUsize>,
 }
 
@@ -35,46 +35,34 @@ impl Stream {
     pub fn start(&self, url: &str) {
         debug!("Starting stream: {}", url);
         let count = self.count.clone();
-        let running = self.running.clone();
+        let active = self.active.clone();
         let generation = self.generation.clone();
         let gen = generation.fetch_add(1, Ordering::AcqRel) + 1;
         let url = url.to_string();
         let senders = self.senders.clone();
-        std::thread::spawn(move || {
-            running.fetch_add(1, Ordering::AcqRel);
-            let remote = RemoteStream::new(&url, senders.clone());
-            let Ok(remote) = remote else {
-                error!(
-                    "Failed to start stream: {}",
-                    remote.err().expect("error expected")
-                );
-                running.fetch_sub(1, Ordering::AcqRel);
-                if generation.load(Ordering::Acquire) == gen
-                    && count.load(Ordering::Relaxed) > 0
-                {
-                    for sender in senders.0.read().expect("not poisoned").iter() {
-                        let _ = sender.send(StreamPacket::Close);
-                    }
+        std::thread::spawn(move || loop {
+            if count.load(Ordering::Relaxed) == 0 || generation.load(Ordering::Acquire) != gen {
+                debug!("no listeners or superseded, shutting down stream");
+                break;
+            }
+            let remote = match RemoteStream::new(&url, senders.clone()) {
+                Ok(remote) => remote,
+                Err(e) => {
+                    error!("Failed to connect to stream: {}", e);
+                    std::thread::sleep(std::time::Duration::from_secs(2));
+                    continue;
                 }
-                return;
             };
             let Ok(decoder) = Decoder::decode(remote) else {
                 error!("Failed to start stream: {}", url);
-                running.fetch_sub(1, Ordering::AcqRel);
-                if generation.load(Ordering::Acquire) == gen
-                    && count.load(Ordering::Relaxed) > 0
-                {
-                    for sender in senders.0.read().expect("not poisoned").iter() {
-                        let _ = sender.send(StreamPacket::Close);
-                    }
-                }
-                return;
+                std::thread::sleep(std::time::Duration::from_secs(2));
+                continue;
             };
+            active.store(true, Ordering::Relaxed);
             for decoding_result in decoder {
                 if count.load(Ordering::Relaxed) == 0
                     || generation.load(Ordering::Acquire) != gen
                 {
-                    debug!("no listeners or superseded, shutting down stream");
                     break;
                 }
                 match decoding_result {
@@ -108,15 +96,13 @@ impl Stream {
                     }
                 }
             }
-            running.fetch_sub(1, Ordering::AcqRel);
-            debug!("Stream decoder ended for {}", url);
-            if generation.load(Ordering::Acquire) == gen
-                && count.load(Ordering::Relaxed) > 0
-            {
-                for sender in senders.0.read().expect("not poisoned").iter() {
-                    let _ = sender.send(StreamPacket::Close);
-                }
+            active.store(false, Ordering::Relaxed);
+            if count.load(Ordering::Relaxed) == 0 || generation.load(Ordering::Acquire) != gen {
+                debug!("no listeners or superseded, shutting down stream");
+                break;
             }
+            debug!("Stream ended for {}, reconnecting", url);
+            std::thread::sleep(std::time::Duration::from_secs(2));
         });
     }
 }
@@ -124,14 +110,13 @@ impl Stream {
 pub enum StreamPacket {
     Data(Vec<alto::Mono<f32>>, i32),
     Title(String),
-    Close,
     Check,
 }
 
 pub struct StreamListener {
     pub receiver: Receiver<StreamPacket>,
     pub count: Arc<AtomicU8>,
-    pub running: Arc<AtomicUsize>,
+    pub active: Arc<AtomicBool>,
 }
 
 impl Drop for StreamListener {
@@ -182,21 +167,21 @@ impl Streams {
             return StreamListener {
                 receiver,
                 count: stream.count.clone(),
-                running: stream.running.clone(),
+                active: stream.active.clone(),
             };
         }
         debug!("creating new stream for {}", url);
         let stream = Stream {
             count: Arc::new(AtomicU8::new(1)),
             senders: Senders(Arc::new(RwLock::new(vec![sender]))),
-            running: Arc::new(AtomicUsize::new(0)),
+            active: Arc::new(AtomicBool::new(false)),
             generation: Arc::new(AtomicUsize::new(0)),
         };
         stream.start(&url);
         let sl = StreamListener {
             receiver,
             count: stream.count.clone(),
-            running: stream.running.clone(),
+            active: stream.active.clone(),
         };
         streams.insert(url, stream);
         sl
