@@ -34,40 +34,48 @@ impl RemoteStream {
     }
 }
 
+impl RemoteStream {
+    fn read_metadata(&mut self) -> std::io::Result<()> {
+        let mut length = [0u8; 1];
+        self.response.read_exact(&mut length)?;
+        let length = length[0] as usize * 16;
+        let mut metadata = vec![0u8; length];
+        self.response.read_exact(&mut metadata)?;
+        let metadata = String::from_utf8_lossy(&metadata);
+        for cap in self.regex.captures_iter(&metadata) {
+            for sender in self.senders.0.read().expect("not poisoned").iter() {
+                let _ = sender.send(StreamPacket::Title(cap[1].to_string()));
+            }
+        }
+        Ok(())
+    }
+}
+
 impl Read for RemoteStream {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
-        if let Some(interval) = self.interval {
-            let mut read = if buf.len() > interval - self.counter {
-                let read = interval - self.counter;
-                self.response
-                    .read_exact(&mut buf[..interval - self.counter])?;
-                self.counter += interval - self.counter;
-                read
+        let Some(interval) = self.interval else {
+            return self.response.read(buf);
+        };
+        if interval == 0 || buf.is_empty() {
+            return self.response.read(buf);
+        }
+        let mut read = 0;
+        while read < buf.len() {
+            let remaining = interval - self.counter;
+            if buf.len() - read >= remaining {
+                self.response.read_exact(&mut buf[read..read + remaining])?;
+                read += remaining;
+                self.counter += remaining;
             } else {
-                self.response.read_exact(buf)?;
-                self.counter += buf.len();
-                buf.len()
-            };
+                self.response.read_exact(&mut buf[read..])?;
+                read = buf.len();
+                break;
+            }
             if self.counter == interval {
-                let mut length = [0u8; 1];
-                self.response.read_exact(&mut length)?;
-                let length = length[0] as usize * 16;
-                let mut metadata = vec![0u8; length];
-                self.response.read_exact(&mut metadata)?;
-                let metadata = String::from_utf8_lossy(&metadata);
-                for cap in self.regex.captures_iter(&metadata) {
-                    for sender in self.senders.0.read().expect("not poisoned").iter() {
-                        let _ = sender.send(StreamPacket::Title(cap[1].to_string()));
-                    }
-                }
+                self.read_metadata()?;
                 self.counter = 0;
             }
-            if read == 0 {
-                read = self.read(buf)?;
-            }
-            Ok(read)
-        } else {
-            self.response.read(buf)
         }
+        Ok(read)
     }
 }

@@ -1,7 +1,10 @@
 use std::{
     collections::HashMap,
     mem::MaybeUninit,
-    sync::{atomic::AtomicU8, Arc, RwLock},
+    sync::{
+        atomic::{AtomicBool, AtomicU8, Ordering},
+        Arc, RwLock,
+    },
 };
 
 use crossbeam_channel::{Receiver, Sender};
@@ -23,21 +26,25 @@ impl Senders {
 pub struct Stream {
     pub count: Arc<AtomicU8>,
     pub senders: Senders,
+    pub alive: Arc<AtomicBool>,
 }
 
 impl Stream {
     pub fn start(&self, url: &str) {
         debug!("Starting stream: {}", url);
         let count = self.count.clone();
+        let alive = self.alive.clone();
         let url = url.to_string();
         let senders = self.senders.clone();
         std::thread::spawn(move || {
+            alive.store(true, Ordering::Relaxed);
             let remote = RemoteStream::new(&url, senders.clone());
             let Ok(remote) = remote else {
                 error!(
                     "Failed to start stream: {}",
                     remote.err().expect("error expected")
                 );
+                alive.store(false, Ordering::Relaxed);
                 return;
             };
             let Ok(decoder) = Decoder::decode(remote) else {
@@ -45,15 +52,16 @@ impl Stream {
                 for sender in senders.0.read().expect("not poisoned").iter() {
                     let _ = sender.send(StreamPacket::Close);
                 }
+                alive.store(false, Ordering::Relaxed);
                 return;
             };
             for decoding_result in decoder {
-                if count.load(std::sync::atomic::Ordering::Relaxed) == 0 {
+                if count.load(Ordering::Relaxed) == 0 {
                     debug!("no listeners, shutting down stream");
                     break;
                 }
                 match decoding_result {
-                    Err(_) => {} // error!("Error: {:?}", e),
+                    Err(e) => error!("Error decoding frame for {}: {:?}", url, e),
                     Ok(frame) => {
                         let mut samples: Vec<alto::Mono<f32>> = Vec::new();
                         for i in 0..frame.samples[0].len() {
@@ -83,8 +91,9 @@ impl Stream {
                     }
                 }
             }
+            alive.store(false, Ordering::Relaxed);
             debug!("Stream decoder ended for {}", url);
-            if count.load(std::sync::atomic::Ordering::Relaxed) > 0 {
+            if count.load(Ordering::Relaxed) > 0 {
                 for sender in senders.0.read().expect("not poisoned").iter() {
                     let _ = sender.send(StreamPacket::Close);
                 }
@@ -103,6 +112,7 @@ pub enum StreamPacket {
 pub struct StreamListener {
     pub receiver: Receiver<StreamPacket>,
     pub count: Arc<AtomicU8>,
+    pub alive: Arc<AtomicBool>,
 }
 
 impl Drop for StreamListener {
@@ -155,17 +165,20 @@ impl Streams {
             return StreamListener {
                 receiver,
                 count: stream.count.clone(),
+                alive: stream.alive.clone(),
             };
         }
         debug!("creating new stream for {}", url);
         let stream = Stream {
             count: Arc::new(AtomicU8::new(1)),
             senders: Senders(Arc::new(RwLock::new(vec![sender]))),
+            alive: Arc::new(AtomicBool::new(true)),
         };
         stream.start(&url);
         let sl = StreamListener {
             receiver,
             count: stream.count.clone(),
+            alive: stream.alive.clone(),
         };
         Self::get()
             .write()

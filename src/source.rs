@@ -80,6 +80,7 @@ impl SoundSource {
                 .expect("Error setting gain");
             let mut specific_gain = gain;
             let mut online = false;
+            let mut last_freq: i32 = 44100;
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
@@ -143,6 +144,7 @@ impl SoundSource {
                     Ok(recv) => {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
+                                last_freq = freq;
                                 if !online {
                                     online = true;
                                     if ctx
@@ -245,6 +247,39 @@ impl SoundSource {
                         }
                     }
                     Err(TryRecvError::Empty) => {
+                        if stream.alive.load(std::sync::atomic::Ordering::Relaxed) {
+                            std::thread::sleep(std::time::Duration::from_millis(16));
+                            continue;
+                        }
+                        // Stream decoder has died, emit static until new data or close arrives
+                        debug!("Stream thread dead for {}, playing static", id);
+                        while source.buffers_processed() > 0 {
+                            let _ = source.unqueue_buffer();
+                        }
+                        if source.buffers_queued() < 100 {
+                            let samples = (0..(last_freq / 30))
+                                .map(|_| alto::Mono {
+                                    center: (rand::random::<f32>() * 2.0 - 1.0) * 0.05,
+                                })
+                                .collect::<Vec<_>>();
+                            let Some(listener) = Listener::get() else {
+                                return;
+                            };
+                            let Ok(buffer) = listener.new_buffer(samples, last_freq) else {
+                                error!("Error creating static buffer for {}", id);
+                                continue;
+                            };
+                            if let Err(e) = source.queue_buffer(buffer) {
+                                error!(
+                                    "Error queueing static buffer for {}: {}",
+                                    id, e
+                                );
+                                return;
+                            }
+                            if source.state() != alto::SourceState::Playing {
+                                let _ = source.play();
+                            }
+                        }
                         std::thread::sleep(std::time::Duration::from_millis(16));
                     }
                     Err(TryRecvError::Disconnected) => {
