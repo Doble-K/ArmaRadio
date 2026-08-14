@@ -79,6 +79,7 @@ impl SoundSource {
                 )
                 .expect("Error setting gain");
             let mut specific_gain = gain;
+            let mut online = false;
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
@@ -142,6 +143,23 @@ impl SoundSource {
                     Ok(recv) => {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
+                                if !online {
+                                    online = true;
+                                    if ctx
+                                        .callback_data(
+                                            "live_radio",
+                                            "status",
+                                            Some(vec![
+                                                id.to_string(),
+                                                "online".to_string(),
+                                            ]),
+                                        )
+                                        .is_err()
+                                    {
+                                        // arma is probably closed
+                                        break;
+                                    }
+                                }
                                 let buffer = if source.buffers_processed() > 200 {
                                     if let Ok(mut buffer) = source.unqueue_buffer() {
                                         if let Err(e) = buffer.set_data(samples, freq) {
@@ -201,6 +219,23 @@ impl SoundSource {
                             }
                             StreamPacket::Close => {
                                 debug!("Stream closed for {}", id);
+                                if online {
+                                    online = false;
+                                    if ctx
+                                        .callback_data(
+                                            "live_radio",
+                                            "status",
+                                            Some(vec![
+                                                id.to_string(),
+                                                "offline".to_string(),
+                                            ]),
+                                        )
+                                        .is_err()
+                                    {
+                                        // arma is probably closed
+                                        break;
+                                    }
+                                }
                                 source.stop();
                                 break;
                             }

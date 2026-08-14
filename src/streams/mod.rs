@@ -83,6 +83,12 @@ impl Stream {
                     }
                 }
             }
+            debug!("Stream decoder ended for {}", url);
+            if count.load(std::sync::atomic::Ordering::Relaxed) > 0 {
+                for sender in senders.0.read().expect("not poisoned").iter() {
+                    let _ = sender.send(StreamPacket::Close);
+                }
+            }
         });
     }
 }

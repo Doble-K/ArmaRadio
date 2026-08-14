@@ -29,6 +29,12 @@ private _ctrlDescription = _display displayCtrl IDC_DESCRIPTION;
 private _activeID = _object getVariable [QEGVAR(manager,active), []] param [0, ""];
 _ctrlDescription ctrlSetText (EGVAR(manager,sourcesTitles) getOrDefault [_activeID, ""]);
 
+private _ctrlStatus = _display displayCtrl IDC_STATUS;
+private _status = EGVAR(manager,sourcesStatus) getOrDefault [_activeID, ""];
+_ctrlStatus ctrlShow (_status != "");
+_ctrlStatus ctrlSetText ([LSTRING(Offline), LSTRING(Online)] select (_status == "online"));
+_ctrlStatus ctrlSetTextColor ([[1, 0.2, 0.2, 1], [0.2, 1, 0.2, 1]] select (_status == "online"));
+
 private _ctrlPicture = _display displayCtrl IDC_PICTURE;
 _ctrlPicture ctrlSetText _picture;
 

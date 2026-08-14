@@ -101,6 +101,15 @@ class GVAR(display) {
             w = QUOTE(GRID_W(58));
             h = QUOTE(GRID_H(13));
         };
+        class Status: ctrlStatic {
+            idc = IDC_STATUS;
+            style = ST_CENTER;
+            x = QUOTE(CENTER_X + GRID_W(140/2 - 59));
+            y = QUOTE(CENTER_Y - GRID_H(110/2 - 85));
+            w = QUOTE(GRID_W(58));
+            h = QUOTE(GRID_H(5));
+            sizeEx = QUOTE(GRID_H(5));
+        };
         class Power: ctrlButtonPictureKeepAspect {
             idc = IDC_POWER;
             text = QPATHTOF(ui\power_ca.paa);

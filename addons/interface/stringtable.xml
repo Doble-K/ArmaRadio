@@ -10,5 +10,13 @@
         <Key ID="STR_Live_Radio_Interface_Off">
             <English>Off</English>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_Online">
+            <English>Online</English>
+            <Spanish>En línea</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Offline">
+            <English>Offline</English>
+            <Spanish>Sin conexión</Spanish>
+        </Key>
     </Package>
 </Project>

@@ -16,6 +16,7 @@ if (hasInterface) then {
         EXT callExtension ["source:destroy", [_id]];
         GVAR(sources) deleteAt _id;
         GVAR(sourcesTitles) deleteAt _id;
+        GVAR(sourcesStatus) deleteAt _id;
     }] call CBA_fnc_addEventHandler;
 
     [QGVAR(volume), {
@@ -46,6 +47,11 @@ addMissionEventHandler ["ExtensionCallback", {
             (parseSimpleArray _data) params ["_id", "_title"];
             GVAR(sourcesTitles) set [_id, _title];
             [QGVAR(metadataUpdated), [_id, _title]] call CBA_fnc_localEvent;
+        };
+        case "status": {
+            (parseSimpleArray _data) params ["_id", "_status"];
+            GVAR(sourcesStatus) set [_id, _status];
+            [QGVAR(metadataUpdated), [_id, ""]] call CBA_fnc_localEvent;
         };
     };
 }];
