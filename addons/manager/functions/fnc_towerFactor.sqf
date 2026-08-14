@@ -44,7 +44,8 @@ private _factor = 0;
                 _towerSide = side _x;
             };
             if (_towerSide != sideUnknown && {_playerSide != sideUnknown}) then {
-                private _enemy = (_towerSide getFriend _playerSide) select 0 < 0.6;
+                private _friend = _towerSide getFriend _playerSide;
+                private _enemy = (_friend param [0, 1]) < 0.6;
                 if !(_enemy) then {
                     continue;
                 };
