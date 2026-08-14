@@ -1,13 +1,25 @@
 #include "script_component.hpp"
 
 if (hasInterface) then {
-    private _gain = [GVAR(volumeMultiplier), 0] select (GVAR(streamerMode));
-    EXT callExtension ["source:global_gain", [_gain]];
+    [GVAR(volumeMultiplier)] call FUNC(applyGain);
 
     GVAR(lastExplosion) = -999;
     addMissionEventHandler ["Explosion", {
         GVAR(lastExplosion) = time;
     }];
+
+    GVAR(hearingFactor) = -1;
+    [{
+        private _factor = 1;
+        if (isClass (configFile >> "CfgPatches" >> "ace_hearing")) then {
+            _factor = (missionNamespace getVariable ["ace_hearing_volume", 1])
+                * (missionNamespace getVariable ["ace_hearing_volumeAttenuation", 1]);
+        };
+        if (_factor != GVAR(hearingFactor)) then {
+            GVAR(hearingFactor) = _factor;
+            [GVAR(volumeMultiplier)] call FUNC(applyGain);
+        };
+    }] call CBA_fnc_addPerFrameHandler;
 
     [QGVAR(start), {
         params ["_id", "_url", "_source"];

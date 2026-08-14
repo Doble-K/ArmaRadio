@@ -18,9 +18,7 @@ EXT callExtension "";
     [0.1, 1, 0.3, 2, true],
     0,
     {
-        if !(GVAR(streamerMode)) then {
-            EXT callExtension ["source:global_gain", [_this]];
-        };
+        [_this] call FUNC(applyGain);
     }
 ] call CBA_fnc_addSetting;
 
@@ -32,8 +30,7 @@ EXT callExtension "";
     false,
     2,
     {
-        private _gain = [GVAR(volumeMultiplier), 0] select (_this);
-        EXT callExtension ["source:global_gain", [_gain]];
+        [GVAR(volumeMultiplier)] call FUNC(applyGain);
     }
 ] call CBA_fnc_addSetting;
 

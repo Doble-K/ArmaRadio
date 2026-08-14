@@ -8,19 +8,19 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 
 ### Config básica
 
-- [ ] **Volumen default 30%** — slider `[0.1, 1, 0.5, 2, true]` → `[0.1, 1, 0.3, 2, true]` en `addons/manager/XEH_preInit.sqf`. El rango sigue permitiendo llegar a 100%.
+- [x] **Volumen default 30%** — slider `[0.1, 1, 0.5, 2, true]` → `[0.1, 1, 0.3, 2, true]` en `addons/manager/XEH_preInit.sqf`. El rango sigue permitiendo llegar a 100%.
   - Nota: hoy el DLL arranca en 100% y el default del slider nunca se aplica solo.
-- [ ] **Default "Driver and Commander Only" = true** — en `addons/interface/XEH_preInit.sqf`, cambiar el último `false` por `true` en el `CBA_fnc_addSetting` del setting.
+- [x] **Default "Driver and Commander Only" = true** — en `addons/interface/XEH_preInit.sqf`, cambiar el último `false` por `true` en el `CBA_fnc_addSetting` del setting.
   - Nota: todos escuchan (pasajeros y gente cerca — ya ocurre vía audio posicional). La restricción aplica solo a CONTROLAR la radio: abrirla y cambiar emisora.
 
 ### Streamer Mode
 
-- [ ] **Nuevo setting "Streamer Mode"** (`CHECKBOX`, default `false`) en `addons/manager/XEH_preInit.sqf`.
+- [x] **Nuevo setting "Streamer Mode"** (`CHECKBOX`, default `false`) en `addons/manager/XEH_preInit.sqf`.
   - ON → `EXT callExtension ["source:global_gain", [0]]` (silencia todas las fuentes, incluidas nuevas).
   - OFF → restaura `GVAR(volumeMultiplier)`.
   - El handler de "Volume Multiplier" no debe pisar el mute cuando streamer mode está activo.
   - Se guarda en el perfil del jugador (`CBA_settings.sqf`) → queda configurado entre misiones.
-- [ ] **Re-aplicar al iniciar misión** — en `addons/manager/XEH_postInit.sqf` (bloque `hasInterface`):
+- [x] **Re-aplicar al iniciar misión** — en `addons/manager/XEH_postInit.sqf` (bloque `hasInterface`):
   ```sqf
   private _gain = if (GVAR(streamerMode)) then { 0 } else { GVAR(volumeMultiplier) };
   EXT callExtension ["source:global_gain", [_gain]];
@@ -29,28 +29,28 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 
 ### Vehículos compatibles configurables (#3)
 
-- [ ] Settings CBA (globales — los maneja el servidor, los clientes no los tocan) en `addons/interface/XEH_preInit.sqf`:
+- [x] Settings CBA (globales — los maneja el servidor, los clientes no los tocan) en `addons/interface/XEH_preInit.sqf`:
   - `Enable for Cars` (clase base `Car`) — `CHECKBOX`, default `true`
   - `Enable for Armored` (clase base `Tank`) — `CHECKBOX`, default `false`
   - `Enable for Helicopters` (clase base `Helicopter`) — `CHECKBOX`, default `false`
   - `Enable for Planes` (clase base `Plane`) — `CHECKBOX`, default `false`
   - `Enable for Ships` (clase base `Ship`) — `CHECKBOX`, default `false`
   - (Opcional) `Custom vehicle classes` — array de classnames extra
-- [ ] Función nueva `fnc_isCompatible.sqf` (`addons/interface/functions/`): recibe vehículo → `true` si `isKindOf` alguna clase base habilitada por los settings + las custom.
-- [ ] `addons/interface/XEH_postInit.sqf:19`: condición de la acción de jugador → `[_vehicle] call FUNC(isCompatible)`.
-- [ ] `addons/interface/CfgVehicles.hpp`: `ACE_SelfActions` con `GVAR(open)` en `Car`, `Tank`, `Helicopter`, `Plane` y `Ship`; la acción se filtra por `isCompatible` para ocultarla si el checkbox está en false.
-- [ ] `fnc_canOpen.sqf`: se mantiene (conductor/comandante) — aplica a todas las categorías.
+- [x] Función nueva `fnc_isCompatible.sqf` (`addons/interface/functions/`): recibe vehículo → `true` si `isKindOf` alguna clase base habilitada por los settings + las custom.
+- [x] `addons/interface/XEH_postInit.sqf:19`: condición de la acción de jugador → `[_vehicle] call FUNC(isCompatible)`.
+- [x] `addons/interface/CfgVehicles.hpp`: `ACE_SelfActions` con `GVAR(open)` en `Car`, `Tank`, `Helicopter`, `Plane` y `Ship`; la acción se filtra por `isCompatible` para ocultarla si el checkbox está en false.
+- [x] `fnc_canOpen.sqf`: se mantiene (conductor/comandante) — aplica a todas las categorías.
 
 ### Indicador de estado del stream (ONLINE/OFFLINE)
 
-- [ ] DLL: callback `stream:status` (`online`/`offline`) vía ExtensionCallback — online al recibir data, offline al terminar la decodificación (EOF/Close). Comparte señal con el ruido blanco del bug del loop (P1).
-- [ ] SQF: handler en `addons/manager/XEH_postInit.sqf` → `GVAR(sourcesStatus)` + refresh de UI vía `metadataUpdated`.
-- [ ] UI: mostrar ONLINE/OFFLINE en el panel (texto en `gui.hpp`, verde/rojo) o en el `IDC_DESCRIPTION`.
+- [x] DLL: callback `stream:status` (`online`/`offline`) vía ExtensionCallback — online al recibir data, offline al terminar la decodificación (EOF/Close). Comparte señal con el ruido blanco del bug del loop (P1).
+- [x] SQF: handler en `addons/manager/XEH_postInit.sqf` → `GVAR(sourcesStatus)` + refresh de UI vía `metadataUpdated`.
+- [x] UI: mostrar ONLINE/OFFLINE en el panel (texto en `gui.hpp`, verde/rojo) o en el `IDC_DESCRIPTION`.
 
 ### Multilenguaje (ES/EN)
 
-- [ ] Completar keys de `stringtable.xml` (`addons/interface`, `addons/main`) en Español e Inglés.
-- [ ] Migrar strings hardcodeados ("Driver and Commander Only", "FM Radio", "Live Radio", acciones ACE) a `LSTRING`/`localize` — sin cambiar el texto (se mantienen los nombres originales del mod).
+- [x] Completar keys de `stringtable.xml` (`addons/interface`, `addons/main`) en Español e Inglés.
+- [x] Migrar strings hardcodeados ("Driver and Commander Only", "FM Radio", "Live Radio", acciones ACE) a `LSTRING`/`localize` — sin cambiar el texto (se mantienen los nombres originales del mod).
 
 ## P1 — Corrección + comodidad
 
@@ -85,38 +85,38 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 
 ### Controles rápidos ACE (sin abrir el panel)
 
-- [ ] Nuevas funciones en `addons/interface/functions/`:
+- [x] Nuevas funciones en `addons/interface/functions/`:
   - `fnc_power.sqf` — encender/apagar (toggle), reusando `EFUNC(manager,play)`.
   - `fnc_volumeChange.sqf` — subir/bajar volumen en pasos ~0.1, límite `MIN_VOLUME`/`MAX_VOLUME` (0–2), reusando `EFUNC(manager,volume)`.
   - `fnc_stationChange.sqf` — estación anterior/siguiente navegando `GVAR(stations)`, solo si está encendida.
-- [ ] Registrar acciones ACE en `addons/interface/CfgVehicles.hpp`:
+- [x] Registrar acciones ACE en `addons/interface/CfgVehicles.hpp`:
   - Vehículos (`ACE_SelfActions`): Encender/Apagar, Subir Volumen, Bajar Volumen, Estación Anterior, Estación Siguiente.
   - Radio estática (`Land_FMradio_F` en `ACE_Actions`).
-- [ ] Agregar las mismas acciones al fallback sin ACE en `addons/interface/XEH_postInit.sqf` (cuando no está cargado `ace_interaction`).
+- [x] Agregar las mismas acciones al fallback sin ACE en `addons/interface/XEH_postInit.sqf` (cuando no está cargado `ace_interaction`).
 
 ### Rango de sonido configurable (#17)
 
-- [ ] Setting CBA "Sound Range" (metros).
-- [ ] En `fnc_tick`: fuente fuera del rango → `source:gain 0`; dentro del rango → volumen normal.
+- [x] Setting CBA "Sound Range" (metros).
+- [x] En `fnc_tick`: fuente fuera del rango → `source:gain 0`; dentro del rango → volumen normal.
 
 ## P2 — Gameplay / inmersión
 
 ### Apagado automático
 
-- [ ] Handler server-only (perFrame) en `addons/manager/XEH_postInit.sqf`:
+- [x] Handler server-only (perFrame) en `addons/manager/XEH_postInit.sqf`:
   - Por cada radio activa, si ningún jugador está a < R metros durante T segundos → `[_object, ""] call EFUNC(manager,play)` (apaga para todos).
   - R y T como settings CBA (defaults propuestos: 30 m / 120 s).
 
 ### Interferencia / distorsión según daño
 
-- [ ] **Rust** (`src/source.rs`): nuevo comando `source:quality` y `SoundCommand::SetQuality`.
+- [x] **Rust** (`src/source.rs`): nuevo comando `source:quality` y `SoundCommand::SetQuality`.
   - Al recibir `StreamPacket::Data`, si `quality > 0`: mezclar ruido blanco y atenuar amplitud proporcionalmente.
   - Barato por muestra; `quality` en `[0, 1]`.
-- [ ] **SQF** (`addons/manager/functions/fnc_tick.sqf`): por cada fuente, enviar
+- [x] **SQF** (`addons/manager/functions/fnc_tick.sqf`): por cada fuente, enviar
   `quality = linearConversion [0, 1, getDammage _object, 0, 1]` → `EXT callExtension ["source:quality", ...]`.
   - Afecta a todos los jugadores por igual (el daño del vehículo es compartido).
 - [ ] (Opcional) Interferencia por distancia del jugador a la radio, además del daño.
-- [ ] **Interferencia ambiental** (extiende el daño): sumar distorsión por eventos ambientales cercanos:
+- [x] **Interferencia ambiental** (extiende el daño): sumar distorsión por eventos ambientales cercanos:
   - Tormentas / lluvia intensa / rayos
   - Explosiones recientes
   - ECM/jammer (si la misión lo usa)
@@ -132,14 +132,14 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 
 ### Sonido de encendido/apagado
 
-- [ ] Click/estática corta al prender y al apagar la radio.
+- [x] Click/estática corta al prender y al apagar la radio.
   - Implementación: clip de audio embebido reproducido por el DLL (ya decodifica MP3 con `simplemad`) o asset SQF.
 
 ### Control en Zeus
 
-- [ ] Permitir al curador (Zeus) encender/apagar radios de unidades de IA y vehículos.
-- [ ] `fnc_tick` ya detecta `_inZeus` (cámara del curador) — reusar para posicionar fuentes.
-- [ ] Módulo Zeus o interacción ACE para seleccionar unidad/vehículo y togglear power (reusa `EFUNC(manager,play)`).
+- [x] Permitir al curador (Zeus) encender/apagar radios de unidades de IA y vehículos.
+- [x] `fnc_tick` ya detecta `_inZeus` (cámara del curador) — reusar para posicionar fuentes.
+- [x] Módulo Zeus o interacción ACE para seleccionar unidad/vehículo y togglear power (reusa `EFUNC(manager,play)`).
 
 ### Radios de mano y mochila radio
 
