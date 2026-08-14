@@ -2,6 +2,17 @@
 
 Registro de puntos del `roadmap.md` que quedaron sin completar en la sesión de trabajo del 14/8/2026, con el motivo y qué se necesita para resolverlos.
 
+## P2 — Apagado automático — DESHABILITADO por bug de apagado espontáneo
+
+- **Estado**: DESHABILITADO (defaults `autoOffRange = 0`, `autoOffTime = 0`; el guard del handler lo apaga). El código y los settings se mantienen.
+- **Síntoma**: la radio se apagó sola estando el jugador al lado del vehículo (2 reportes), incluida al bajarse del vehículo. Con el mod original no pasaba.
+- **Causa probable**: `allUnits select { isPlayer _x }` puede venir vacío/sin el jugador en hosted (respawn/transición) → `_near` nunca `true` → el contador de `autoOffTime` (120 s) se dispara indebidamente. El commit `6988716` habilitó la feature en hosted (`isServer` sin `!hasInterface`), que es donde juega el usuario.
+- **Qué se necesita para resolver**:
+  1. Diagnóstico con logging temporal (`count _players`, distancia, valores de settings) antes del apagado.
+  2. Probar fixes: inicializar `GVAR(autoOffLastSeen)` en el evento `start`; no contar hasta el primer "near"; usar `allPlayers`; saltar el vehículo del propio jugador.
+- **Nota**: no se sigue ahora — documentado a pedido del usuario (14/8/2026).
+
+
 ## P2 — Interferencia ambiental por explosiones — nota
 
 - **Estado**: COMPLETADO con fix de `addMissionEventHandler ["Explosion"]` → object handlers.

@@ -106,6 +106,27 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 - [x] Handler server-only (perFrame) en `addons/manager/XEH_postInit.sqf`:
   - Por cada radio activa, si ningún jugador está a < R metros durante T segundos → `[_object, ""] call EFUNC(manager,play)` (apaga para todos).
   - R y T como settings CBA (defaults propuestos: 30 m / 120 s).
+- [x] **DESHABILITADO (14/8/2026)** — reporte de apagado espontáneo en partida (ver "BUG: se apaga sola" abajo).
+  - Se desactiva sin retirar el código: defaults `autoOffRange = 0` y `autoOffTime = 0` (el guard `if (GVAR(autoOffRange) <= 0 || GVAR(autoOffTime) <= 0) exitWith {}` la apaga).
+  - Decisión: documentar todo y NO seguir ahora (pendiente de diagnóstico).
+
+#### BUG: la radio se apaga sola estando al lado del vehículo / al bajarse
+
+- **Síntoma (2 reportes)**: la radio se apagó sola estando el jugador al lado del vehículo, y se volvió a apagar al bajarse del vehículo. Antes (mod original) no pasaba.
+- **Feature responsable**: auto power off (este punto P2), habilitada también en hosted por el commit `6988716` (cambió `isServer && !hasInterface` → `isServer`). El usuario juega en hosted/single player.
+- **Hipótesis de causa** (sin confirmar):
+  - `allUnits select { isPlayer _x }` puede venir vacío o sin el jugador en momentos de transición/respawn → `_near` nunca `true` → el contador de `autoOffTime` se dispara indebidamente.
+  - `GVAR(autoOffLastSeen)` se inicializa con `time` en el primer check y no se refresca si `_players` está vacío.
+  - El cambio de hosted (`6988716`) hizo que la feature corra en el contexto donde el usuario juega.
+- **Cómo diagnosticar** (cuando se retome):
+  - Logging temporal en el bloque: `diag_log` con `count _players`, distancia jugador→objeto, y valores de `autoOffRange`/`autoOffTime`/`autoOffLastSeen` antes de disparar el apagado.
+  - Reproducir con `autoOffRange` alto (ej. 500) para confirmar que el conteo se dispara indebidamente.
+- **Fixes candidatos a probar** (cuando se retome):
+  - Inicializar `GVAR(autoOffLastSeen)` en el momento de encender la radio (evento `start`/`fnc_play`) en vez del default `time` del primer check.
+  - No iniciar el conteo hasta que al menos un jugador haya estado cerca una vez (flag).
+  - Usar `allPlayers` en vez de `allUnits select { isPlayer _x }`.
+  - Excluir del apagado el vehículo donde está el propio jugador (`if (_object == vehicle player) exitWith {}` en el host).
+- **Estado**: DESHABILITADO (defaults 0), documentado, pendiente de diagnóstico.
 
 ### Interferencia / distorsión según daño
 
@@ -161,6 +182,23 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
   - Pre-roll de estática: al recibir el primer frame de audio, se encola un buffer de ruido blanco de ~4 s y se inicia reproducción de inmediato — el arranque suena como "sintonizar" la FM en vez de silencio, mientras el audio real se acumula detrás.
   - Reanudación rápida: tras un underrun, se re-anuda apenas `buffers_queued() > 30` (~0.8 s) en vez de esperar 75 (~2 s).
 - [ ] **Pendiente (futuro)**: sincronización fina del audio entre jugadores que escuchan la misma radio (arranque coordinado con el evento global `start`); el buffer consistente de ~4 s ya reduce el desfase.
+
+### Audio en loop / "falta de información" + estática en radios offline
+
+- **Síntoma (reportado 14/8/2026)**: el audio suena como un **loop por falta de información** (segmento repetido/cortes); el usuario dice que con el **mod original no pasaba**. Las radios offline además **siempre emiten estática**.
+- **Comparación con el original** (lo que nosotros introdujimos en `src/streams/mod.rs` y `src/source.rs`):
+  - Original: stream muerto → solo `sleep(16ms)`, la radio quedaba muda, **sin reconexión** ni estática.
+  - Nuestro fork: **reconexión automática** (`Stream::start` con loop + `generation`), **estática offline continua** (amplitud 0.05), marcado online/offline, y **pre-roll de estática de 4 s** al arrancar (commit `e329630`).
+- **Hipótesis de causa** (sin confirmar):
+  - El **loop de reconexión** de `Stream::start` puede re-decodificar el stream desde el principio y reproducir el mismo segmento inicial → suena como loop/falta de datos.
+  - La **estática offline** se mantiene mientras el stream está inactivo; si la reconexión falla y el thread muere, la fuente sigue mandando ruido blanco indefinidamente.
+  - Interacción del pre-roll de 4 s con streams que vuelven rápido → mezcla estática con el inicio real.
+- **Cómo diagnosticar** (cuando se retome):
+  - Revisar `diag_log`/RPT por errores de decode (`Mad(LostSync)`, `Mad(BadHuffData)`) y por los mensajes `Stream ended for {}, reconnecting` para ver la frecuencia de reconexión.
+  - Reproducir con una estación estable (PulseEDM) vs una inestable (ClassicRock109) para aislar si el loop depende del stream o de la lógica.
+  - Probar deshabilitando temporalmente el pre-roll (`PRE_ROLL_SECONDS = 0`) y la estática offline para ver cuál introduce el loop.
+- **Decisión pendiente**: comportamiento deseado para radios offline — (a) configurable con setting CBA "Static on offline" (default ON), (b) silencio (como el original), o (c) estática solo unos segundos y luego silencio.
+- **Estado**: documentado, NO se sigue ahora (pendiente de diagnóstico).
 
 ## P3 — Futuro medio/lejano
 
