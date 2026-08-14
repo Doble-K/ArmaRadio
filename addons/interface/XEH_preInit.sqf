@@ -23,6 +23,6 @@ GVAR(stations) sort true;
     "CHECKBOX",
     "Driver and Commander Only",
     "Live Radio",
-    false,
+    true,
     1
 ] call CBA_fnc_addSetting;
