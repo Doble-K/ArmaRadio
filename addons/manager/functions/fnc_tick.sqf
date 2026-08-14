@@ -47,6 +47,16 @@ EXT callExtension ["listener:dir", _data];
             _y setVariable [QGVAR(quality), _quality];
             EXT callExtension ["source:quality", [_x, _quality]];
         };
+
+        if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {
+            _y setVariable [QGVAR(lastExistsCheck), diag_tickTime];
+            if (((EXT callExtension ["source:exists", [_x]]) select 0) isEqualTo "0") then {
+                private _active = _y getVariable [QGVAR(active), []];
+                if !(_active isEqualTo []) then {
+                    EXT callExtension ["source:new", [_x, _active param [1, ""], _y getVariable [QGVAR(volume), 1]]];
+                };
+            };
+        };
     } else {
         [QGVAR(stop), [_x]] call CBA_fnc_localEvent;
     };

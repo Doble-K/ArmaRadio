@@ -385,6 +385,7 @@ pub fn group() -> Group {
         .command("pos", command_set_position)
         .command("gain", command_set_gain)
         .command("quality", command_set_quality)
+        .command("exists", command_source_exists)
         .command("global_gain", command_set_global_gain)
         .state(global_gain)
 }
@@ -420,6 +421,18 @@ pub fn command_set_gain(id: String, gain: f32) {
 pub fn command_set_quality(id: String, quality: f32) {
     if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
         src.lock().expect("not poisoned").set_quality(quality);
+    }
+}
+
+pub fn command_source_exists(id: String) -> String {
+    if Sources::get()
+        .read()
+        .expect("not poisoned")
+        .contains_key(&id)
+    {
+        "1".to_string()
+    } else {
+        "0".to_string()
     }
 }
 
