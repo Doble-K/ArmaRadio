@@ -24,4 +24,13 @@ private _player = call CBA_fnc_currentUnit;
 
 if (driver _object == _player) exitWith {true};
 if (commander _object == _player) exitWith {true};
+
+// Vehicles without a commander position: delegate control to the first two passengers
+if (fullCrew [_object, "commander", true] isEqualTo []) exitWith {
+    private _passengers = fullCrew [_object, "cargo", false];
+    private _first = _passengers param [0, []] param [0, objNull];
+    private _second = _passengers param [1, []] param [0, objNull];
+    (_first isEqualTo _player) || (_second isEqualTo _player)
+};
+
 false
