@@ -298,6 +298,28 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 - [x] Módulos ZEN individuales: funcionan.
 - [x] Interferencia ambiental (lluvia/explosiones/daño): presente y audible.
 
+## Próxima iteración — Tareas simples pendientes del testing (1 commit cada una)
+
+> Encontradas en testing en partida (14/8/2026). Quedan como tareas simples pendientes, en el mismo formato que la iteración anterior (1 commit por tarea). La verificación en partida es manual y futura.
+
+### T11 — Fix: el menú ACE "FM Radio" desaparece con la radio dañada
+
+- [ ] **Síntoma**: con la radio quemada, el menú ACE "FM Radio" desaparece para pasajeros en asientos sin control. El criterio de T1 no se cumplió en partida.
+- [ ] **Causa raíz**: el menú padre usa `RADIO_CONDITION` (`isCompatible && canOpen`); `canOpen` falla en asientos que no controlan, y ACE oculta el submenú entero si no queda ningún hijo visible (con radio quemada y sin ser ingeniero, `Repair` tampoco se muestra).
+- [ ] **Fix** en `CfgVehicles.hpp`: nueva macro `RADIO_MENU_CONDITION` = `isCompatible && (canOpen || isBurned)` para el menú padre `GVAR(menu)` y la acción `Open` (así siempre hay un hijo visible con radio dañada y se puede abrir el panel para ver el aviso de T2). `power`/`volumen`/`estación` siguen con `RADIO_CONDITION`; `Repair` con `REPAIR_CONDITION`.
+- [ ] Criterio done: con la radio dañada el menú FM aparece igual; `hemtt build` OK. Verificación en partida manual y futura.
+- Commit: 1.
+
+### T12 — Modelo de acceso por tripulación (artillero principal/copiloto vs artilleros de puerta, pasajero delantero)
+
+- [ ] **Síntomas (testing)**: en la Hilux los pasajeros 3/4 tienen acceso a la radio (debería ser solo el "pasajero 2" delantero, el de al lado del conductor); en helicópteros todos los pasajeros de cabina tienen acceso y los artilleros de torreta/puerta no.
+- [ ] **Regla objetivo**: driver y comandante siempre; **artillero principal / copiloto** (`gunner _object` — asiento delantero del AH-1Z, artillero del blindado) = tripulación → setting nuevo; **artilleros de puerta / torretas secundarias** (rol `turret` en `fullCrew`) → solo con "All Gunners" ON; **pasajeros / cargo / infantería** → nunca.
+- [ ] **Setting nuevo** `mainGunnerAndCopilotCanControl` (CHECKBOX, default ON) en `addons/interface/XEH_preInit.sqf` + stringtable EN/ES con tooltip.
+- [ ] **T9** `allGunnersCanControl` pasa a cubrir SOLO torretas secundarias / artilleros de puerta (default OFF); corregir su descripción (hoy dice "Door gunners stay excluded", quedó invertida).
+- [ ] **`fnc_canOpen.sqf`**: driver/comandante → siempre; `gunner _object` → setting nuevo; torretas secundarias → `allGunners`; sin asiento de comandante y vehículo terrestre (Car/Tank) → SOLO el pasajero delantero (el ocupante de cargo más cercano a la posición del conductor); pasajeros → `false`.
+- [ ] Criterio done: en la Hilux solo "pasajero 2" (delantero) controla; en helicópteros los pasajeros de cabina no controlan y los artilleros de puerta sí con la opción ON; build OK. Verificación en partida manual y futura.
+- Commit: 1.
+
 ## Decisiones humanas requeridas (bloqueadas, NO son tarea del agente)
 
 - **ClassicRock109**: ¿reemplazar, quitar o mantener la estación caída?
