@@ -6,6 +6,7 @@ use std::{
     time::{Duration, SystemTime},
 };
 
+use alto::Source;
 use arma_rs::{arma, Extension};
 use rand::{distributions::Alphanumeric, thread_rng, Rng};
 
@@ -26,6 +27,7 @@ pub fn init() -> Extension {
         .group("source", source::group())
         .command("id", command_id)
         .command("heartbeat", command_heartbeat)
+        .command("click", command_click)
         .finish();
     logger::init(ext.context());
 
@@ -63,6 +65,35 @@ fn command_id() -> String {
 
 fn command_heartbeat() {
     Heartbeat::beat();
+}
+
+fn command_click() {
+    let Some(listener) = crate::listener::Listener::get() else {
+        return;
+    };
+    std::thread::spawn(move || {
+        let Ok(mut source) = listener.new_streaming_source() else {
+            return;
+        };
+        let len = 44100 / 25;
+        let samples = (0..len)
+            .map(|i| {
+                let envelope = 1.0 - (i as f32 / len as f32);
+                alto::Mono {
+                    center: (rand::random::<f32>() * 2.0 - 1.0) * 0.4 * envelope,
+                }
+            })
+            .collect::<Vec<_>>();
+        let Ok(buffer) = listener.new_buffer(samples, 44100) else {
+            return;
+        };
+        if source.queue_buffer(buffer).is_err() {
+            return;
+        }
+        source.play();
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        source.stop();
+    });
 }
 
 pub struct Heartbeat;

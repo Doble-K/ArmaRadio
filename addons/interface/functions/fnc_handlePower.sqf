@@ -35,6 +35,7 @@ if (_toggle) then {
 
     private _object = _display getVariable QGVAR(object);
     [_object, _url] call EFUNC(manager,play);
+    EXT callExtension ["click", []];
 
     _display setVariable [QGVAR(powered), _powered];
 };
