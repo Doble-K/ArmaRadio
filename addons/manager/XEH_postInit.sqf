@@ -4,6 +4,11 @@ if (hasInterface) then {
     private _gain = [GVAR(volumeMultiplier), 0] select (GVAR(streamerMode));
     EXT callExtension ["source:global_gain", [_gain]];
 
+    GVAR(lastExplosion) = -999;
+    addMissionEventHandler ["Explosion", {
+        GVAR(lastExplosion) = time;
+    }];
+
     [QGVAR(start), {
         params ["_id", "_url", "_source"];
         EXT callExtension ["source:new", [_id, _url, _source getVariable [QGVAR(volume), 1]]];

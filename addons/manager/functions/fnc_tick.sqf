@@ -40,6 +40,9 @@ EXT callExtension ["listener:dir", _data];
         EXT callExtension ["source:pos", _data];
 
         private _quality = linearConversion [0, 1, getDammage _y, 0, 1, true];
+        private _storm = 0.2 * rain;
+        private _explosion = linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true];
+        _quality = (_quality + _storm + _explosion) min 1;
         if (_quality != (_y getVariable [QGVAR(quality), 0])) then {
             _y setVariable [QGVAR(quality), _quality];
             EXT callExtension ["source:quality", [_x, _quality]];
