@@ -25,9 +25,9 @@ EXT callExtension ["listener:dir", _data];
             if (_inZeus) then {
                 _ppos = getPosASL curatorCamera;
             };
-            private _outOfRange = (_pos distance _ppos) > _range;
+            private _outOfRange = _range > 0 && {(_pos distance _ppos) > _range};
             if (_outOfRange != (_y getVariable [QGVAR(outOfRange), false])) then {
-                _y setVariable [QGVAR(outOfRange), _outOfRange, true];
+                _y setVariable [QGVAR(outOfRange), _outOfRange];
                 EXT callExtension ["source:gain", [_x, if (_outOfRange) then { 0 } else { _y getVariable [QGVAR(volume), 1] }]];
             };
             _data = [

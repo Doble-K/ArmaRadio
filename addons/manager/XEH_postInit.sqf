@@ -38,6 +38,10 @@ if (hasInterface) then {
 
     [QGVAR(volume), {
         params ["_id", "_gain"];
+        private _object = GVAR(sources) getOrDefault [_id, objNull];
+        if (_object getVariable [QGVAR(outOfRange), false]) then {
+            _gain = 0;
+        };
         EXT callExtension ["source:gain", [_id, _gain]];
     }] call CBA_fnc_addEventHandler;
 
