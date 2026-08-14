@@ -19,6 +19,8 @@ params ["_object"];
 
 if (_object isKindOf "Land_FMradio_F") exitWith {true};
 
+private _compatible = false;
+
 private _categories = [
     [QGVAR(enableCars), "Car"],
     [QGVAR(enableArmored), "Tank"],
@@ -29,8 +31,12 @@ private _categories = [
 
 {
     _x params ["_setting", "_cfgClass"];
-    if ((missionNamespace getVariable [_setting, false]) && {_object isKindOf _cfgClass}) exitWith {true};
+    if ((missionNamespace getVariable [_setting, false]) && {_object isKindOf _cfgClass}) exitWith {
+        _compatible = true;
+    };
 } forEach _categories;
+
+if (_compatible) exitWith {true};
 
 private _text = missionNamespace getVariable [QGVAR(customVehicleClasses), "[]"];
 private _customClasses = if (count _text > 0 && {(toArray _text) param [0, 91] == 91}) then {
@@ -39,7 +45,9 @@ private _customClasses = if (count _text > 0 && {(toArray _text) param [0, 91] =
     []
 };
 {
-    if (_object isKindOf _x) exitWith {true};
+    if (_object isKindOf _x) exitWith {
+        _compatible = true;
+    };
 } forEach _customClasses;
 
-false
+_compatible
