@@ -77,6 +77,26 @@
             <English>Power</English>
             <Spanish>Encender/Apagar</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_SelectObject">
+            <English>Select an object first</English>
+            <Spanish>Seleccioná primero un objeto</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_SetStation">
+            <English>Set Radio Station</English>
+            <Spanish>Configurar emisora</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_SetVolume">
+            <English>Set Radio Volume</English>
+            <Spanish>Configurar volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Station">
+            <English>Station</English>
+            <Spanish>Emisora</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_Volume">
+            <English>Volume</English>
+            <Spanish>Volumen</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_Repair">
             <English>Repair Radio</English>
             <Spanish>Reparar radio</Spanish>

@@ -20,3 +20,4 @@ PREP(stationChange);
 PREP(updateInfo);
 PREP(volumeChange);
 PREP(updateList);
+PREP(zeusRegister);

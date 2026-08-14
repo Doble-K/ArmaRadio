@@ -96,3 +96,8 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
 [QEGVAR(manager,metadataUpdated), {
     [uiNamespace getVariable QGVAR(display)] call FUNC(updateInfo);
 }] call CBA_fnc_addEventHandler;
+
+// ZEN (Zeus Enhanced) integration: modules, context menu and dialogs
+if (isClass (configFile >> "CfgPatches" >> "zen_custom_modules")) then {
+    call FUNC(zeusRegister);
+};
