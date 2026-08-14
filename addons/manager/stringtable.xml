@@ -13,5 +13,9 @@
             <English>Streamer Mode</English>
             <Spanish>Modo streamer</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_SoundRange">
+            <English>Sound Range (m)</English>
+            <Spanish>Rango de sonido (m)</Spanish>
+        </Key>
     </Package>
 </Project>

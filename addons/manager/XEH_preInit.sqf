@@ -36,3 +36,12 @@ EXT callExtension "";
         EXT callExtension ["source:global_gain", [_gain]];
     }
 ] call CBA_fnc_addSetting;
+
+[
+    QGVAR(soundRange),
+    "SLIDER",
+    LLSTRING(SoundRange),
+    LLSTRING(Category),
+    [0, 1000, 200, 0, false],
+    0
+] call CBA_fnc_addSetting;

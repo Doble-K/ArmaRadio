@@ -3,6 +3,7 @@
 private _player = call CBA_fnc_currentUnit;
 private _inZeus = !(isNull (findDisplay 312));
 
+private _range = GVAR(soundRange);
 
 private _data = if (_inZeus) then {
     private _d = vectorDir curatorCamera;
@@ -23,6 +24,11 @@ EXT callExtension ["listener:dir", _data];
             private _ppos = eyePos _player;
             if (_inZeus) then {
                 _ppos = getPosASL curatorCamera;
+            };
+            private _outOfRange = (_pos distance _ppos) > _range;
+            if (_outOfRange != (_y getVariable [QGVAR(outOfRange), false])) then {
+                _y setVariable [QGVAR(outOfRange), _outOfRange, true];
+                EXT callExtension ["source:gain", [_x, if (_outOfRange) then { 0 } else { _y getVariable [QGVAR(volume), 1] }]];
             };
             _data = [
                 _x,
