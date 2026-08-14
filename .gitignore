@@ -3,6 +3,7 @@
 extension/target
 *.pbo
 releases/
+realeases/
 old/
 keys/
 target/

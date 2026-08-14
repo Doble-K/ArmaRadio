@@ -44,6 +44,15 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(playClickSound),
+    "CHECKBOX",
+    LLSTRING(PlayClickSound),
+    LLSTRING(Category),
+    false,
+    2
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(autoOffRange),
     "SLIDER",
     LLSTRING(AutoOffRange),

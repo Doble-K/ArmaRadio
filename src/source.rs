@@ -82,6 +82,7 @@ impl SoundSource {
             let mut specific_gain = gain;
             let mut quality = 0.0_f32;
             let mut online = false;
+            let mut reported = false;
             let mut has_data = false;
             let mut last_freq: i32 = 44100;
             'outer: loop {
@@ -167,6 +168,7 @@ impl SoundSource {
                                 };
                                 if !online {
                                     online = true;
+                                    reported = true;
                                     if ctx
                                         .callback_data(
                                             "live_radio",
@@ -250,7 +252,8 @@ impl SoundSource {
                             continue;
                         }
                         // Stream is not producing frames, mark offline once
-                        if online {
+                        if online || !reported {
+                            reported = true;
                             online = false;
                             if ctx
                                 .callback_data(

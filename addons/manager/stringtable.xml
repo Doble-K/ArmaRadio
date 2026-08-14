@@ -13,6 +13,10 @@
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_PlayClickSound">
+            <English>Play Click Sound</English>
+            <Spanish>Sonido de clic</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_SoundRange">
             <English>Sound Range (m)</English>
             <Spanish>Rango de sonido (m)</Spanish>

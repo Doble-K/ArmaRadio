@@ -59,6 +59,7 @@ impl Stream {
                 continue;
             };
             active.store(true, Ordering::Relaxed);
+            let mut consecutive_errors = 0u32;
             for decoding_result in decoder {
                 if count.load(Ordering::Relaxed) == 0
                     || generation.load(Ordering::Acquire) != gen
@@ -66,8 +67,20 @@ impl Stream {
                     break;
                 }
                 match decoding_result {
-                    Err(e) => error!("Error decoding frame for {}: {:?}", url, e),
+                    Err(e) => {
+                        consecutive_errors += 1;
+                        if consecutive_errors > 50 {
+                            error!(
+                                "Too many consecutive decode errors for {}, treating as offline",
+                                url
+                            );
+                            active.store(false, Ordering::Relaxed);
+                            break;
+                        }
+                        error!("Error decoding frame for {}: {:?}", url, e);
+                    }
                     Ok(frame) => {
+                        consecutive_errors = 0;
                         let mut samples: Vec<alto::Mono<f32>> = Vec::new();
                         for i in 0..frame.samples[0].len() {
                             samples.push(alto::Mono {

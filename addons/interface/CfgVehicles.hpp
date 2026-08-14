@@ -1,5 +1,7 @@
 #define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
 
+#define RADIO_ARR_2(ARG1,ARG2) [ARG1, ARG2]
+
 #define RADIO_QUICK_ACTIONS \
     class GVAR(open) { \
         displayName = CSTRING(Open); \
@@ -13,22 +15,22 @@
     }; \
     class GVAR(volumeUp) { \
         displayName = CSTRING(VolumeUp); \
-        statement = QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange)); \
+        statement = QUOTE(RADIO_ARR_2(_target,0.1) call FUNC(volumeChange)); \
         condition = RADIO_CONDITION; \
     }; \
     class GVAR(volumeDown) { \
         displayName = CSTRING(VolumeDown); \
-        statement = QUOTE(ARR_2(_target,-0.1) call FUNC(volumeChange)); \
+        statement = QUOTE(RADIO_ARR_2(_target,-0.1) call FUNC(volumeChange)); \
         condition = RADIO_CONDITION; \
     }; \
     class GVAR(stationNext) { \
         displayName = CSTRING(StationNext); \
-        statement = QUOTE(ARR_2(_target,1) call FUNC(stationChange)); \
+        statement = QUOTE(RADIO_ARR_2(_target,1) call FUNC(stationChange)); \
         condition = RADIO_CONDITION; \
     }; \
     class GVAR(stationPrev) { \
         displayName = CSTRING(StationPrev); \
-        statement = QUOTE(ARR_2(_target,-1) call FUNC(stationChange)); \
+        statement = QUOTE(RADIO_ARR_2(_target,-1) call FUNC(stationChange)); \
         condition = RADIO_CONDITION; \
     };
 

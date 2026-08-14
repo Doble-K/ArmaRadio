@@ -128,6 +128,31 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 - [x] Hook: leer el volumen de hearing de ACE (módulo `ace_hearing`) y multiplicar `global_gain` (igual que `volumeMultiplier`).
 - [x] Nota: verificar en implementación la API exacta de ACE (setting/evento de hearing).
 
+## P1 — Bugs detectados en prueba en partida (14/8/2026)
+
+### Controles rápidos ACE: volumen y estación no funcionan
+
+- [x] **Causa raíz**: en `addons/interface/CfgVehicles.hpp`, las statements usaban `QUOTE(ARR_2(_target,0.1) call FUNC(volumeChange))`. El macro CBA `ARR_2` expande a `ARG1, ARG2` **sin corchetes**, generando `_target, 0.1 call ...` en el config compilado → `fnc_volumeChange` recibía `0.1` como primer argumento (`Error getvariable: Tipo Número` en el RPT). `open`/`power` sí funcionaban porque usan `[_target]` literal.
+- [x] **Fix**: statements reescritas con corchetes explícitos: `QUOTE([_target, 0.1] call FUNC(volumeChange))` etc.
+- [ ] **Verificación pendiente**: probar en partida que Vol+/Vol-/Next/Prev funcionan desde el menú ACE.
+
+### Ruido raro en el audio (desync del decoder MP3)
+
+- [x] **Síntoma**: ruido/estática rara al reproducir ciertas estaciones (ej. `listen.classicrock109.com`). En el RPT: decenas de `Mad(LostSync)`, `Mad(BadHuffData)`, `Mad(BadScFSI)`, `Mad(BadLayer)` por segundo — `simplemad` pierde sync de frames (desync ICY, mismo bug P1 original).
+- [x] **Fix parcial (Rust)**: en `src/streams/mod.rs`, contar errores de decode consecutivos; al superar 50, marcar el stream offline (`active=false`) y cortar el loop para que la fuente emita estática controlada en vez de audio corrupto.
+- [ ] **Pendiente de decisión**: la estación default `ClassicRock109` parece caída/rota. Decidir si se reemplaza, se quita, o se mantiene (roadmap original decía "no tocar streams default").
+
+### Click de encendido/apagado molesto
+
+- [x] El `EXT callExtension ["click", []]` en `fnc_power.sqf` y `fnc_handlePower.sqf` suena siempre al prender/apagar.
+- [x] **Fix**: nuevo setting CBA `playClickSound` (CHECKBOX, default `false`) en `addons/manager/XEH_preInit.sqf`; los clicks solo suenan si está activo.
+
+### Stream offline que no reporta estado
+
+- [x] **Síntoma**: un stream caído/roto quedaba "mudo" sin indicar ONLINE/OFFLINE en el panel.
+- [x] **Causa raíz**: `source.rs` solo emitía `status=offline` si previamente había estado online (`if online`); un stream que moría antes de mandar data nunca reportaba.
+- [x] **Fix (Rust)**: flag `reported` — reporta `offline` la primera vez aunque nunca haya estado online, y `online` al recibir data.
+
 ## P3 — Futuro medio/lejano
 
 ### Sonido de encendido/apagado
