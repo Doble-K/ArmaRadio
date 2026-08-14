@@ -40,6 +40,31 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
     } forEach _vehicleActions;
 };
 
+[QEGVAR(manager,start), {
+    params ["", "", "_source"];
+    [_source] call FUNC(refresh);
+}] call CBA_fnc_addEventHandler;
+
+[QEGVAR(manager,stop), {
+    params ["_id"];
+    private _display = uiNamespace getVariable QGVAR(display);
+    if (isNull _display) exitWith {};
+    private _object = _display getVariable QGVAR(object);
+    if ((_object getVariable [QEGVAR(manager,active), []] param [0, ""]) isEqualTo _id) then {
+        [_object] call FUNC(refresh);
+    };
+}] call CBA_fnc_addEventHandler;
+
+[QEGVAR(manager,volume), {
+    params ["_id", "_gain"];
+    private _display = uiNamespace getVariable QGVAR(display);
+    if (isNull _display) exitWith {};
+    private _object = _display getVariable QGVAR(object);
+    if ((_object getVariable [QEGVAR(manager,active), []] param [0, ""]) isEqualTo _id) then {
+        [_display, _gain] call FUNC(handleVolume);
+    };
+}] call CBA_fnc_addEventHandler;
+
 [QEGVAR(manager,metadataUpdated), {
     [uiNamespace getVariable QGVAR(display)] call FUNC(updateInfo);
 }] call CBA_fnc_addEventHandler;
