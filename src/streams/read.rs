@@ -51,6 +51,58 @@ impl RemoteStream {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn regex() -> Regex {
+        Regex::new("(?m)StreamTitle='(.+?)';").expect("valid regex")
+    }
+
+    #[test]
+    fn parses_stream_title() {
+        let meta = "StreamTitle='Artist - Song';StreamUrl='';";
+        let caps: Vec<String> = regex()
+            .captures_iter(meta)
+            .map(|c| c[1].to_string())
+            .collect();
+        assert_eq!(caps, vec!["Artist - Song".to_string()]);
+    }
+
+    #[test]
+    fn parses_multiple_titles() {
+        let meta = "StreamTitle='A';StreamTitle='B';";
+        let caps: Vec<String> = regex()
+            .captures_iter(meta)
+            .map(|c| c[1].to_string())
+            .collect();
+        assert_eq!(caps.len(), 2);
+    }
+
+    #[test]
+    fn handles_no_title() {
+        let meta = "StreamUrl='http://example.com';";
+        let caps: Vec<String> = regex()
+            .captures_iter(meta)
+            .map(|c| c[1].to_string())
+            .collect();
+        assert!(caps.is_empty());
+    }
+
+    #[test]
+    fn handles_null_padding() {
+        let mut meta = String::from("StreamTitle='Song';");
+        while (meta.len() % 16) != 0 {
+            meta.push('\0');
+        }
+        let caps: Vec<String> = regex()
+            .captures_iter(&meta)
+            .map(|c| c[1].to_string())
+            .collect();
+        assert_eq!(caps, vec!["Song".to_string()]);
+    }
+}
+
 impl Read for RemoteStream {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
         let Some(interval) = self.interval else {
