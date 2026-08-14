@@ -1,5 +1,7 @@
 #define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
 
+#define REPAIR_CONDITION QUOTE(_target call FUNC(isBurned) && {[_player] call FUNC(canRepair)})
+
 #define RADIO_ARR_2(ARG1,ARG2) [ARG1, ARG2]
 
 #define RADIO_QUICK_ACTIONS \
@@ -32,6 +34,11 @@
         displayName = CSTRING(StationPrev); \
         statement = QUOTE(RADIO_ARR_2(_target,-1) call FUNC(stationChange)); \
         condition = RADIO_CONDITION; \
+    }; \
+    class GVAR(repair) { \
+        displayName = CSTRING(Repair); \
+        statement = QUOTE([_target] call FUNC(repair)); \
+        condition = REPAIR_CONDITION; \
     };
 
 #define RADIO_SELF_ACTIONS \

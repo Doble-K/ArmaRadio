@@ -1,5 +1,7 @@
 PREP(canOpen);
+PREP(canRepair);
 PREP(handleListSelect);
+PREP(isBurned);
 PREP(isCompatible);
 PREP(handlePower);
 PREP(handleSearchButton);
@@ -13,6 +15,7 @@ PREP(moduleToggleRadio);
 PREP(open);
 PREP(power);
 PREP(refresh);
+PREP(repair);
 PREP(stationChange);
 PREP(updateInfo);
 PREP(volumeChange);

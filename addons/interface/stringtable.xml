@@ -77,6 +77,10 @@
             <English>Power</English>
             <Spanish>Encender/Apagar</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_Repair">
+            <English>Repair Radio</English>
+            <Spanish>Reparar radio</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_StationNext">
             <English>Next Station</English>
             <Spanish>Estación Siguiente</Spanish>

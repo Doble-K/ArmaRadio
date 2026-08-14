@@ -4,6 +4,9 @@ params ["_source", "_url"];
 
 private _ret = "";
 
+// A burned radio cannot be turned back on until it is repaired
+if ((_source getVariable [QGVAR(burned), false]) && {_url isNotEqualTo ""}) exitWith { "" };
+
 private _existing = _source getVariable [QGVAR(active), []];
 if !(_existing isEqualTo []) then {
     private _id = _existing select 0;

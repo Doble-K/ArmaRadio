@@ -37,6 +37,14 @@
             <English>When enabled, only enemy towers generate interference. When disabled, any tower in the list generates interference.</English>
             <Spanish>Al activarlo, solo las torres enemigas generan interferencia. Al desactivarlo, cualquier torre de la lista genera interferencia.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_RadioBurnDamage">
+            <English>Radio Burn Damage</English>
+            <Spanish>Daño para quemar la radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_UnderwaterBurnTime">
+            <English>Underwater Burn Time (s)</English>
+            <Spanish>Tiempo bajo el agua para quemarse (s)</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_PlayClickSound">
             <English>Play Click Sound</English>
             <Spanish>Sonido de clic</Spanish>

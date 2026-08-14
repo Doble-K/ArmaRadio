@@ -107,3 +107,21 @@ EXT callExtension "";
     false,
     1
 ] call CBA_fnc_addSetting;
+
+[
+    QGVAR(radioBurnDamage),
+    "SLIDER",
+    LLSTRING(RadioBurnDamage),
+    LLSTRING(Category),
+    [0, 1, 0.8, 2, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(underwaterBurnTime),
+    "SLIDER",
+    LLSTRING(UnderwaterBurnTime),
+    LLSTRING(Category),
+    [0, 120, 10, 0, false],
+    1
+] call CBA_fnc_addSetting;

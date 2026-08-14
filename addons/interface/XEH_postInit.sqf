@@ -20,6 +20,20 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
         ]] call CBA_fnc_addPlayerAction;
     } forEach _staticActions;
 
+    private _staticRepairActions = [
+        [localize LSTRING(Repair), { [cursorTarget] call FUNC(repair) }]
+    ];
+    {
+        _x params ["_name", "_code"];
+        [[
+            _name,
+            _code,
+            "", 1, true, true, "",
+            'cursorTarget isKindOf "Land_FMradio_F" && cursorTarget call live_radio_interface_fnc_isBurned && [player] call live_radio_interface_fnc_canRepair',
+            5
+        ]] call CBA_fnc_addPlayerAction;
+    } forEach _staticRepairActions;
+
     private _vehicleActions = [
         [localize LSTRING(FMRadio), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(open) }],
         [localize LSTRING(Power), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(power) }],
@@ -38,6 +52,20 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
             5
         ]] call CBA_fnc_addPlayerAction;
     } forEach _vehicleActions;
+
+    private _vehicleRepairActions = [
+        [localize LSTRING(Repair), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(repair) }]
+    ];
+    {
+        _x params ["_name", "_code"];
+        [[
+            _name,
+            _code,
+            "", 1, true, true, "",
+            'vehicle (call CBA_fnc_currentUnit) call live_radio_interface_fnc_isBurned && [player] call live_radio_interface_fnc_canRepair',
+            5
+        ]] call CBA_fnc_addPlayerAction;
+    } forEach _vehicleRepairActions;
 };
 
 [QEGVAR(manager,start), {

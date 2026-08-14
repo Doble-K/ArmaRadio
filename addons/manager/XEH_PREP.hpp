@@ -1,4 +1,5 @@
 PREP(applyGain);
+PREP(burn);
 PREP(heartbeat);
 PREP(jamFactor);
 PREP(play);
