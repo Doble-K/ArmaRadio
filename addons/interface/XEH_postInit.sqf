@@ -52,7 +52,7 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
             _name,
             _code,
             "", 1, true, true, "",
-            QUOTE(vehicle (call CBA_fnc_currentUnit) call FUNC(isCompatible) && vehicle (call CBA_fnc_currentUnit) call FUNC(canOpen)),
+            QUOTE(vehicle (call CBA_fnc_currentUnit) call FUNC(isCompatible) && {(vehicle (call CBA_fnc_currentUnit) call FUNC(canOpen)) || {vehicle (call CBA_fnc_currentUnit) call FUNC(isBurned)}}),
             5
         ]] call CBA_fnc_addPlayerAction;
     } forEach _vehicleActions;

@@ -1,5 +1,7 @@
 #define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
 
+#define RADIO_MENU_CONDITION QUOTE(_target call FUNC(isCompatible) && {(_target call FUNC(canOpen)) || (_target call FUNC(isBurned))})
+
 #define REPAIR_CONDITION QUOTE(_target call FUNC(isBurned) && {[_player] call FUNC(canRepair)})
 
 #define RADIO_ARR_2(ARG1,ARG2) [ARG1, ARG2]
@@ -8,7 +10,7 @@
     class GVAR(open) { \
         displayName = CSTRING(Open); \
         statement = QUOTE(_target call FUNC(open)); \
-        condition = RADIO_CONDITION; \
+        condition = RADIO_MENU_CONDITION; \
     }; \
     class GVAR(power) { \
         displayName = CSTRING(Power); \
@@ -59,7 +61,7 @@
     class ACE_SelfActions { \
         class GVAR(menu) { \
             displayName = CSTRING(FMRadio); \
-            condition = RADIO_CONDITION; \
+            condition = RADIO_MENU_CONDITION; \
             RADIO_QUICK_ACTIONS \
         }; \
     };
