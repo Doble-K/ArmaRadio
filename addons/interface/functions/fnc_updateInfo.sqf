@@ -32,7 +32,7 @@ _ctrlDescription ctrlSetText (EGVAR(manager,sourcesTitles) getOrDefault [_active
 private _ctrlStatus = _display displayCtrl IDC_STATUS;
 private _status = EGVAR(manager,sourcesStatus) getOrDefault [_activeID, ""];
 _ctrlStatus ctrlShow (_status != "");
-_ctrlStatus ctrlSetText ([LSTRING(Offline), LSTRING(Online)] select (_status == "online"));
+_ctrlStatus ctrlSetText ([LLSTRING(Offline), LLSTRING(Online)] select (_status == "online"));
 _ctrlStatus ctrlSetTextColor ([[1, 0.2, 0.2, 1], [0.2, 1, 0.2, 1]] select (_status == "online"));
 
 private _ctrlPicture = _display displayCtrl IDC_PICTURE;

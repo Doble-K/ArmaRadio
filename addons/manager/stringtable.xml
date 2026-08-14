@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="Live Radio">
+    <Package name="Manager">
+        <Key ID="STR_Live_Radio_Manager_Category">
+            <English>Live Radio</English>
+            <Spanish>Live Radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_VolumeMultiplier">
+            <English>Volume Multiplier</English>
+            <Spanish>Multiplicador de volumen</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_StreamerMode">
+            <English>Streamer Mode</English>
+            <Spanish>Modo streamer</Spanish>
+        </Key>
+    </Package>
+</Project>

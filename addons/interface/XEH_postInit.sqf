@@ -2,7 +2,7 @@
 
 if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
     [[
-        "FM Radio",
+        localize LSTRING(FMRadio),
         {
             [cursorTarget] call FUNC(open)
         },
@@ -11,7 +11,7 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
         5
     ]] call CBA_fnc_addPlayerAction;
     [[
-        "FM Radio",
+        localize LSTRING(FMRadio),
         {
             [vehicle (call CBA_fnc_currentUnit)] call FUNC(open)
         },

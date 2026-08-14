@@ -13,8 +13,8 @@ EXT callExtension "";
 [
     QGVAR(volumeMultiplier),
     "SLIDER",
-    "Volume Multiplier",
-    "Live Radio",
+    LLSTRING(VolumeMultiplier),
+    LLSTRING(Category),
     [0.1, 1, 0.3, 2, true],
     0,
     {
@@ -27,8 +27,8 @@ EXT callExtension "";
 [
     QGVAR(streamerMode),
     "CHECKBOX",
-    "Streamer Mode",
-    "Live Radio",
+    LLSTRING(StreamerMode),
+    LLSTRING(Category),
     false,
     2,
     {

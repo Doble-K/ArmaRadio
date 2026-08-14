@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project name="Radio">
+<Project name="Live Radio">
     <Package name="Main">
-        <Key ID="STR_Radio_Main_Author">
+        <Key ID="STR_Live_Radio_Main_Author">
             <English>BrettMayson</English>
+            <Spanish>BrettMayson</Spanish>
         </Key>
-        <Key ID="STR_Radio_Main_URL">
+        <Key ID="STR_Live_Radio_Main_URL">
             <English>https://github.com/BrettMayson/ArmaRadio</English>
+            <Spanish>https://github.com/BrettMayson/ArmaRadio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Main_Category">
+            <English>Live Radio</English>
+            <Spanish>Live Radio</Spanish>
         </Key>
     </Package>
 </Project>

@@ -21,8 +21,8 @@ GVAR(stations) sort true;
 [
     QGVAR(driverAndCommanderOnly),
     "CHECKBOX",
-    "Driver and Commander Only",
-    "Live Radio",
+    LLSTRING(DriverAndCommanderOnly),
+    LLSTRING(Category),
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -30,8 +30,8 @@ GVAR(stations) sort true;
 [
     QGVAR(enableCars),
     "CHECKBOX",
-    "Enable for Cars",
-    "Live Radio",
+    LLSTRING(EnableCars),
+    LLSTRING(Category),
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -39,8 +39,8 @@ GVAR(stations) sort true;
 [
     QGVAR(enableArmored),
     "CHECKBOX",
-    "Enable for Armored",
-    "Live Radio",
+    LLSTRING(EnableArmored),
+    LLSTRING(Category),
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -48,8 +48,8 @@ GVAR(stations) sort true;
 [
     QGVAR(enableHelicopters),
     "CHECKBOX",
-    "Enable for Helicopters",
-    "Live Radio",
+    LLSTRING(EnableHelicopters),
+    LLSTRING(Category),
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -57,8 +57,8 @@ GVAR(stations) sort true;
 [
     QGVAR(enablePlanes),
     "CHECKBOX",
-    "Enable for Planes",
-    "Live Radio",
+    LLSTRING(EnablePlanes),
+    LLSTRING(Category),
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -66,8 +66,8 @@ GVAR(stations) sort true;
 [
     QGVAR(enableShips),
     "CHECKBOX",
-    "Enable for Ships",
-    "Live Radio",
+    LLSTRING(EnableShips),
+    LLSTRING(Category),
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -75,8 +75,8 @@ GVAR(stations) sort true;
 [
     QGVAR(customVehicleClasses),
     "EDITBOX",
-    "Custom vehicle classes",
-    "Live Radio",
+    LLSTRING(CustomVehicleClasses),
+    LLSTRING(Category),
     "[]",
     1
 ] call CBA_fnc_addSetting;
