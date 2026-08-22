@@ -1,6 +1,6 @@
 #define RADIO_CONDITION QUOTE(_target call FUNC(isCompatible) && {_target call FUNC(canOpen)})
 
-#define RADIO_MENU_CONDITION QUOTE(_target call FUNC(isCompatible) && {(_target call FUNC(canOpen)) || (_target call FUNC(isBurned))})
+#define RADIO_MENU_CONDITION QUOTE(_target call FUNC(isCompatible))
 
 #define REPAIR_CONDITION QUOTE(_target call FUNC(isBurned) && {[_player] call FUNC(canRepair)})
 
