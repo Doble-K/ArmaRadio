@@ -61,6 +61,30 @@
             <English>Play a static click sound when the radio is powered on or off.</English>
             <Spanish>Reproduce un clic de estática al encender o apagar la radio.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableBurn">
+            <English>Enable Burn</English>
+            <Spanish>Habilitar rotura</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableBurnDescription">
+            <English>Master switch for hard radio burnouts.</English>
+            <Spanish>Interruptor maestro para la rotura dura de la radio.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_BurnByWater">
+            <English>Burn By Water</English>
+            <Spanish>Rotura por agua</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_BurnByWaterDescription">
+            <English>Allow radios to burn out when submerged for too long.</English>
+            <Spanish>Permite que las radios se rompan al permanecer sumergidas demasiado tiempo.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_BurnByDamage">
+            <English>Burn By Damage</English>
+            <Spanish>Rotura por daño</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_BurnByDamageDescription">
+            <English>Allow radios to burn out when engine damage is too high.</English>
+            <Spanish>Permite que las radios se rompan cuando el daño del motor es demasiado alto.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_RadioMotorDamageThreshold">
             <English>Radio Motor Damage Threshold</English>
             <Spanish>Umbral de daño del motor para quemar la radio</Spanish>

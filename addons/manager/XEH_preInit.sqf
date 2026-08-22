@@ -55,6 +55,33 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(enableBurn),
+    "CHECKBOX",
+    [LLSTRING(EnableBurn), LLSTRING(EnableBurnDescription)],
+    LLSTRING(Category),
+    false,
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(burnByWater),
+    "CHECKBOX",
+    [LLSTRING(BurnByWater), LLSTRING(BurnByWaterDescription)],
+    LLSTRING(Category),
+    false,
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(burnByDamage),
+    "CHECKBOX",
+    [LLSTRING(BurnByDamage), LLSTRING(BurnByDamageDescription)],
+    LLSTRING(Category),
+    false,
+    1
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(autoOffRange),
     "SLIDER",
     [LLSTRING(AutoOffRange), LLSTRING(AutoOffRangeDescription)],

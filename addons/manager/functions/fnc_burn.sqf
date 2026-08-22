@@ -28,25 +28,40 @@ params ["_object"];
 
 if (_object getVariable [QGVAR(burned), false]) exitWith { 1 };
 
+if !(EGVAR(manager,enableBurn)) exitWith {
+    _object setVariable [QGVAR(underwaterFactor), 0];
+    _object setVariable [QGVAR(underwaterSince), 0];
+    0
+};
+
 // Damage factor: reaches 1 exactly at the motor burn threshold
-private _engineDamage = _object getHitPointDamage "HitEngine";
-if (isNil "_engineDamage") then { _engineDamage = 0; };
-private _damageFactor = linearConversion [0, GVAR(radioMotorDamageThreshold), _engineDamage, 0, 1, true];
+private _damageFactor = 0;
+if (EGVAR(manager,burnByDamage)) then {
+    private _engineDamage = _object getHitPointDamage "HitEngine";
+    if (isNil "_engineDamage") then { _engineDamage = 0; };
+    _damageFactor = linearConversion [0, GVAR(radioMotorDamageThreshold), _engineDamage, 0, 1, true];
+};
 
 // Underwater factor with gradual decay when out of the water
 private _underwaterFactor = _object getVariable [QGVAR(underwaterFactor), 0];
-if ((getPosASLW _object) select 2 < 0) then {
-    private _since = _object getVariable [QGVAR(underwaterSince), 0];
-    if (_since == 0) then {
-        _object setVariable [QGVAR(underwaterSince), time];
-        _since = time;
+if (EGVAR(manager,burnByWater)) then {
+    if ((getPosASLW _object) select 2 < 0) then {
+        private _since = _object getVariable [QGVAR(underwaterSince), 0];
+        if (_since == 0) then {
+            _object setVariable [QGVAR(underwaterSince), time];
+            _since = time;
+        };
+        _underwaterFactor = ((time - _since) / GVAR(underwaterBurnTime)) max _underwaterFactor;
+    } else {
+        _object setVariable [QGVAR(underwaterSince), 0];
+        _underwaterFactor = (_underwaterFactor - 0.05) max 0;
     };
-    _underwaterFactor = ((time - _since) / GVAR(underwaterBurnTime)) max _underwaterFactor;
+    _object setVariable [QGVAR(underwaterFactor), _underwaterFactor];
 } else {
+    _object setVariable [QGVAR(underwaterFactor), 0];
     _object setVariable [QGVAR(underwaterSince), 0];
-    _underwaterFactor = (_underwaterFactor - 0.05) max 0;
+    _underwaterFactor = 0;
 };
-_object setVariable [QGVAR(underwaterFactor), _underwaterFactor];
 
 private _factor = (_damageFactor max _underwaterFactor) min 1;
 
