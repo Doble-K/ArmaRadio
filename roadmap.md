@@ -121,9 +121,27 @@ Los items están pensados como mejoras genéricas para contribuir al repo origin
 
 - [ ] Probar en partida que Vol+/Vol-/Next/Prev funcionan desde el menú ACE.
 
-### Tarea — Decidir estación default `ClassicRock109`
+### Tarea — Menú ACE siempre visible y rotura configurable
 
-- [ ] La estación default `ClassicRock109` parece caída/rota. Decidir si se reemplaza, se quita, o se mantiene (roadmap original decía "no tocar streams default").
+- [ ] El menú ACE debe verse siempre en radios compatibles, estén quemadas o no.
+- [ ] `burned` no debe ocultar el menú padre ni bloquear la apertura del panel.
+- [ ] La rotura pasa a ser opcional por settings CBA: toggle maestro para desactivar rotura y toggles por causa (agua, daño, interferencia radio/clima/EMP).
+- [ ] Las acciones normales quedan protegidas solo por guards internos; `Repair` debe seguir restaurando la radio y limpiar `burned`.
+
+### Completado (commit `3c3a90c`) — Rotura dura desactivada por defecto
+
+- [x] **Setting CBA `enableBurn`** (`CHECKBOX`, default `false`) en `addons/manager/XEH_preInit.sqf`.
+- [x] **Settings CBA `burnByWater` / `burnByDamage`** (`CHECKBOX`, default `false`) en `addons/manager/XEH_preInit.sqf`.
+- [x] `fnc_burn.sqf` respeta el master switch y los toggles por causa; si `enableBurn` está off, limpia `underwaterFactor` / `underwaterSince` y no marca `burned`.
+- [x] El feedback de audio/estética por `quality` se mantiene intacto; no se tocó `fnc_tick.sqf`.
+
+#### Tarea 2 — UI cuando la radio está `burned` (documentación de diseño)
+
+- **Opción A, mínima y segura**: dejar `fnc_open.sqf`, `fnc_refresh.sqf` y `fnc_handlePower.sqf` como están; solo reforzar `fnc_repair.sqf` limpiando `underwaterSince`.
+- **Opción B, UI más permisiva**: habilitar `Power` aunque esté `burned` y mover el guard a `fnc_handlePower.sqf`.
+- **Opción C, feedback extra sin cambiar flujo**: mantener `Power` deshabilitado y confiar en `fnc_updateInfo.sqf` para mostrar `Radio damaged / not responding`.
+- **Opción D, split explícito UI/ejecución**: separar visualización de acciones y ejecución interna; el menú siempre visible, pero los controles se regulan por guards internos en cada acción.
+- **Recomendación aplicada**: Opción A, por ser la implementación mínima y de menor riesgo; fue la base del cambio en `cc71c23`.
 
 ### Completado (commit `3d505fc`) — Emisoras configurables sin hardcoded
 
@@ -322,7 +340,6 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 
 ## Decisiones humanas requeridas (bloqueadas, NO son tarea del agente)
 
-- **ClassicRock109**: ¿reemplazar, quitar o mantener la estación caída?
 - **Apagado automático**: diagnosticar el bug de apagado espontáneo (requiere partida) antes de re-habilitarlo.
 - **Verificación ACE en partida**: QA manual (controles rápidos, repair, gunner).
 - **Radios de mano / mochila radio**: definir items concretos y alcance.
@@ -369,8 +386,6 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 - [x] **Síntoma**: ruido/estática rara al reproducir ciertas estaciones (ej. `listen.classicrock109.com`). En el RPT: decenas de `Mad(LostSync)`, `Mad(BadHuffData)`, `Mad(BadScFSI)`, `Mad(BadLayer)` por segundo — `simplemad` pierde sync de frames (desync ICY, mismo bug original).
 - [x] **Fix parcial (Rust)**: en `src/streams/mod.rs`, contar errores de decode consecutivos; al superar 50, marcar el stream offline (`active=false`) y cortar el loop para que la fuente emita estática controlada en vez de audio corrupto.
 - [ ] **REVERTIDO (14/8/2026)** con el decoder a upstream `v0.9.1` (ver "Decoder Rust → upstream v0.9.1" abajo): el contador `consecutive_errors` y el flag `active` se eliminaron junto con la reconexión. Queda pendiente de re-implementar con el decoder viejo.
-- [ ] **Pendiente de decisión**: la estación default `ClassicRock109` parece caída/rota. Decidir si se reemplaza, se quita, o se mantiene (roadmap original decía "no tocar streams default").
-
 ### Revertido — Buffer de audio y cortes por falta de datos (14/8/2026)
 
 - [x] **Síntoma**: cortes/artefactos "de procesado" al reproducir, sobre todo con red inestable o streams que pierden frames (underrun de OpenAL).

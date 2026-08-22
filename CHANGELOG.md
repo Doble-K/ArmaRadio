@@ -11,7 +11,10 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 ### Pending
 - Verify in-game: ACE quick controls, repair, gunner and passenger control, the
   combined ZEN module and the settings tooltips (manual QA).
-- Decide on the `ClassicRock109` default station (replace, remove or keep).
+- Make the ACE menu always visible and move radio burn to optional settings per
+  cause (water, damage, radio/climate/EMP interference).
+- Radio burn is disabled by default via `enableBurn` / `burnByWater` /
+  `burnByDamage`; the damage/atmospheric quality feedback remains enabled.
 - Diagnose the spontaneous power-off bug before re-enabling auto power-off.
 - Handheld and backpack radios; persistent per-profile volume; Antistasi
   heal/garage integration for burned radios.
