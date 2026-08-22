@@ -35,6 +35,7 @@ _object setVariable [QGVAR(repairing), true, true];
 
         _object setVariable [QEGVAR(manager,burned), false, true];
         _object setVariable [QEGVAR(manager,underwaterFactor), 0, true];
+        _object setVariable [QEGVAR(manager,underwaterSince), 0, true];
 
         private _station = _object getVariable [QEGVAR(manager,lastStation), (GVAR(stations) param [0, []]) param [2, ""]];
         if (_station != "") then {
