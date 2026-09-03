@@ -1,4 +1,5 @@
 PREP(canOpen);
+PREP(buildStations);
 PREP(canRepair);
 PREP(handleListSelect);
 PREP(isBurned);
