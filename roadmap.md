@@ -386,6 +386,9 @@ y un modelo de frecuencia.
   de mezclar ruido blanco sin estado directamente con cada muestra de música.
 - [x] Añadir modulación progresiva según `quality`, con ruido suavizado,
   variación lenta de amplitud y atenuación gradual del programa.
+- [x] Añadir setting global `enableStatic` en Addon Options, activado por defecto;
+  al desactivarlo, el factor de calidad vuelve gradualmente a cero sin desactivar
+  el volumen, el estado del stream ni la rotura dura.
 - [ ] Evaluar una ecualización tipo radio FM: filtrar/agrupar el ruido por banda y
   aplicar un perfil distinto al audio degradado. No usar un recurso de audio fijo
   hasta definir si debe ser ruido blanco, hiss de FM o un recurso configurable.

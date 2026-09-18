@@ -53,6 +53,14 @@
             <English>Allow Zeus to mark an object radio as always on. The radio cannot be powered off while this is enabled.</English>
             <Spanish>Permite que Zeus marque la radio de un objeto como siempre encendida. No se puede apagar mientras esté habilitada.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableStatic">
+            <English>Enable Radio Static</English>
+            <Spanish>Habilitar estática de radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableStaticDescription">
+            <English>Enable static and distortion from damage, weather, explosions, towers and jammers. Disabling it fades the effect out.</English>
+            <Spanish>Habilita la estática y distorsión por daño, clima, explosiones, torres y jammers. Al desactivarla, el efecto desaparece gradualmente.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadius">
             <English>Interference Tower Radius (m)</English>
             <Spanish>Radio de la torre de interferencia (m)</Spanish>

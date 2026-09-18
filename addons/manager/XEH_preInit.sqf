@@ -55,6 +55,15 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(enableStatic),
+    "CHECKBOX",
+    [LLSTRING(EnableStatic), LLSTRING(EnableStaticDescription)],
+    LLSTRING(Category),
+    true,
+    1
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(enablePersistentRadios),
     "CHECKBOX",
     [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],

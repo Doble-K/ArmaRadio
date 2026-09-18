@@ -49,7 +49,11 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         private _storm = 0.2 * rain;
         private _explosion = linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true];
         private _burn = [_y] call FUNC(burn);
-        private _target = (_damage + _storm + _explosion + _towerFactor + _jamFactor + _burn) min 1;
+        private _target = if (GVAR(enableStatic)) then {
+            (_damage + _storm + _explosion + _towerFactor + _jamFactor + _burn) min 1
+        } else {
+            0
+        };
 
         private _current = _y getVariable [QGVAR(quality), 0];
         private _step = diag_deltaTime * 2;
