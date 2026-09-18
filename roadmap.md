@@ -348,6 +348,109 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 - **Inmersión como causa de quemado**: T3 mantuvo la causa por inmersión (`underwaterBurnTime`); decidir a futuro si se conserva o se elimina.
 - **Licencia del fork**: DECIDIDA (14/8/2026) — contribuciones del fork (Doble-K) bajo GPL-3.0 (`LICENSE`); código de upstream bajo MIT (`LICENSE-MIT`). Nota: el código GPL-3.0 no es mergeable en el repo MIT de upstream.
 
+## Próxima iteración — Resynced / gameplay ampliado
+
+Estas tareas quedan añadidas al roadmap a partir de la siguiente tanda de trabajo.
+Se mantienen separadas porque las primeras son compatibles con el modelo actual,
+mientras que las radios personales requieren definir una arquitectura de fuentes
+y un modelo de frecuencia.
+
+### ZEN y radios colocadas en objetos
+
+- [ ] **Módulo ZEN "Add FM Radio"**: seleccionar un objeto compatible, elegir una emisora y crear una fuente FM posicional asociada al objeto. Reutilizar `GVAR(active)`, `EFUNC(manager,play)` y la lista de emisoras actual.
+- [ ] **Módulo ZEN "Keep Radio On"**: marcar/desmarcar que la radio de un objeto permanezca encendida aunque no haya un jugador controlándola.
+- [ ] **Setting CBA para radios persistentes**: permitir o bloquear la función "Keep Radio On" desde Addon Options. El setting controla la disponibilidad de la función; no enciende automáticamente todos los objetos.
+- [ ] Definir el comportamiento al borrar, mover o reemplazar el objeto y evitar que el módulo cree fuentes duplicadas.
+
+### Estabilidad de streams en vehículos
+
+- [ ] Reproducir y registrar cortes al entrar/salir de vehículos, cambiar de asiento,
+  cambiar de emisora y mover el vehículo.
+- [x] Corregir la carrera de `Streams::listen`: antes dos llamadas simultáneas
+  podían pasar el lookup y abrir dos streams para la misma URL. Ahora lookup e
+  inserción usan el mismo lock de escritura.
+- [ ] Garantizar que destruir/recrear una fuente no deje vivo el hilo anterior ni
+  encole audio antiguo después del cambio de emisora.
+- [ ] Añadir logging de `source:new`, `source:destroy`, URL, ID y contador de
+  listeners para diagnosticar el posible doble stream.
+
+### Estática, modulación y ecualización
+
+- [ ] Separar la estática en una capa de ruido controlable, en lugar de mezclar
+  ruido blanco directamente con cada muestra de música.
+- [ ] Añadir modulación progresiva según `quality`, con variación de amplitud y
+  cortes breves, evitando que el ruido tape completamente la voz o la música.
+- [ ] Evaluar una ecualización tipo radio FM: filtrar/agrupar el ruido por banda y
+  aplicar un perfil distinto al audio degradado. No usar un recurso de audio fijo
+  hasta definir si debe ser ruido blanco, hiss de FM o un recurso configurable.
+- [ ] Añadir tests o una ruta de diagnóstico para comprobar que el procesamiento
+  no introduce clipping, loops ni consumo excesivo de CPU.
+
+### Radios personales
+
+- [ ] **Handys**: detectar el item en el inventario de la unidad y reproducir la
+  radio solo para el portador mediante auricular por defecto.
+- [ ] Setting CBA para permitir que el handy también se escuche por altavoz.
+- [ ] **Mochilas de radio larga**: detectar una mochila configurada como fuente,
+  con audio posicional asociado al portador o a la mochila cuando se deja en el
+  suelo.
+- [ ] Definir una lista configurable de classnames de handys y mochilas; no
+  asumir compatibilidad automática con TFAR o ACRE.
+- [ ] Definir el modelo de frecuencia: una única FM global por equipo, una
+  frecuencia por item, o frecuencias configurables por misión. La primera
+  implementación debe elegir una sola opción para evitar mezclar emisoras FM
+  con comunicaciones militares reales.
+- [ ] Definir si las radios personales comparten estaciones con los vehículos o
+  tienen un catálogo/frecuencia separado.
+
+### Integración opcional con TFAR Standalone
+
+El repositorio `ltsammy/task-force-radio-standalone` conserva la interfaz SQF y
+los nombres de funciones de TFAR, mientras reemplaza el transporte de TeamSpeak
+por una extensión propia y un servidor de voz. Se puede usar como referencia y
+adaptador opcional, pero Live Radio no debe depender de su DLL ni de su servidor.
+
+- [ ] Detectar TFAR Standalone/TFAR mediante `CfgPatches` y activar un adaptador
+  solo cuando esté presente.
+- [ ] Leer de TFAR los classnames y el estado de radios de mano/mochila, sin
+  duplicar su transmisión de voz ni modificar su extensión.
+- [ ] Usar una clave de frecuencia común para decidir qué radio personal puede
+  escuchar qué emisión, manteniendo el stream FM y el audio posicional dentro de
+  Live Radio.
+- [ ] Definir una tabla de frecuencias de misión, con nombres opcionales como
+  `COM-1`, `COM-2`, `LR-1` y `MED`, en vez de depender de URLs o nombres de
+  emisoras para identificar canales militares.
+- [ ] Mantener un modo autónomo cuando TFAR no esté cargado: classnames y
+  frecuencias configurables desde CBA/mission config.
+- [ ] No enviar audio FM a la red de voz ni intentar reemplazar el sistema PTT;
+  la integración inicial solo sincroniza disponibilidad, frecuencia y salida
+  por auricular/altavoz.
+
+#### Idea abierta — FM asociada a canales TFAR
+
+La idea preliminar es que, cuando ambos mods estén activos, una emisión de Live
+Radio pueda estar asociada a una combinación de banda y frecuencia TFAR, por
+ejemplo `SW 30.0` o `LR 50.0`. Al sintonizar ese canal, el jugador podría recibir
+la voz de TFAR y la emisión FM de Live Radio mezcladas localmente, sin enviar la
+música al servidor de voz ni convertirla en una transmisión de voz.
+
+- [ ] Definir si la emisión FM se activa automáticamente al sintonizar el canal
+  o si además requiere encender manualmente el handy/radio.
+- [ ] Definir si el vínculo usa solo `SW/LR + frecuencia` o también clase de
+  radio, canal, cifrado y estado de altavoz.
+- [ ] Definir si la emisión es global para todos los receptores sintonizados,
+  exclusiva del portador o también audible como fuente 3D en modo altavoz.
+- [ ] Definir cómo se configuran las asociaciones desde la misión: CBA,
+  `description.ext`, objetos concretos o una combinación de ellas.
+- [ ] Investigar la API estable de TFAR Standalone para leer radios y frecuencias
+  sin copiar código ni depender de su DLL.
+- [ ] Mantener un modo autónomo cuando TFAR no esté cargado.
+
+> **Estado:** concepto válido para explorar, pero todavía no es una especificación
+> cerrada ni una promesa de compatibilidad. La implementación debe esperar a que
+> se definan el comportamiento de sintonización, el alcance del audio y el
+> formato de configuración.
+
 ## Fase 3 — Backend / decoder (ÚLTIMO paso — NO implementar por ahora)
 
 > Todo lo de esta fase está **documentado pero NO se implementa** en esta iteración. La idea: recuperar el decoder upstream que funciona y, más adelante, re-integrar con cuidado los enhancements. Lo único que interesa recuperar es la **estática offline**, pero aplica solo cuando el stream está offline → no es prioridad; si resulta fácil de integrar, se implementa, y si no, queda pendiente.
@@ -378,7 +481,10 @@ ZEN es el framework Zeus que Crows-EW usa como base y es dependencia de ese mod.
 - Aplica también si se agrega reconexión automática más adelante: ruido hasta que se restablezca.
 
 **Otros bugs (issues del repo)**:
-- **Dos streams abren si cambian rápido** (#12): race condition en `fnc_play`/`Streams::listen` (check-then-insert no atómico). Blindar con validación antes de crear la fuente/stream.
+- **Dos streams abren si cambian rápido** (#12): la carrera check-then-insert de
+  `Streams::listen` quedó corregida usando el mismo lock de escritura para
+  lookup e inserción. Sigue pendiente verificar el caso completo en partida,
+  incluyendo recreación de fuentes y audio antiguo encolado.
 - **UI no refresca si otro jugador cambia** (#5): `updateInfo`/`handleVolume` solo corren en eventos locales (`metadataUpdated`). Broadcast del estado activo + refresh de displays abiertos al recibir cambios remotos.
 
 ### Revertido — Ruido raro en el audio (desync del decoder MP3)

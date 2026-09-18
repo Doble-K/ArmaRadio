@@ -136,7 +136,11 @@ impl Streams {
 
     pub fn listen(url: String) -> StreamListener {
         let (sender, receiver) = crossbeam_channel::unbounded();
-        if let Some(stream) = Self::get().read().expect("not poisoned").get(&url) {
+        // Hold the map write lock through lookup and insertion so concurrent
+        // source creation cannot start two streams for the same URL.
+        let streams = Self::get();
+        let mut streams = streams.write().expect("not poisoned");
+        if let Some(stream) = streams.get(&url) {
             debug!("using existing stream for {}", url);
             if stream
                 .count
@@ -161,10 +165,7 @@ impl Streams {
             receiver,
             count: stream.count.clone(),
         };
-        Self::get()
-            .write()
-            .expect("not poisoned")
-            .insert(url, stream);
+        streams.insert(url, stream);
         sl
     }
 }
