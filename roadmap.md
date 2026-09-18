@@ -357,9 +357,9 @@ y un modelo de frecuencia.
 
 ### ZEN y radios colocadas en objetos
 
-- [ ] **Módulo ZEN "Add FM Radio"**: seleccionar un objeto compatible, elegir una emisora y crear una fuente FM posicional asociada al objeto. Reutilizar `GVAR(active)`, `EFUNC(manager,play)` y la lista de emisoras actual.
-- [ ] **Módulo ZEN "Keep Radio On"**: marcar/desmarcar que la radio de un objeto permanezca encendida aunque no haya un jugador controlándola.
-- [ ] **Setting CBA para radios persistentes**: permitir o bloquear la función "Keep Radio On" desde Addon Options. El setting controla la disponibilidad de la función; no enciende automáticamente todos los objetos.
+- [x] **Módulo ZEN "Add FM Radio"**: seleccionar un objeto compatible, elegir una emisora y crear una fuente FM posicional asociada al objeto. Reutiliza `GVAR(active)`, `EFUNC(manager,play)` y la lista de emisoras actual.
+- [x] **Módulo ZEN "Keep Radio On"**: marcar/desmarcar que la radio de un objeto no pueda apagarse mientras la persistencia esté habilitada.
+- [x] **Setting CBA para radios persistentes**: permite o bloquea la función "Keep Radio On" desde Addon Options. El setting controla la disponibilidad y no enciende automáticamente todos los objetos.
 - [ ] Definir el comportamiento al borrar, mover o reemplazar el objeto y evitar que el módulo cree fuentes duplicadas.
 
 ### Estabilidad de streams en vehículos
