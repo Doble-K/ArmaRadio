@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="Live Radio">
     <Package name="Interface">
+        <Key ID="STR_Live_Radio_Interface_AddRadio">
+            <English>Add FM Radio</English>
+            <Spanish>Agregar radio FM</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_AllGunnersCanControl">
             <English>All Gunners Can Control Radio</English>
             <Spanish>Todos los artilleros pueden controlar la radio</Spanish>
@@ -120,6 +124,10 @@
         <Key ID="STR_Live_Radio_Interface_Open">
             <English>Open</English>
             <Spanish>Abrir</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_PersistentDisabled">
+            <English>Persistent radios are disabled in Addon Options.</English>
+            <Spanish>Las radios persistentes están deshabilitadas en Addon Options.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_Power">
             <English>Power</English>

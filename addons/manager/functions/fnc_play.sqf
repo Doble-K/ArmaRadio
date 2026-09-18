@@ -4,6 +4,11 @@ params ["_source", "_url"];
 
 private _ret = "";
 
+// A persistent radio cannot be powered off while the feature is enabled.
+if (_url isEqualTo "" && {GVAR(enablePersistentRadios)} && {_source getVariable [QGVAR(keepPowered), false]}) exitWith {
+    ((_source getVariable [QGVAR(active), []]) param [0, ""])
+};
+
 // A burned radio cannot be turned back on until it is repaired
 if ((_source getVariable [QGVAR(burned), false]) && {_url isNotEqualTo ""}) exitWith { "" };
 

@@ -55,6 +55,15 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(enablePersistentRadios),
+    "CHECKBOX",
+    [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],
+    LLSTRING(Category),
+    false,
+    1
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(enableBurn),
     "CHECKBOX",
     [LLSTRING(EnableBurn), LLSTRING(EnableBurnDescription)],

@@ -23,6 +23,43 @@ if (!isClass (configFile >> "CfgPatches" >> "zen_custom_modules")) exitWith {};
 // --- Custom modules (Zeus modules tree) ---
 // Module functions receive [_position ASL, _attachedObject]
 
+["Live Radio", "Add FM Radio to Object", {
+    params ["", "_object"];
+    if (isNull _object) exitWith {
+        [LLSTRING(SelectObject)] call zen_common_fnc_showMessage;
+    };
+
+    private _names = GVAR(stations) apply { _x param [0, ""] };
+    [LLSTRING(AddRadio), [["COMBO", [LLSTRING(Station), ""], [_names, [], 0]]], {
+        params ["_values", "_object"];
+        private _name = _values param [0, ""];
+        private _index = GVAR(stations) findIf { (_x param [0, ""]) isEqualTo _name };
+        private _url = (GVAR(stations) param [_index, []]) param [2, ""];
+        if (_url isEqualTo "") exitWith {};
+        _object setVariable [QGVAR(lastStation), _url, true];
+        [_object, _url] call EFUNC(manager,play);
+    }, {}, _object] call zen_dialog_fnc_create;
+}] call zen_custom_modules_fnc_register;
+
+["Live Radio", "Keep Radio On", {
+    params ["", "_object"];
+    if (isNull _object) exitWith {
+        [LLSTRING(SelectObject)] call zen_common_fnc_showMessage;
+    };
+    if (!EGVAR(manager,enablePersistentRadios)) exitWith {
+        [LLSTRING(PersistentDisabled)] call zen_common_fnc_showMessage;
+    };
+
+    private _keep = !(_object getVariable [QEGVAR(manager,keepPowered), false]);
+    _object setVariable [QEGVAR(manager,keepPowered), _keep, true];
+    if (_keep && {_object getVariable [QEGVAR(manager,active), []] isEqualTo []}) then {
+        private _url = _object getVariable [QGVAR(lastStation), (GVAR(stations) param [0, []]) param [2, ""]];
+        if (_url isNotEqualTo "") then {
+            [_object, _url] call EFUNC(manager,play);
+        };
+    };
+}] call zen_custom_modules_fnc_register;
+
 ["Live Radio", "Toggle Radio Power", {
     params ["", "_object"];
     if (isNull _object) exitWith {
