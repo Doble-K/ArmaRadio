@@ -376,10 +376,10 @@ y un modelo de frecuencia.
 
 ### Estática, modulación y ecualización
 
-- [ ] Separar la estática en una capa de ruido controlable, en lugar de mezclar
-  ruido blanco directamente con cada muestra de música.
-- [ ] Añadir modulación progresiva según `quality`, con variación de amplitud y
-  cortes breves, evitando que el ruido tape completamente la voz o la música.
+- [x] Separar la estática en una capa de ruido controlable por fuente, en lugar
+  de mezclar ruido blanco sin estado directamente con cada muestra de música.
+- [x] Añadir modulación progresiva según `quality`, con ruido suavizado,
+  variación lenta de amplitud y atenuación gradual del programa.
 - [ ] Evaluar una ecualización tipo radio FM: filtrar/agrupar el ruido por banda y
   aplicar un perfil distinto al audio degradado. No usar un recurso de audio fijo
   hasta definir si debe ser ruido blanco, hiss de FM o un recurso configurable.

@@ -83,6 +83,8 @@ impl SoundSource {
             let mut quality = 0.0_f32;
             let mut online = false;
             let mut reported = false;
+            let mut static_state = 0.0_f32;
+            let mut modulation_phase = 0.0_f32;
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
@@ -154,8 +156,23 @@ impl SoundSource {
                                     samples
                                         .into_iter()
                                         .map(|mut sample| {
-                                            sample.center = sample.center * (1.0 - quality)
-                                                + (rand::random::<f32>() * 2.0 - 1.0) * quality;
+                                            // Keep static as a per-source signal instead of
+                                            // replacing the stream with uncorrelated white noise.
+                                            let white = rand::random::<f32>() * 2.0 - 1.0;
+                                            static_state = static_state * 0.82 + white * 0.18;
+                                            let modulation = 1.0
+                                                - quality
+                                                    * 0.18
+                                                    * (0.5 + 0.5 * modulation_phase.sin());
+                                            sample.center = sample.center
+                                                * (1.0 - quality * 0.55)
+                                                * modulation
+                                                + static_state * (quality * 0.35);
+                                            modulation_phase +=
+                                                std::f32::consts::TAU * 7.0 / freq.max(1) as f32;
+                                            if modulation_phase >= std::f32::consts::TAU {
+                                                modulation_phase -= std::f32::consts::TAU;
+                                            }
                                             sample
                                         })
                                         .collect::<Vec<_>>()
