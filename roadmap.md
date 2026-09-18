@@ -362,6 +362,32 @@ y un modelo de frecuencia.
 - [x] **Setting CBA para radios persistentes**: permite o bloquea la función "Keep Radio On" desde Addon Options. El setting controla la disponibilidad y no enciende automáticamente todos los objetos.
 - [ ] Definir el comportamiento al borrar, mover o reemplazar el objeto y evitar que el módulo cree fuentes duplicadas.
 
+### Idea abierta — reparación multi-backend
+
+La reparación de la radio debe tener un núcleo común y varias superficies de
+interacción. La lógica de estado no debe depender de ACE, para que el mod siga
+funcionando con ACE, sin ACE y con Advanced-ACE-Repair cargado.
+
+- [ ] Extraer un núcleo común para `canRepairRadio` y `repairRadio`: estado
+  `burned`, emisora guardada, tiempo de reparación, herramientas/repuestos y
+  restauración de la fuente.
+- [ ] **ACE**: adaptar la reparación al flujo de `ace_repair` cuando esté
+  disponible, reutilizando sus permisos de ingeniero, herramientas, barra de
+  progreso, animación, lugares de reparación y objetos reclamados/consumidos.
+- [ ] **Vanilla**: mantener las acciones fallback actuales de
+  `XEH_postInit.sqf`, usando exactamente el mismo núcleo de reparación.
+- [ ] **Zeus vanilla**: añadir un módulo `Repair Radio` que invoque directamente
+  el núcleo común sin requerir ACE.
+- [ ] **Advanced-ACE-Repair**: detectar el mod opcionalmente y ofrecer una
+  acción compatible con su modelo de reparación, sin convertirlo en dependencia
+  obligatoria ni copiar su código o assets.
+- [ ] Evitar acciones duplicadas cuando estén cargados ACE y
+  Advanced-ACE-Repair al mismo tiempo.
+
+> **Recomendación de implementación:** primero crear el núcleo común y probarlo
+> con el fallback vanilla; después añadir el adaptador ACE y, por último, la
+> integración opcional con Advanced-ACE-Repair.
+
 ### Estabilidad de streams en vehículos
 
 - [ ] Reproducir y registrar cortes al entrar/salir de vehículos, cambiar de asiento,
