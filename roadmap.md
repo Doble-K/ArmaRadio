@@ -371,6 +371,8 @@ y un modelo de frecuencia.
   inserción usan el mismo lock de escritura.
 - [ ] Garantizar que destruir/recrear una fuente no deje vivo el hilo anterior ni
   encole audio antiguo después del cambio de emisora.
+- [x] Proteger el evento `start` contra cambios rápidos: si el mismo objeto aún
+  conserva una fuente anterior, se destruye antes de registrar la nueva.
 - [x] Emitir `StreamPacket::Close` cuando el decoder termina por EOF, para que la
   fuente publique la transición a OFFLINE sin mantener un stream agotado en
   silencio. La reconexión automática queda separada hasta resolver el problema

@@ -32,6 +32,16 @@ if (hasInterface) then {
 
     [QGVAR(start), {
         params ["_id", "_url", "_source"];
+
+        // A fast station change can deliver start before the previous stop has
+        // removed the old local source. Keep one OpenAL source per object.
+        {
+            EXT callExtension ["source:destroy", [_x]];
+            GVAR(sources) deleteAt _x;
+        } forEach ((keys GVAR(sources)) select {
+            (GVAR(sources) get _x) isEqualTo _source && {_x isNotEqualTo _id}
+        });
+
         EXT callExtension ["source:new", [_id, _url, _source getVariable [QGVAR(volume), 1]]];
         GVAR(sources) set [_id, _source];
         [QGVAR(metadataUpdated), [_id, ""]] call CBA_fnc_localEvent;
