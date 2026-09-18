@@ -384,6 +384,30 @@ funcionando con ACE, sin ACE y con Advanced-ACE-Repair cargado.
 - [ ] Evitar acciones duplicadas cuando estén cargados ACE y
   Advanced-ACE-Repair al mismo tiempo.
 
+#### Referencia autorizada — continuación de Advanced-ACE-Repair
+
+La referencia actual para esta integración será la continuación mantenida por
+UnRealxInferno:
+
+- GitHub: `https://github.com/UnRealxInferno/Advanced-ACE-Repair`
+- Fork directo de `MrFleff/Advanced-ACE-Repair`.
+- Workshop de la continuación: `https://steamcommunity.com/sharedfiles/filedetails/?id=3688159183`.
+- El Workshop original enlazado anteriormente (`3441837719`) aparece eliminado;
+  no debe usarse como referencia de publicación actual.
+
+El autor original indicó públicamente en el Workshop que cualquiera podía tomar
+el mod desde GitHub y continuar su desarrollo. Por eso este fork se documenta
+como una referencia autorizada para estudiar, adaptar y contribuir mejoras al
+ecosistema de reparación ACE, manteniendo la atribución a Fleff y
+UnRealxInferno. El repositorio no contiene una licencia formal declarada, así
+que cualquier código o asset reutilizado debe conservar sus avisos y confirmar
+el permiso correspondiente; la implementación de Live Radio seguirá siendo
+propia y solo dependerá de la API de ACE.
+
+Las correcciones relevantes del fork incluyen rutas `$PBOPREFIX$`, `MAINPREFIX`,
+un error de parseo en `ALL_HITPOINTS` y compatibilidad con versiones actuales de
+ACE. Su patrón `ACE_Repair` será la base para la futura acción `Repair Radio`.
+
 > **Recomendación de implementación:** primero crear el núcleo común y probarlo
 > con el fallback vanilla; después añadir el adaptador ACE y, por último, la
 > integración opcional con Advanced-ACE-Repair.

@@ -49,3 +49,17 @@ Registro de puntos del `roadmap.md` que quedaron sin completar en la sesión de 
 
 - **Estado**: COMPLETADO (módulo Zeus `ModuleToggleRadio` + acciones `ACE_ZeusActions` con toggle de power).
 - **Nota de verificación**: la estructura de `ACE_ZeusActions` fue verificada contra el fuente de ACE3/ZEN: se compila desde la clase raíz `configFile >> "ACE_ZeusActions"` con submenús como subclases directas (NO dentro de `CfgVehicles`, NO envuelto en `ACE_MainActions`). La implementación final quedó en `addons/interface/CfgZeusActions.hpp` a nivel root. Igual conviene verificar visualmente en partida con ACE cargado.
+
+## Referencia de reparación — Advanced-ACE-Repair
+
+- **Fork de referencia**: `https://github.com/UnRealxInferno/Advanced-ACE-Repair`.
+- **Origen**: continuación de `MrFleff/Advanced-ACE-Repair`, con correcciones de
+  rutas PBO, parseo de configuración y compatibilidad reciente con ACE.
+- **Permiso documentado**: el autor original indicó públicamente en Workshop que
+  cualquiera podía tomar el mod desde GitHub y continuar su desarrollo.
+- **Uso previsto en Live Radio**: estudiar y adaptar el patrón `ACE_Repair` para
+  `Repair Radio`, conservando atribución y evitando copiar assets o código sin
+  confirmar el permiso aplicable. Live Radio no tendrá una dependencia obligatoria
+  de Advanced-ACE-Repair.
+- **Workshop actual de la continuación**: `3688159183`. El item original
+  `3441837719` aparece eliminado.
