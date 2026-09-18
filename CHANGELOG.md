@@ -9,6 +9,14 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 ## [Unreleased]
 
 ### Pending
+- Add ZEN modules to attach an FM station to an arbitrary object and mark its
+  radio as persistent.
+- Add a CBA setting that enables persistent radios; persistent radios cannot be
+  powered off while the setting and object flag are enabled.
+- Improve per-source static with smoothed noise, gradual program attenuation and
+  slow modulation based on the existing quality factor.
+- Prevent duplicate streams during concurrent URL lookup/insertion and report
+  normal decoder EOF as an offline transition.
 - Verify in-game: ACE quick controls, repair, gunner and passenger control, the
   combined ZEN module and the settings tooltips (manual QA).
 - Make the ACE menu always visible and move radio burn to optional settings per
