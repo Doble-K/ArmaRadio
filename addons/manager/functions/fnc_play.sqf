@@ -13,7 +13,7 @@ if (_url isEqualTo "" && {GVAR(enablePersistentRadios)} && {_source getVariable 
 if ((_source getVariable [QGVAR(burned), false]) && {_url isNotEqualTo ""}) exitWith { "" };
 
 private _existing = _source getVariable [QGVAR(active), []];
-if !(_existing isEqualTo []) then {
+if (_existing isNotEqualTo []) then {
     private _id = _existing select 0;
     if (((_existing select 1) isEqualTo _url) && {GVAR(sourcesStatus) getOrDefault [_id, "online"] isNotEqualTo "offline"}) then {
         _ret = _id;
@@ -23,7 +23,7 @@ if !(_existing isEqualTo []) then {
     };
 };
 
-if !(_ret isEqualTo "") exitWith {};
+if (_ret isNotEqualTo "") exitWith {};
 if (_url isEqualTo "") exitWith {
     _source setVariable [QGVAR(active), nil, true];
 };

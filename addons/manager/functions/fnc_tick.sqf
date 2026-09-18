@@ -26,7 +26,7 @@ private _jamFactor = [_player] call FUNC(jamFactor);
     if (alive _y) then {
         private _pos = getPosASL _y;
         private _data = [_x, 0, 0, 0];
-        if (_inZeus || {!(_y isEqualTo vehicle _player)}) then {
+        if (_inZeus || {_y isNotEqualTo vehicle _player}) then {
             private _ppos = eyePos _player;
             if (_inZeus) then {
                 _ppos = getPosASL curatorCamera;
@@ -68,7 +68,7 @@ private _jamFactor = [_player] call FUNC(jamFactor);
             _y setVariable [QGVAR(lastExistsCheck), diag_tickTime];
             if (((EXT callExtension ["source:exists", [_x]]) select 0) isEqualTo "0") then {
                 private _active = _y getVariable [QGVAR(active), []];
-                if !(_active isEqualTo []) then {
+                if (_active isNotEqualTo []) then {
                     EXT callExtension ["source:new", [_x, _active param [1, ""], _y getVariable [QGVAR(volume), 1]]];
                 };
             };
