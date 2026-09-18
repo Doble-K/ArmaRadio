@@ -371,6 +371,10 @@ y un modelo de frecuencia.
   inserción usan el mismo lock de escritura.
 - [ ] Garantizar que destruir/recrear una fuente no deje vivo el hilo anterior ni
   encole audio antiguo después del cambio de emisora.
+- [x] Emitir `StreamPacket::Close` cuando el decoder termina por EOF, para que la
+  fuente publique la transición a OFFLINE sin mantener un stream agotado en
+  silencio. La reconexión automática queda separada hasta resolver el problema
+  histórico de loops.
 - [ ] Añadir logging de `source:new`, `source:destroy`, URL, ID y contador de
   listeners para diagnosticar el posible doble stream.
 

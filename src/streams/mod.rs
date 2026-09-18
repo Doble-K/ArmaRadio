@@ -83,6 +83,13 @@ impl Stream {
                     }
                 }
             }
+
+            // A normal EOF must be visible to every source. Without this
+            // packet the source thread remains alive with an exhausted stream
+            // and the UI never receives the offline transition.
+            for sender in senders.0.read().expect("not poisoned").iter() {
+                let _ = sender.send(StreamPacket::Close);
+            }
         });
     }
 }
