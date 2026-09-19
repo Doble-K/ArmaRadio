@@ -14,10 +14,19 @@
 
 GVAR(stations) = [];
 
-private _customStations = [];
-private _customText = missionNamespace getVariable [QGVAR(customStations), "[]"];
-if (count _customText > 0 && {(toArray _customText) param [0, 91] == 91}) then {
-    _customStations = parseSimpleArray _customText;
+private _customValue = missionNamespace getVariable [QGVAR(customStations), "[]"];
+private _customStations = switch (true) do {
+    case (_customValue isEqualType []): {
+        _customValue
+    };
+    case (_customValue isEqualType ""): {
+        private _text = trim _customValue;
+        if (_text isEqualTo "") then { [] } else {
+            private _parsed = parseSimpleArray _text;
+            if (_parsed isEqualType []) then { _parsed } else { [] }
+        }
+    };
+    default { [] };
 };
 
 private _seenURLs = createHashMap;

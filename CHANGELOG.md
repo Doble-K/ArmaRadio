@@ -9,6 +9,8 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 ## [Unreleased]
 
 ### Pending
+- Harden customStations parsing so Addon Options values work when returned as
+  serialized text, arrays, or text with surrounding whitespace.
 - Add ZEN modules to attach an FM station to an arbitrary object and mark its
   radio as persistent.
 - Add a CBA setting that enables persistent radios; persistent radios cannot be
