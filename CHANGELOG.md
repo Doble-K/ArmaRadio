@@ -9,8 +9,6 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 ## [Unreleased]
 
 ### Pending
-- Harden customStations parsing so Addon Options values work when returned as
-  serialized text, arrays, or text with surrounding whitespace.
 - Add ZEN modules to attach an FM station to an arbitrary object and mark its
   radio as persistent.
 - Add a CBA setting that enables persistent radios; persistent radios cannot be
@@ -28,6 +26,25 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 - Diagnose the spontaneous power-off bug before re-enabling auto power-off.
 - Handheld and backpack radios; persistent per-profile volume; Antistasi
   heal/garage integration for burned radios.
+
+## [1.1.0] - 2026-09-23
+
+Maintenance and polish release on top of the 1.0.0 fork features.
+
+### Added
+
+- **Custom stations parsing hardening** — `customStations` Addon Options values
+  now work whether returned as a serialized string, an array, or text with
+  surrounding whitespace.
+- Enhanced launcher metadata and updated launcher logos.
+- Polished Workshop description.
+
+### Changed
+
+- Modernized the GitHub Actions toolchain (build and release workflows).
+- Cleaned HEMTT SQF notices (`isEqualTo`/`isNotEqualTo` style cleanup).
+- Documented roadmap continuation items (Advanced ACE Repair, multi-backend
+  repair plan, handheld routing and radio profiles).
 
 ## [1.0.0] - 2026-08-14
 
