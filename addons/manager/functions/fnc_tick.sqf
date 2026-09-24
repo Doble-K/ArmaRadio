@@ -18,7 +18,6 @@ EXT callExtension ["listener:dir", _data];
 
 // Radio tower interference (TFAR/Antistasi), throttled in FUNC(towerFactor)
 private _towerFactors = [_player] call FUNC(towerFactor);
-private _towerFactor = _towerFactors select 0;
 
 // Crows-EW / TFAR radio jammer interference
 private _jamFactor = [_player] call FUNC(jamFactor);
@@ -58,10 +57,9 @@ private _jamFactor = [_player] call FUNC(jamFactor);
             0
         };
         private _jam = [0, _jamFactor] select GVAR(enableJammerInterference);
-        private _tower = _towerFactor;
         private _burn = if (GVAR(enableBurnInterference)) then { [_y] call FUNC(burn) } else { 0 };
         private _target = if (GVAR(enableStatic)) then {
-            (_damage + _storm + _explosion + _tower + _jam + _burn) min 1
+            (_damage + _storm + _explosion + _jam + _burn) min 1
         } else {
             0
         };
@@ -70,9 +68,50 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         private _step = diag_deltaTime * 2;
         private _delta = _target - _current;
         private _smoothed = _current + (_delta min _step max -_step);
-        if (abs (_smoothed - _current) > 0.005) then {
+        private _cone1 = if (GVAR(enableStatic) && {GVAR(enableCone1)}) then {
+            private _factor = _towerFactors select 0;
+            if (_factor > 0) then {
+                _factor * linearConversion [0, 1, GVAR(cone1VolumeStart), GVAR(cone1VolumeEnd), _factor, true]
+            } else {
+                0
+            }
+        } else {
+            0
+        };
+        private _cone2 = if (GVAR(enableStatic) && {GVAR(enableCone2)}) then {
+            private _factor = _towerFactors select 1;
+            if (_factor > 0) then {
+                _factor * linearConversion [0, 1, GVAR(cone2VolumeStart), GVAR(cone2VolumeEnd), _factor, true]
+            } else {
+                0
+            }
+        } else {
+            0
+        };
+        private _cone3 = if (GVAR(enableStatic) && {GVAR(enableCone3)}) then {
+            private _factor = _towerFactors select 2;
+            if (_factor > 0) then {
+                _factor * linearConversion [0, 1, GVAR(cone3VolumeStart), GVAR(cone3VolumeEnd), _factor, true]
+            } else {
+                0
+            }
+        } else {
+            0
+        };
+        private _targets = [_smoothed, _cone1, _cone2, _cone3];
+        private _previousTargets = _y getVariable [QGVAR(interferenceTargets), [0, 0, 0, 0]];
+        private _targetsChanged = false;
+        {
+            if (abs ((_targets select _forEachIndex) - (_previousTargets select _forEachIndex)) > 0.005) exitWith {
+                _targetsChanged = true;
+            };
+        } forEach _targets;
+        private _fadeChanged = abs ((_y getVariable [QGVAR(interferenceFade), -1]) - GVAR(streamFadeOut)) > 0.005;
+        if (_fadeChanged || {_targetsChanged}) then {
             _y setVariable [QGVAR(quality), _smoothed];
-            EXT callExtension ["source:interference", [_x, _smoothed, 0, 0, 0, GVAR(streamFadeOut)]];
+            _y setVariable [QGVAR(interferenceTargets), _targets];
+            _y setVariable [QGVAR(interferenceFade), GVAR(streamFadeOut)];
+            EXT callExtension ["source:interference", [_x, _smoothed, _cone1, _cone2, _cone3, GVAR(streamFadeOut)]];
         };
 
         if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {

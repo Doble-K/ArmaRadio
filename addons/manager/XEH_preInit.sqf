@@ -69,12 +69,7 @@ EXT callExtension "";
     [LLSTRING(StreamFadeOut), LLSTRING(StreamFadeOutDescription)],
     LLSTRING(Category),
     [0, 1, 1, 2, true],
-    1,
-    {
-        {
-            EXT callExtension ["source:interference", [_x, (_y getVariable [QGVAR(quality), 0]), 0, 0, 0, GVAR(streamFadeOut)]];
-        } forEach GVAR(sources);
-    }
+    1
 ] call CBA_fnc_addSetting;
 
 [
