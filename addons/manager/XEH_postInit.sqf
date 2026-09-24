@@ -3,19 +3,29 @@
 if (hasInterface) then {
     [GVAR(volumeMultiplier)] call FUNC(applyGain);
 
-    GVAR(lastExplosion) = -999;
+    GVAR(explosionEvents) = [];
+    private _registerExplosionHandlers = {
+        {
+            if (isNil {_x getVariable QGVAR(explosionHandler)}) then {
+                _x setVariable [QGVAR(explosionHandler), _x addEventHandler ["Explosion", {
+                    params ["_object", "_damage", "_type"];
+                    private _hit = if (_type isEqualType "") then {
+                        getNumber (configFile >> "CfgAmmo" >> _type >> "hit")
+                    } else {
+                        1
+                    };
+                    private _intensity = linearConversion [0, 100, ((_damage max _hit) max 1), 0, 1, true];
+                    GVAR(explosionEvents) pushBack [getPosASL _object, time, _intensity];
+                    GVAR(explosionEvents) = GVAR(explosionEvents) select { time - (_x#1) < 4 };
+                }]];
+            };
+        } forEach allMissionObjects "";
+    };
+    call _registerExplosionHandlers;
     [{
-        private _unit = call CBA_fnc_currentUnit;
-        private _vehicle = vehicle _unit;
-        if (isNil {_unit getVariable QGVAR(explosionHandler)}) then {
-            _unit setVariable [QGVAR(explosionHandler),
-                _unit addEventHandler ["Explosion", { GVAR(lastExplosion) = time; }]];
-        };
-        if (_vehicle != _unit && {isNil {_vehicle getVariable QGVAR(explosionHandler)}}) then {
-            _vehicle setVariable [QGVAR(explosionHandler),
-                _vehicle addEventHandler ["Explosion", { GVAR(lastExplosion) = time; }]];
-        };
-    }] call CBA_fnc_addPerFrameHandler;
+        params ["_registerExplosionHandlers"];
+        call _registerExplosionHandlers;
+    }, [_registerExplosionHandlers], 1] call CBA_fnc_addPerFrameHandler;
 
     GVAR(hearingFactor) = -1;
     [{

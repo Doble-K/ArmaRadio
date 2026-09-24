@@ -52,7 +52,16 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         };
         private _storm = if (GVAR(enableWeatherInterference)) then { 0.2 * rain } else { 0 };
         private _explosion = if (GVAR(enableExplosionInterference)) then {
-            linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true]
+            private _peak = 0;
+            {
+                private _age = time - (_x#1);
+                if (_age >= 0 && {_age < 4}) then {
+                    private _distanceFactor = linearConversion [100, 0, _pos distance (_x#0), 0, 1, true];
+                    private _envelope = linearConversion [0.1, 4, _age, 1, 0, true];
+                    _peak = (_peak + (_x#2) * _distanceFactor * _envelope) min 1;
+                };
+            } forEach GVAR(explosionEvents);
+            _peak
         } else {
             0
         };
