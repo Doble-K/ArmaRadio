@@ -7,28 +7,21 @@ on:
 
 jobs:
   build_extension:
-    strategy:
-      matrix:
-        arrays:
-          [
-            os: { tag: "windows-latest", target: "i686-pc-windows-msvc" },
-            os: { tag: "windows-latest", target: "x86_64-pc-windows-msvc" },
-          ]
-    runs-on: ${{ matrix.arrays.os.tag }}
+    runs-on: windows-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v5
       - name: Install latest
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.arrays.os.target }}
+          targets: x86_64-pc-windows-msvc
       - name: Cargo Build
-        run: cargo build --release
+        run: cargo build --release --target x86_64-pc-windows-msvc
       - name: Upload
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ matrix.arrays.os.target }}
-          path: target/release/live_radio.dll
+          name: x86_64-pc-windows-msvc
+          path: target/x86_64-pc-windows-msvc/release/live_radio.dll
           if-no-files-found: error
           retention-days: 30
   package:
@@ -41,10 +34,6 @@ jobs:
         with:
           name: x86_64-pc-windows-msvc
       - run: mv live_radio.dll live_radio_x64.dll
-      - uses: actions/download-artifact@v6
-        with:
-          name: i686-pc-windows-msvc
-
       - name: Setup HEMTT
         uses: arma-actions/hemtt@v1
         with:

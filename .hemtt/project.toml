@@ -5,7 +5,6 @@ mainprefix = "z"
 
 [files]
 include = [
-    "live_radio.dll",
     "live_radio_x64.dll",
     "logo_ca.paa",
     "logo_over_ca.paa",
