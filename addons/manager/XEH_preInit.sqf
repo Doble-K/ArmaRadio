@@ -8,6 +8,7 @@ GVAR(sourcesTitles) = createHashMap;
 GVAR(sourcesStatus) = createHashMap;
 GVAR(nearbyTowers) = [];
 GVAR(towersLastScan) = -999;
+GVAR(debugInterferenceLastLog) = -1;
 
 // Make sure the extension has been loaded once
 EXT callExtension "";
@@ -61,6 +62,15 @@ EXT callExtension "";
     LLSTRING(Category),
     true,
     1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(debugInterference),
+    "CHECKBOX",
+    [LLSTRING(DebugInterference), LLSTRING(DebugInterferenceDescription)],
+    LLSTRING(Category),
+    false,
+    false
 ] call CBA_fnc_addSetting;
 
 [

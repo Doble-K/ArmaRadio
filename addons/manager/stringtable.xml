@@ -133,6 +133,14 @@
             <English>Interference resource volume at the outer radius of cone 3.</English>
             <Spanish>Volumen del recurso de interferencia en el radio exterior del cono 3.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_DebugInterference">
+            <English>Debug Interference</English>
+            <Spanish>Depurar interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_DebugInterferenceDescription">
+            <English>Write configured towers, detected towers, cone factors and source targets to the client RPT once per second.</English>
+            <Spanish>Escribe en el RPT del cliente las torres configuradas, detectadas, los factores de cono y los objetivos de cada fuente una vez por segundo.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_EnableBurn">
             <English>Enable Burn</English>
             <Spanish>Habilitar rotura</Spanish>

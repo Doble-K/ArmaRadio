@@ -19,6 +19,21 @@ EXT callExtension ["listener:dir", _data];
 // Radio tower interference (TFAR/Antistasi), throttled in FUNC(towerFactor)
 private _towerFactors = [_player] call FUNC(towerFactor);
 
+if (GVAR(debugInterference) && {diag_tickTime - GVAR(debugInterferenceLastLog) >= 1}) then {
+    GVAR(debugInterferenceLastLog) = diag_tickTime;
+    private _configuredTowers = parseSimpleArray GVAR(interferenceTowers);
+    private _detectedTowers = GVAR(nearbyTowers) apply {
+        [typeOf _x, round (_x distance _player)]
+    };
+    diag_log format [
+        "[Live Radio] interference debug: configured=%1 detected=%2 factors=%3 scanRadius=%4",
+        _configuredTowers,
+        _detectedTowers,
+        _towerFactors,
+        GVAR(interferenceTowerRadius) max (selectMax [GVAR(cone1OuterRadius), GVAR(cone2OuterRadius), GVAR(cone3OuterRadius)])
+    ];
+};
+
 // Crows-EW / TFAR radio jammer interference
 private _jamFactor = [_player] call FUNC(jamFactor);
 
@@ -108,6 +123,14 @@ private _jamFactor = [_player] call FUNC(jamFactor);
             _y setVariable [QGVAR(interferenceTargets), _targets];
             _y setVariable [QGVAR(interferenceFade), GVAR(streamFadeOut)];
             EXT callExtension ["source:interference", [_x, _smoothed, _cone1, _cone2, _cone3, GVAR(streamFadeOut)]];
+            if (GVAR(debugInterference)) then {
+                diag_log format [
+                    "[Live Radio] interference debug: source=%1 targets=%2 fade=%3",
+                    _x,
+                    _targets,
+                    GVAR(streamFadeOut)
+                ];
+            };
         };
 
         if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {
