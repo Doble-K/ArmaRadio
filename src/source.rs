@@ -2,7 +2,7 @@ use std::{
     collections::HashMap,
     mem::MaybeUninit,
     sync::{
-        atomic::AtomicU8,
+        atomic::{AtomicBool, AtomicU8, Ordering},
         mpsc::{self, Receiver, Sender},
         Arc, Mutex, RwLock,
     },
@@ -186,12 +186,24 @@ pub struct SoundSource {
     position: Vector3,
     time: SystemTime,
     channel: Sender<SoundCommand>,
+    alive: Arc<AtomicBool>,
+}
+
+struct SourceThreadGuard(Arc<AtomicBool>);
+
+impl Drop for SourceThreadGuard {
+    fn drop(&mut self) {
+        self.0.store(false, Ordering::Release);
+    }
 }
 
 impl SoundSource {
     pub fn new(ctx: Context, id: String, url: String, gain: f32) -> Self {
         let (tx, rx): (Sender<SoundCommand>, Receiver<SoundCommand>) = mpsc::channel();
+        let alive = Arc::new(AtomicBool::new(true));
+        let thread_alive = alive.clone();
         std::thread::spawn(move || {
+            let _alive = SourceThreadGuard(thread_alive);
             debug!("Starting source `{}`", id);
             let stream = Streams::listen(url);
             let Some(listener) = Listener::get() else {
@@ -432,6 +444,7 @@ impl SoundSource {
             position: Vector3::new(0.0, 0.0, 0.0),
             time: SystemTime::now(),
             channel: tx,
+            alive,
         }
     }
 
@@ -571,15 +584,13 @@ pub fn command_set_interference(
 }
 
 pub fn command_source_exists(id: String) -> String {
-    if Sources::get()
+    let alive = Sources::get()
         .read()
         .expect("not poisoned")
-        .contains_key(&id)
-    {
-        "1".to_string()
-    } else {
-        "0".to_string()
-    }
+        .get(&id)
+        .and_then(|source| source.lock().ok())
+        .is_some_and(|source| source.alive.load(Ordering::Acquire));
+    if alive { "1".to_string() } else { "0".to_string() }
 }
 
 pub fn command_set_global_gain(ctx: Context, gain: f32) {
