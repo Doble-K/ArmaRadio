@@ -17,7 +17,8 @@ private _data = if (_inZeus) then {
 EXT callExtension ["listener:dir", _data];
 
 // Radio tower interference (TFAR/Antistasi), throttled in FUNC(towerFactor)
-private _towerFactor = [_player] call FUNC(towerFactor);
+private _towerFactors = [_player] call FUNC(towerFactor);
+private _towerFactor = _towerFactors select 0;
 
 // Crows-EW / TFAR radio jammer interference
 private _jamFactor = [_player] call FUNC(jamFactor);
