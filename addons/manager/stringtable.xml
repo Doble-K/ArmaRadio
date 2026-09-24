@@ -222,12 +222,12 @@
             <Spanish>Incluye los efectos del clima y las torres de radio en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadius">
-            <English>Interference Tower Radius (m)</English>
-            <Spanish>Radio de la torre de interferencia (m)</Spanish>
+            <English>Tower Scan Radius (m)</English>
+            <Spanish>Radio de búsqueda de torres (m)</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadiusDescription">
-            <English>Radius around each radio tower inside which it generates interference.</English>
-            <Spanish>Radio alrededor de cada torre de radio dentro del cual genera interferencia.</Spanish>
+            <English>Maximum radius used to find configured tower objects. Cone outer radii still define where interference is heard.</English>
+            <Spanish>Radio máximo para encontrar torres configuradas. Los radios exteriores de los conos siguen definiendo dónde se escucha la interferencia.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerSideFilter">
             <English>Interference Tower Side Filter</English>

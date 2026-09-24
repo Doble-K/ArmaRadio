@@ -22,11 +22,20 @@ if (_strength <= 0) exitWith { [0, 0, 0] };
 
 private _outerRadii = [GVAR(cone1OuterRadius), GVAR(cone2OuterRadius), GVAR(cone3OuterRadius)];
 private _innerRadii = [GVAR(cone1InnerRadius), GVAR(cone2InnerRadius), GVAR(cone3InnerRadius)];
-private _scanRadius = selectMax _outerRadii;
+private _scanRadius = (GVAR(interferenceTowerRadius) max (selectMax _outerRadii));
 if (_scanRadius <= 0) exitWith { [0, 0, 0] };
 
 private _towerClasses = parseSimpleArray GVAR(interferenceTowers);
-if (_towerClasses isEqualTo []) exitWith { 0 };
+if (_towerClasses isEqualTo []) exitWith { [0, 0, 0] };
+if (_towerClasses isEqualTo ["Land_Communication_F"]) then {
+    _towerClasses append [
+        "Land_TTowerBig_1_F",
+        "Land_TTowerBig_2_F",
+        "Land_TTowerBig_2_ruins_F",
+        "Land_TTowerSmall_1_F",
+        "Land_TTowerSmall_2_F"
+    ];
+};
 
 // Collect nearby towers with throttle (every 3s) and cache them
 if (diag_tickTime - GVAR(towersLastScan) > 3) then {

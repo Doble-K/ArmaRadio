@@ -311,7 +311,7 @@ EXT callExtension "";
     "EDITBOX",
     [LLSTRING(InterferenceTowers), LLSTRING(InterferenceTowersDescription)],
     LLSTRING(Category),
-    "[""Land_Communication_F""]",
+    "[""Land_Communication_F"",""Land_TTowerBig_1_F"",""Land_TTowerBig_2_F"",""Land_TTowerBig_2_ruins_F"",""Land_TTowerSmall_1_F"",""Land_TTowerSmall_2_F""]",
     1
 ] call CBA_fnc_addSetting;
 
