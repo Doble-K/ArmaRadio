@@ -45,12 +45,22 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         };
         EXT callExtension ["source:pos", _data];
 
-        private _damage = linearConversion [0, 1, getDammage _y, 0, 1, true];
-        private _storm = 0.2 * rain;
-        private _explosion = linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true];
-        private _burn = [_y] call FUNC(burn);
+        private _damage = if (GVAR(enableDamageInterference)) then {
+            linearConversion [0, 1, getDammage _y, 0, 1, true]
+        } else {
+            0
+        };
+        private _storm = if (GVAR(enableWeatherInterference)) then { 0.2 * rain } else { 0 };
+        private _explosion = if (GVAR(enableExplosionInterference)) then {
+            linearConversion [10, 0, time - GVAR(lastExplosion), 0, 1, true]
+        } else {
+            0
+        };
+        private _jam = [0, _jamFactor] select GVAR(enableJammerInterference);
+        private _tower = _towerFactor;
+        private _burn = if (GVAR(enableBurnInterference)) then { [_y] call FUNC(burn) } else { 0 };
         private _target = if (GVAR(enableStatic)) then {
-            (_damage + _storm + _explosion + _towerFactor + _jamFactor + _burn) min 1
+            (_damage + _storm + _explosion + _tower + _jam + _burn) min 1
         } else {
             0
         };

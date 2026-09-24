@@ -213,6 +213,51 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(enableDamageInterference),
+    "CHECKBOX",
+    [LLSTRING(EnableDamageInterference), LLSTRING(EnableDamageInterferenceDescription)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableWeatherInterference),
+    "CHECKBOX",
+    [LLSTRING(EnableWeatherInterference), LLSTRING(EnableWeatherInterferenceDescription)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableExplosionInterference),
+    "CHECKBOX",
+    [LLSTRING(EnableExplosionInterference), LLSTRING(EnableExplosionInterferenceDescription)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableJammerInterference),
+    "CHECKBOX",
+    [LLSTRING(EnableJammerInterference), LLSTRING(EnableJammerInterferenceDescription)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableBurnInterference),
+    "CHECKBOX",
+    [LLSTRING(EnableBurnInterference), LLSTRING(EnableBurnInterferenceDescription)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(enablePersistentRadios),
     "CHECKBOX",
     [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],

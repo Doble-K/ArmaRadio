@@ -141,6 +141,14 @@
             <English>Master switch for hard radio burnouts.</English>
             <Spanish>Interruptor maestro para la rotura dura de la radio.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableBurnInterference">
+            <English>Enable Burn Interference</English>
+            <Spanish>Habilitar interferencia por rotura</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableBurnInterferenceDescription">
+            <English>Include progressive radio burn damage in the general interference factor. This setting is local to each player.</English>
+            <Spanish>Incluye la rotura progresiva de la radio en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_EnableCone1">
             <English>Enable Cone 1</English>
             <Spanish>Habilitar cono 1</Spanish>
@@ -165,6 +173,30 @@
             <English>Enable the local interference channel for cone 3. This setting is local to each player.</English>
             <Spanish>Habilita el canal local de interferencia del cono 3. Este ajuste es local para cada jugador.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableDamageInterference">
+            <English>Enable Damage Interference</English>
+            <Spanish>Habilitar interferencia por daño</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableDamageInterferenceDescription">
+            <English>Include vehicle damage in the general radio interference factor. This setting is local to each player.</English>
+            <Spanish>Incluye el daño del vehículo en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableExplosionInterference">
+            <English>Enable Explosion Interference</English>
+            <Spanish>Habilitar interferencia por explosiones</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableExplosionInterferenceDescription">
+            <English>Include recent explosions in the general radio interference factor. This setting is local to each player.</English>
+            <Spanish>Incluye explosiones recientes en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableJammerInterference">
+            <English>Enable Jammer Interference</English>
+            <Spanish>Habilitar interferencia por jammer</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableJammerInterferenceDescription">
+            <English>Include jammer and electronic warfare effects in the general radio interference factor. This setting is local to each player.</English>
+            <Spanish>Incluye los efectos de jammers y guerra electrónica en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_EnablePersistentRadios">
             <English>Enable Persistent Radios</English>
             <Spanish>Habilitar radios persistentes</Spanish>
@@ -180,6 +212,14 @@
         <Key ID="STR_Live_Radio_Manager_EnableStaticDescription">
             <English>Enable static and distortion from damage, weather, explosions, towers and jammers. Disabling it fades the effect out.</English>
             <Spanish>Habilita la estática y distorsión por daño, clima, explosiones, torres y jammers. Al desactivarla, el efecto desaparece gradualmente.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableWeatherInterference">
+            <English>Enable Weather Interference</English>
+            <Spanish>Habilitar interferencia climática</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableWeatherInterferenceDescription">
+            <English>Include weather and radio tower effects in the general radio interference factor. This setting is local to each player.</English>
+            <Spanish>Incluye los efectos del clima y las torres de radio en el factor general de interferencia. Este ajuste es local para cada jugador.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_InterferenceTowerRadius">
             <English>Interference Tower Radius (m)</English>
