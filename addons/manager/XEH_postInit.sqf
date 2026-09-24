@@ -4,28 +4,6 @@ if (hasInterface) then {
     [GVAR(volumeMultiplier)] call FUNC(applyGain);
 
     GVAR(explosionEvents) = [];
-    private _registerExplosionHandlers = {
-        {
-            if (isNil {_x getVariable QGVAR(explosionHandler)}) then {
-                _x setVariable [QGVAR(explosionHandler), _x addEventHandler ["Explosion", {
-                    params ["_object", "_damage", "_type"];
-                    private _hit = if (_type isEqualType "") then {
-                        getNumber (configFile >> "CfgAmmo" >> _type >> "hit")
-                    } else {
-                        1
-                    };
-                    private _intensity = linearConversion [0, 100, ((_damage max _hit) max 1), 0, 1, true];
-                    GVAR(explosionEvents) pushBack [getPosASL _object, time, _intensity];
-                    GVAR(explosionEvents) = GVAR(explosionEvents) select { time - (_x#1) < 4 };
-                }]];
-            };
-        } forEach allMissionObjects "";
-    };
-    call _registerExplosionHandlers;
-    [{
-        params ["_registerExplosionHandlers"];
-        call _registerExplosionHandlers;
-    }, 1, [_registerExplosionHandlers]] call CBA_fnc_addPerFrameHandler;
 
     GVAR(hearingFactor) = -1;
     [{
