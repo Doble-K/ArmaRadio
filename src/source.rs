@@ -12,6 +12,11 @@ use std::{
 use alto::Source;
 use arma_rs::{Context, ContextState, Group};
 use crossbeam_channel::TryRecvError;
+use rand::{rngs::StdRng, Rng, SeedableRng};
+use std::{
+    collections::hash_map::DefaultHasher,
+    hash::{Hash, Hasher},
+};
 
 use crate::{
     audio::{Audio, InterferenceCache},
@@ -58,10 +63,24 @@ struct LocalMixer {
     high_pass_state: f32,
     high_pass_input: f32,
     low_pass_state: f32,
+    fluctuation_rngs: [StdRng; 4],
+    fluctuation_current: [f32; 4],
+    fluctuation_targets: [f32; 4],
+    fluctuation_elapsed: [f32; 4],
+    fluctuation_intervals: [f32; 4],
 }
 
 impl LocalMixer {
-    fn new() -> Option<Self> {
+    fn new(id: &str) -> Option<Self> {
+        let mut hasher = DefaultHasher::new();
+        id.hash(&mut hasher);
+        let seed = hasher.finish();
+        let fluctuation_rngs = std::array::from_fn(|channel| {
+            let mut bytes = [0u8; 32];
+            bytes[..8].copy_from_slice(&seed.to_le_bytes());
+            bytes[8..16].copy_from_slice(&(channel as u64).to_le_bytes());
+            StdRng::from_seed(bytes)
+        });
         Audio::interference().ok().map(|clips| Self {
             clips,
             cursors: [0.0; 4],
@@ -72,6 +91,11 @@ impl LocalMixer {
             high_pass_state: 0.0,
             high_pass_input: 0.0,
             low_pass_state: 0.0,
+            fluctuation_rngs,
+            fluctuation_current: [1.0; 4],
+            fluctuation_targets: [1.0; 4],
+            fluctuation_elapsed: [0.0; 4],
+            fluctuation_intervals: [0.08; 4],
         })
     }
 
@@ -90,10 +114,29 @@ impl LocalMixer {
             *current += (target - *current) * 0.1;
         }
         self.stream_fade += (self.stream_fade_target - self.stream_fade) * 0.1;
-        let gains = self.current;
+        let block_duration = samples.len() as f32 / frequency as f32;
+        for channel in 0..4 {
+            self.fluctuation_elapsed[channel] += block_duration;
+            while self.fluctuation_elapsed[channel] >= self.fluctuation_intervals[channel] {
+                self.fluctuation_elapsed[channel] -= self.fluctuation_intervals[channel];
+                self.fluctuation_targets[channel] =
+                    0.8 + self.fluctuation_rngs[channel].gen::<f32>() * 0.4;
+                self.fluctuation_intervals[channel] =
+                    0.08 + self.fluctuation_rngs[channel].gen::<f32>() * 0.17;
+            }
+            self.fluctuation_current[channel] +=
+                (self.fluctuation_targets[channel] - self.fluctuation_current[channel])
+                    * (block_duration / self.fluctuation_intervals[channel]).min(1.0);
+        }
+        let gains: [f32; 4] = std::array::from_fn(|channel| {
+            self.current[channel] * self.fluctuation_current[channel]
+        });
         let interference = gains.iter().copied().fold(0.0_f32, f32::max);
-        let high_pass = 20.0 + 780.0 * interference;
-        let low_pass = 20_000.0 - 18_000.0 * interference;
+        let filter_interference = (interference
+            * (1.0 + (self.fluctuation_current[0] - 1.0) * 0.15))
+            .clamp(0.0, 1.0);
+        let high_pass = 20.0 + 780.0 * filter_interference;
+        let low_pass = 20_000.0 - 18_000.0 * filter_interference;
         let high_alpha = (std::f32::consts::TAU * high_pass / frequency as f32)
             .min(1.0);
         let low_alpha = (std::f32::consts::TAU * low_pass / frequency as f32)
@@ -106,16 +149,26 @@ impl LocalMixer {
         ];
 
         for sample in &mut samples {
-            let static_sample = clips[0].sample_at(self.cursors[0], frequency);
-            let mixed = sample.center * (1.0 - gains[0] * 0.55) + static_sample * (gains[0] * 0.35);
+            let local = clips
+                .iter()
+                .enumerate()
+                .map(|(channel, clip)| {
+                    clip.sample_at(self.cursors[channel], frequency) * gains[channel]
+                })
+                .sum::<f32>();
+            let mixed = sample.center * (1.0 - gains[0] * 0.55) + local * 0.35;
             let high_passed = high_alpha
                 * (self.high_pass_state + mixed - self.high_pass_input);
             self.high_pass_input = mixed;
             self.high_pass_state = high_passed;
             self.low_pass_state += low_alpha * (high_passed - self.low_pass_state);
-            let stream_gain = 1.0 - interference * self.stream_fade;
+            let stream_gain = 1.0 - filter_interference * self.stream_fade;
             let filtered = self.low_pass_state * stream_gain;
-            sample.center = if interference > 0.0 { soft_limit(filtered) } else { mixed };
+            sample.center = if filter_interference > 0.0 {
+                soft_limit(filtered)
+            } else {
+                mixed
+            };
             for (cursor, clip) in self.cursors.iter_mut().zip(clips) {
                 *cursor = clip.advance(*cursor, frequency);
             }
@@ -164,7 +217,7 @@ impl SoundSource {
             let mut specific_gain = gain;
             let mut online = false;
             let mut reported = false;
-            let mut mixer = LocalMixer::new();
+            let mut mixer = LocalMixer::new(&id);
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
