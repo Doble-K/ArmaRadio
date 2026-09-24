@@ -34,8 +34,28 @@
             <Spanish>Permite que las radios se rompan al permanecer sumergidas demasiado tiempo.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_Category">
-            <English>Live Radio</English>
-            <Spanish>Live Radio</Spanish>
+            <English>Live Radio: Resynced</English>
+            <Spanish>Live Radio: Resynced</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_CategoryAudio">
+            <English>Audio</English>
+            <Spanish>Audio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_CategoryRadioBehavior">
+            <English>Radio Behavior</English>
+            <Spanish>Comportamiento de radio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_CategoryInterference">
+            <English>Interference</English>
+            <Spanish>Interferencia</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_CategoryTowerInterference">
+            <English>Tower Interference</English>
+            <Spanish>Interferencia de torres</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_CategoryDebug">
+            <English>Debug</English>
+            <Spanish>Depuración</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_Cone1InnerRadius">
             <English>Cone 1 Inner Radius (m)</English>

@@ -17,7 +17,7 @@ EXT callExtension "";
     QGVAR(volumeMultiplier),
     "SLIDER",
     [LLSTRING(VolumeMultiplier), LLSTRING(VolumeMultiplierDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryAudio)],
     [0.1, 1, 0.3, 2, true],
     0,
     {
@@ -29,7 +29,7 @@ EXT callExtension "";
     QGVAR(streamerMode),
     "CHECKBOX",
     [LLSTRING(StreamerMode), LLSTRING(StreamerModeDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryAudio)],
     false,
     2,
     {
@@ -41,7 +41,7 @@ EXT callExtension "";
     QGVAR(soundRange),
     "SLIDER",
     [LLSTRING(SoundRange), LLSTRING(SoundRangeDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryAudio)],
     [0, 1000, 200, 0, false],
     0
 ] call CBA_fnc_addSetting;
@@ -50,7 +50,7 @@ EXT callExtension "";
     QGVAR(playClickSound),
     "CHECKBOX",
     [LLSTRING(PlayClickSound), LLSTRING(PlayClickSoundDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryAudio)],
     false,
     2
 ] call CBA_fnc_addSetting;
@@ -59,7 +59,7 @@ EXT callExtension "";
     QGVAR(enableStatic),
     "CHECKBOX",
     [LLSTRING(EnableStatic), LLSTRING(EnableStaticDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -68,7 +68,7 @@ EXT callExtension "";
     QGVAR(debugInterference),
     "CHECKBOX",
     [LLSTRING(DebugInterference), LLSTRING(DebugInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryDebug)],
     false,
     false
 ] call CBA_fnc_addSetting;
@@ -77,7 +77,7 @@ EXT callExtension "";
     QGVAR(streamFadeOut),
     "SLIDER",
     [LLSTRING(StreamFadeOut), LLSTRING(StreamFadeOutDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     [0, 1, 1, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -86,7 +86,7 @@ EXT callExtension "";
     QGVAR(enableCone1),
     "CHECKBOX",
     [LLSTRING(EnableCone1), LLSTRING(EnableCone1Description)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -95,7 +95,7 @@ EXT callExtension "";
     QGVAR(enableCone2),
     "CHECKBOX",
     [LLSTRING(EnableCone2), LLSTRING(EnableCone2Description)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -104,7 +104,7 @@ EXT callExtension "";
     QGVAR(enableCone3),
     "CHECKBOX",
     [LLSTRING(EnableCone3), LLSTRING(EnableCone3Description)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -113,7 +113,7 @@ EXT callExtension "";
     QGVAR(cone1OuterRadius),
     "SLIDER",
     [LLSTRING(Cone1OuterRadius), LLSTRING(Cone1OuterRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 800, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -122,7 +122,7 @@ EXT callExtension "";
     QGVAR(cone2OuterRadius),
     "SLIDER",
     [LLSTRING(Cone2OuterRadius), LLSTRING(Cone2OuterRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 600, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -131,7 +131,7 @@ EXT callExtension "";
     QGVAR(cone3OuterRadius),
     "SLIDER",
     [LLSTRING(Cone3OuterRadius), LLSTRING(Cone3OuterRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 400, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -140,7 +140,7 @@ EXT callExtension "";
     QGVAR(cone1InnerRadius),
     "SLIDER",
     [LLSTRING(Cone1InnerRadius), LLSTRING(Cone1InnerRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 100, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -149,7 +149,7 @@ EXT callExtension "";
     QGVAR(cone2InnerRadius),
     "SLIDER",
     [LLSTRING(Cone2InnerRadius), LLSTRING(Cone2InnerRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 100, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -158,7 +158,7 @@ EXT callExtension "";
     QGVAR(cone3InnerRadius),
     "SLIDER",
     [LLSTRING(Cone3InnerRadius), LLSTRING(Cone3InnerRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 100, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -167,7 +167,7 @@ EXT callExtension "";
     QGVAR(cone1VolumeStart),
     "SLIDER",
     [LLSTRING(Cone1VolumeStart), LLSTRING(Cone1VolumeStartDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 0, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -176,7 +176,7 @@ EXT callExtension "";
     QGVAR(cone1VolumeEnd),
     "SLIDER",
     [LLSTRING(Cone1VolumeEnd), LLSTRING(Cone1VolumeEndDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 1, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -185,7 +185,7 @@ EXT callExtension "";
     QGVAR(cone2VolumeStart),
     "SLIDER",
     [LLSTRING(Cone2VolumeStart), LLSTRING(Cone2VolumeStartDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 0, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -194,7 +194,7 @@ EXT callExtension "";
     QGVAR(cone2VolumeEnd),
     "SLIDER",
     [LLSTRING(Cone2VolumeEnd), LLSTRING(Cone2VolumeEndDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 1, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -203,7 +203,7 @@ EXT callExtension "";
     QGVAR(cone3VolumeStart),
     "SLIDER",
     [LLSTRING(Cone3VolumeStart), LLSTRING(Cone3VolumeStartDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 0, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -212,7 +212,7 @@ EXT callExtension "";
     QGVAR(cone3VolumeEnd),
     "SLIDER",
     [LLSTRING(Cone3VolumeEnd), LLSTRING(Cone3VolumeEndDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 1, 2, true],
     1
 ] call CBA_fnc_addSetting;
@@ -221,7 +221,7 @@ EXT callExtension "";
     QGVAR(enableDamageInterference),
     "CHECKBOX",
     [LLSTRING(EnableDamageInterference), LLSTRING(EnableDamageInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -230,7 +230,7 @@ EXT callExtension "";
     QGVAR(enableWeatherInterference),
     "CHECKBOX",
     [LLSTRING(EnableWeatherInterference), LLSTRING(EnableWeatherInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -239,7 +239,7 @@ EXT callExtension "";
     QGVAR(enableExplosionInterference),
     "CHECKBOX",
     [LLSTRING(EnableExplosionInterference), LLSTRING(EnableExplosionInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -248,7 +248,7 @@ EXT callExtension "";
     QGVAR(enableJammerInterference),
     "CHECKBOX",
     [LLSTRING(EnableJammerInterference), LLSTRING(EnableJammerInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -257,7 +257,7 @@ EXT callExtension "";
     QGVAR(enableBurnInterference),
     "CHECKBOX",
     [LLSTRING(EnableBurnInterference), LLSTRING(EnableBurnInterferenceDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
     true,
     false
 ] call CBA_fnc_addSetting;
@@ -266,7 +266,7 @@ EXT callExtension "";
     QGVAR(enablePersistentRadios),
     "CHECKBOX",
     [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -275,7 +275,7 @@ EXT callExtension "";
     QGVAR(enableBurn),
     "CHECKBOX",
     [LLSTRING(EnableBurn), LLSTRING(EnableBurnDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -284,7 +284,7 @@ EXT callExtension "";
     QGVAR(burnByWater),
     "CHECKBOX",
     [LLSTRING(BurnByWater), LLSTRING(BurnByWaterDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -293,7 +293,7 @@ EXT callExtension "";
     QGVAR(burnByDamage),
     "CHECKBOX",
     [LLSTRING(BurnByDamage), LLSTRING(BurnByDamageDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -302,7 +302,7 @@ EXT callExtension "";
     QGVAR(autoOffRange),
     "SLIDER",
     [LLSTRING(AutoOffRange), LLSTRING(AutoOffRangeDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     [0, 500, 30, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -311,7 +311,7 @@ EXT callExtension "";
     QGVAR(autoOffTime),
     "SLIDER",
     [LLSTRING(AutoOffTime), LLSTRING(AutoOffTimeDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     [0, 600, 120, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -320,7 +320,7 @@ EXT callExtension "";
     QGVAR(interferenceTowers),
     "EDITBOX",
     [LLSTRING(InterferenceTowers), LLSTRING(InterferenceTowersDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     "[""Land_Communication_F"",""Land_TTowerBig_1_F"",""Land_TTowerBig_2_F"",""Land_TTowerBig_2_ruins_F"",""Land_TTowerSmall_1_F"",""Land_TTowerSmall_2_F""]",
     1
 ] call CBA_fnc_addSetting;
@@ -329,7 +329,7 @@ EXT callExtension "";
     QGVAR(interferenceTowerRadius),
     "SLIDER",
     [LLSTRING(InterferenceTowerRadius), LLSTRING(InterferenceTowerRadiusDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 3000, 1000, 0, false],
     1
 ] call CBA_fnc_addSetting;
@@ -338,7 +338,7 @@ EXT callExtension "";
     QGVAR(interferenceTowerStrength),
     "SLIDER",
     [LLSTRING(InterferenceTowerStrength), LLSTRING(InterferenceTowerStrengthDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     [0, 1, 0.5, 2, false],
     1
 ] call CBA_fnc_addSetting;
@@ -347,7 +347,7 @@ EXT callExtension "";
     QGVAR(interferenceTowerSideFilter),
     "CHECKBOX",
     [LLSTRING(InterferenceTowerSideFilter), LLSTRING(InterferenceTowerSideFilterDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryTowerInterference)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -356,7 +356,7 @@ EXT callExtension "";
     QGVAR(radioMotorDamageThreshold),
     "SLIDER",
     [LLSTRING(RadioMotorDamageThreshold), LLSTRING(RadioMotorDamageThresholdDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     [0, 1, 0.8, 2, false],
     1
 ] call CBA_fnc_addSetting;
@@ -365,7 +365,7 @@ EXT callExtension "";
     QGVAR(underwaterBurnTime),
     "SLIDER",
     [LLSTRING(UnderwaterBurnTime), LLSTRING(UnderwaterBurnTimeDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     [0, 120, 10, 0, false],
     1
 ] call CBA_fnc_addSetting;

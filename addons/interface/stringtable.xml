@@ -14,8 +14,12 @@
             <Spanish>Permite que los artilleros de puerta y de torretas secundarias abran la radio y cambien de emisora. El artillero principal / copiloto siempre puede.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_Category">
-            <English>Live Radio</English>
-            <Spanish>Live Radio</Spanish>
+            <English>Live Radio: Resynced</English>
+            <Spanish>Live Radio: Resynced</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_CategoryRadioBehavior">
+            <English>Radio Behavior</English>
+            <Spanish>Comportamiento de radio</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_CustomStations">
             <English>Custom stations</English>

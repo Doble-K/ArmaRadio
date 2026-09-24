@@ -12,7 +12,7 @@ GVAR(stations) = [];
     QGVAR(customStations),
     "EDITBOX",
     [LLSTRING(CustomStations), LLSTRING(CustomStationsDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     "[[""Classic Rock 109"",""http://listen.classicrock109.com:10042""],[""PulseEDM Dance Music"",""http://pulseedm.cdnstream1.com:8124/1373_128""],[""Live Ireland"",""http://192.111.140.11:8058/stream?type=http&nocache=325927""]]",
     1,
     {
@@ -31,7 +31,7 @@ call FUNC(buildStations);
     QGVAR(driverAndCommanderOnly),
     "CHECKBOX",
     [LLSTRING(DriverAndCommanderOnly), LLSTRING(DriverAndCommanderOnlyDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -40,7 +40,7 @@ call FUNC(buildStations);
     QGVAR(mainGunnerAndCopilotCanControl),
     "CHECKBOX",
     [LLSTRING(MainGunnerAndCopilotCanControl), LLSTRING(MainGunnerAndCopilotCanControlDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -49,7 +49,7 @@ call FUNC(buildStations);
     QGVAR(allGunnersCanControl),
     "CHECKBOX",
     [LLSTRING(AllGunnersCanControl), LLSTRING(AllGunnersCanControlDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -58,7 +58,7 @@ call FUNC(buildStations);
     QGVAR(enableCars),
     "CHECKBOX",
     [LLSTRING(EnableCars), LLSTRING(EnableCarsDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     true,
     1
 ] call CBA_fnc_addSetting;
@@ -67,7 +67,7 @@ call FUNC(buildStations);
     QGVAR(enableArmored),
     "CHECKBOX",
     [LLSTRING(EnableArmored), LLSTRING(EnableArmoredDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -76,7 +76,7 @@ call FUNC(buildStations);
     QGVAR(enableHelicopters),
     "CHECKBOX",
     [LLSTRING(EnableHelicopters), LLSTRING(EnableHelicoptersDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -85,7 +85,7 @@ call FUNC(buildStations);
     QGVAR(enablePlanes),
     "CHECKBOX",
     [LLSTRING(EnablePlanes), LLSTRING(EnablePlanesDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -94,7 +94,7 @@ call FUNC(buildStations);
     QGVAR(enableShips),
     "CHECKBOX",
     [LLSTRING(EnableShips), LLSTRING(EnableShipsDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     false,
     1
 ] call CBA_fnc_addSetting;
@@ -103,7 +103,7 @@ call FUNC(buildStations);
     QGVAR(customVehicleClasses),
     "EDITBOX",
     [LLSTRING(CustomVehicleClasses), LLSTRING(CustomVehicleClassesDescription)],
-    LLSTRING(Category),
+    [LLSTRING(Category), LLSTRING(CategoryRadioBehavior)],
     "[]",
     1
 ] call CBA_fnc_addSetting;
