@@ -37,6 +37,102 @@
             <English>Live Radio</English>
             <Spanish>Live Radio</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1InnerRadius">
+            <English>Cone 1 Inner Radius (m)</English>
+            <Spanish>Radio interior del cono 1 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1InnerRadiusDescription">
+            <English>Inner radius of cone 1. The cone reaches its final volume at this distance.</English>
+            <Spanish>Radio interior del cono 1. El cono alcanza su volumen final a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1OuterRadius">
+            <English>Cone 1 Outer Radius (m)</English>
+            <Spanish>Radio exterior del cono 1 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1OuterRadiusDescription">
+            <English>Outer radius of cone 1. Interference begins at this distance.</English>
+            <Spanish>Radio exterior del cono 1. La interferencia comienza a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1VolumeEnd">
+            <English>Cone 1 Final Volume</English>
+            <Spanish>Volumen final del cono 1</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1VolumeEndDescription">
+            <English>Interference resource volume at the inner radius of cone 1.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio interior del cono 1.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1VolumeStart">
+            <English>Cone 1 Initial Volume</English>
+            <Spanish>Volumen inicial del cono 1</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone1VolumeStartDescription">
+            <English>Interference resource volume at the outer radius of cone 1.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio exterior del cono 1.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2InnerRadius">
+            <English>Cone 2 Inner Radius (m)</English>
+            <Spanish>Radio interior del cono 2 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2InnerRadiusDescription">
+            <English>Inner radius of cone 2. The cone reaches its final volume at this distance.</English>
+            <Spanish>Radio interior del cono 2. El cono alcanza su volumen final a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2OuterRadius">
+            <English>Cone 2 Outer Radius (m)</English>
+            <Spanish>Radio exterior del cono 2 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2OuterRadiusDescription">
+            <English>Outer radius of cone 2. Interference begins at this distance.</English>
+            <Spanish>Radio exterior del cono 2. La interferencia comienza a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2VolumeEnd">
+            <English>Cone 2 Final Volume</English>
+            <Spanish>Volumen final del cono 2</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2VolumeEndDescription">
+            <English>Interference resource volume at the inner radius of cone 2.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio interior del cono 2.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2VolumeStart">
+            <English>Cone 2 Initial Volume</English>
+            <Spanish>Volumen inicial del cono 2</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone2VolumeStartDescription">
+            <English>Interference resource volume at the outer radius of cone 2.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio exterior del cono 2.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3InnerRadius">
+            <English>Cone 3 Inner Radius (m)</English>
+            <Spanish>Radio interior del cono 3 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3InnerRadiusDescription">
+            <English>Inner radius of cone 3. The cone reaches its final volume at this distance.</English>
+            <Spanish>Radio interior del cono 3. El cono alcanza su volumen final a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3OuterRadius">
+            <English>Cone 3 Outer Radius (m)</English>
+            <Spanish>Radio exterior del cono 3 (m)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3OuterRadiusDescription">
+            <English>Outer radius of cone 3. Interference begins at this distance.</English>
+            <Spanish>Radio exterior del cono 3. La interferencia comienza a esta distancia.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3VolumeEnd">
+            <English>Cone 3 Final Volume</English>
+            <Spanish>Volumen final del cono 3</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3VolumeEndDescription">
+            <English>Interference resource volume at the inner radius of cone 3.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio interior del cono 3.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3VolumeStart">
+            <English>Cone 3 Initial Volume</English>
+            <Spanish>Volumen inicial del cono 3</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_Cone3VolumeStartDescription">
+            <English>Interference resource volume at the outer radius of cone 3.</English>
+            <Spanish>Volumen del recurso de interferencia en el radio exterior del cono 3.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_EnableBurn">
             <English>Enable Burn</English>
             <Spanish>Habilitar rotura</Spanish>
@@ -44,6 +140,30 @@
         <Key ID="STR_Live_Radio_Manager_EnableBurnDescription">
             <English>Master switch for hard radio burnouts.</English>
             <Spanish>Interruptor maestro para la rotura dura de la radio.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone1">
+            <English>Enable Cone 1</English>
+            <Spanish>Habilitar cono 1</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone1Description">
+            <English>Enable the local interference channel for cone 1. This setting is local to each player.</English>
+            <Spanish>Habilita el canal local de interferencia del cono 1. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone2">
+            <English>Enable Cone 2</English>
+            <Spanish>Habilitar cono 2</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone2Description">
+            <English>Enable the local interference channel for cone 2. This setting is local to each player.</English>
+            <Spanish>Habilita el canal local de interferencia del cono 2. Este ajuste es local para cada jugador.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone3">
+            <English>Enable Cone 3</English>
+            <Spanish>Habilitar cono 3</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_EnableCone3Description">
+            <English>Enable the local interference channel for cone 3. This setting is local to each player.</English>
+            <Spanish>Habilita el canal local de interferencia del cono 3. Este ajuste es local para cada jugador.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_EnablePersistentRadios">
             <English>Enable Persistent Radios</English>

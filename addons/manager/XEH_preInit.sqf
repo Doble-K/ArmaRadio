@@ -78,6 +78,141 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(enableCone1),
+    "CHECKBOX",
+    [LLSTRING(EnableCone1), LLSTRING(EnableCone1Description)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableCone2),
+    "CHECKBOX",
+    [LLSTRING(EnableCone2), LLSTRING(EnableCone2Description)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableCone3),
+    "CHECKBOX",
+    [LLSTRING(EnableCone3), LLSTRING(EnableCone3Description)],
+    LLSTRING(Category),
+    true,
+    false
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone1OuterRadius),
+    "SLIDER",
+    [LLSTRING(Cone1OuterRadius), LLSTRING(Cone1OuterRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 800, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone2OuterRadius),
+    "SLIDER",
+    [LLSTRING(Cone2OuterRadius), LLSTRING(Cone2OuterRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 600, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone3OuterRadius),
+    "SLIDER",
+    [LLSTRING(Cone3OuterRadius), LLSTRING(Cone3OuterRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 400, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone1InnerRadius),
+    "SLIDER",
+    [LLSTRING(Cone1InnerRadius), LLSTRING(Cone1InnerRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 100, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone2InnerRadius),
+    "SLIDER",
+    [LLSTRING(Cone2InnerRadius), LLSTRING(Cone2InnerRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 100, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone3InnerRadius),
+    "SLIDER",
+    [LLSTRING(Cone3InnerRadius), LLSTRING(Cone3InnerRadiusDescription)],
+    LLSTRING(Category),
+    [0, 3000, 100, 0, false],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone1VolumeStart),
+    "SLIDER",
+    [LLSTRING(Cone1VolumeStart), LLSTRING(Cone1VolumeStartDescription)],
+    LLSTRING(Category),
+    [0, 1, 0, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone1VolumeEnd),
+    "SLIDER",
+    [LLSTRING(Cone1VolumeEnd), LLSTRING(Cone1VolumeEndDescription)],
+    LLSTRING(Category),
+    [0, 1, 1, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone2VolumeStart),
+    "SLIDER",
+    [LLSTRING(Cone2VolumeStart), LLSTRING(Cone2VolumeStartDescription)],
+    LLSTRING(Category),
+    [0, 1, 0, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone2VolumeEnd),
+    "SLIDER",
+    [LLSTRING(Cone2VolumeEnd), LLSTRING(Cone2VolumeEndDescription)],
+    LLSTRING(Category),
+    [0, 1, 1, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone3VolumeStart),
+    "SLIDER",
+    [LLSTRING(Cone3VolumeStart), LLSTRING(Cone3VolumeStartDescription)],
+    LLSTRING(Category),
+    [0, 1, 0, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(cone3VolumeEnd),
+    "SLIDER",
+    [LLSTRING(Cone3VolumeEnd), LLSTRING(Cone3VolumeEndDescription)],
+    LLSTRING(Category),
+    [0, 1, 1, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(enablePersistentRadios),
     "CHECKBOX",
     [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],
