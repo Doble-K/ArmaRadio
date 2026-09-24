@@ -610,3 +610,16 @@ música al servidor de voz ni convertirla en una transmisión de voz.
 - #16 (32-bit): DESCARTADO — Arma 3 dejó de dar soporte.
 - #14 (playlists M3U8/AAC): a futuro, no factible por ahora (requiere decoder nuevo).
 - **Radios de mano/mochila** (futuro lejano, prioridad baja): usar el mismo sistema del mod (audio posicional propio) con radios de mano y mochilas radio como fuente — sin integrar TFAR/ACRE. Los que estén cerca escuchan la FM posicional, igual que con vehículos. Pendiente de definir items concretos y alcance; no se toca por ahora.
+
+## Estado para la próxima sesión
+
+- `main`: rama principal de trabajo y futura actualización del Workshop.
+- `test/baseline`: versión base conocida para comparar regresiones.
+- `test/custom-stations-parser`: rama experimental con un cambio de parseo de
+  `customStations`; no incluirla en la release hasta probarla en partida.
+- El problema de emisoras observado se atribuyó al `system link`, no se confirmó
+  como bug del mod.
+- Los cambios recientes de logos están en `logo_ca.paa` y `logo_over_ca.paa`;
+  `picture_ca.paa` no se modificó.
+- Próximo orden recomendado: probar baseline, probar parser experimental y luego
+  decidir qué commits llevar a `main` y publicar.
