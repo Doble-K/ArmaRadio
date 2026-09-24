@@ -25,7 +25,7 @@ if (hasInterface) then {
     [{
         params ["_registerExplosionHandlers"];
         call _registerExplosionHandlers;
-    }, [_registerExplosionHandlers], 1] call CBA_fnc_addPerFrameHandler;
+    }, 1, [_registerExplosionHandlers]] call CBA_fnc_addPerFrameHandler;
 
     GVAR(hearingFactor) = -1;
     [{
