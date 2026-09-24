@@ -48,6 +48,26 @@ impl DecodedClip {
             })
             .collect()
     }
+
+    pub(crate) fn sample_at(&self, position: f64, sample_rate: u32) -> f32 {
+        if self.samples.is_empty() || sample_rate == 0 {
+            return 0.0;
+        }
+        let position = position % self.samples.len() as f64;
+        let left = position.floor() as usize;
+        let right = (left + 1) % self.samples.len();
+        let fraction = position - left as f64;
+        self.samples[left] * (1.0 - fraction as f32) + self.samples[right] * fraction as f32
+    }
+
+    pub(crate) fn advance(&self, position: f64, sample_rate: u32) -> f64 {
+        if sample_rate == 0 {
+            position
+        } else {
+            (position + self.sample_rate as f64 / sample_rate as f64)
+                % self.samples.len().max(1) as f64
+        }
+    }
 }
 
 impl InterferenceCache {

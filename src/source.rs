@@ -14,6 +14,7 @@ use arma_rs::{Context, ContextState, Group};
 use crossbeam_channel::TryRecvError;
 
 use crate::{
+    audio::{Audio, InterferenceCache},
     listener::Listener,
     streams::{StreamPacket, Streams},
     vector3::Vector3,
@@ -44,6 +45,46 @@ enum SoundCommand {
     SetQuality(f32),
     RefreshGain,
     Destroy,
+}
+
+struct LocalMixer {
+    clips: Arc<InterferenceCache>,
+    cursors: [f64; 4],
+}
+
+impl LocalMixer {
+    fn new() -> Option<Self> {
+        Audio::interference().ok().map(|clips| Self {
+            clips,
+            cursors: [0.0; 4],
+        })
+    }
+
+    fn mix(&mut self, mut samples: Vec<alto::Mono<f32>>, frequency: i32, quality: f32) -> Vec<alto::Mono<f32>> {
+        let frequency = frequency.max(1) as u32;
+        let quality = quality.clamp(0.0, 1.0);
+        let gains = [quality, 0.0, 0.0, 0.0];
+        let clips = [
+            &self.clips.resource_1,
+            &self.clips.resource_3,
+            &self.clips.resource_2,
+            &self.clips.resource_1,
+        ];
+
+        for sample in &mut samples {
+            let static_sample = clips[0].sample_at(self.cursors[0], frequency);
+            let mixed = sample.center * (1.0 - gains[0] * 0.55) + static_sample * (gains[0] * 0.35);
+            sample.center = if gains[0] > 0.0 { soft_limit(mixed) } else { mixed };
+            for (cursor, clip) in self.cursors.iter_mut().zip(clips) {
+                *cursor = clip.advance(*cursor, frequency);
+            }
+        }
+        samples
+    }
+}
+
+fn soft_limit(sample: f32) -> f32 {
+    sample / (1.0 + sample.abs())
 }
 
 #[derive(Debug)]
@@ -83,8 +124,7 @@ impl SoundSource {
             let mut quality = 0.0_f32;
             let mut online = false;
             let mut reported = false;
-            let mut static_state = 0.0_f32;
-            let mut modulation_phase = 0.0_f32;
+            let mut mixer = LocalMixer::new();
             'outer: loop {
                 while let Ok(command) = rx.try_recv() {
                     match command {
@@ -152,30 +192,8 @@ impl SoundSource {
                     Ok(recv) => {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
-                                let samples = if quality > 0.0 {
-                                    samples
-                                        .into_iter()
-                                        .map(|mut sample| {
-                                            // Keep static as a per-source signal instead of
-                                            // replacing the stream with uncorrelated white noise.
-                                            let white = rand::random::<f32>() * 2.0 - 1.0;
-                                            static_state = static_state * 0.82 + white * 0.18;
-                                            let modulation = 1.0
-                                                - quality
-                                                    * 0.18
-                                                    * (0.5 + 0.5 * modulation_phase.sin());
-                                            sample.center = sample.center
-                                                * (1.0 - quality * 0.55)
-                                                * modulation
-                                                + static_state * (quality * 0.35);
-                                            modulation_phase +=
-                                                std::f32::consts::TAU * 7.0 / freq.max(1) as f32;
-                                            if modulation_phase >= std::f32::consts::TAU {
-                                                modulation_phase -= std::f32::consts::TAU;
-                                            }
-                                            sample
-                                        })
-                                        .collect::<Vec<_>>()
+                                let samples = if let Some(mixer) = mixer.as_mut() {
+                                    mixer.mix(samples, freq, quality)
                                 } else {
                                     samples
                                 };
