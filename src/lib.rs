@@ -22,6 +22,9 @@ mod vector3;
 
 #[arma]
 pub fn init() -> Extension {
+    if let Err(error) = audio::Audio::interference() {
+        error!("Failed to preload interference resources: {}", error);
+    }
     let ext = Extension::build()
         .group("listener", listener::group())
         .group("source", source::group())
