@@ -28,6 +28,25 @@ This repository is a working fork of [BrettMayson/ArmaRadio](https://github.com/
 - Short static click when powering a radio on or off (toggleable).
 - Multilanguage strings (English / Spanish) via stringtables.
 
+## Custom station JSON
+
+The `customStations` CBA setting accepts the same array-of-arrays syntax as this
+JSON format:
+
+```json
+[
+  ["Classic Rock 109", "http://listen.classicrock109.com:10042"],
+  ["My station", "https://example.org/stream.mp3"]
+]
+```
+
+Use the text as a manual import/export format by copying it into or out of the
+`customStations` edit box. Entries must have a non-empty name and an `http` or
+`https` URL. Incomplete, invalid, and duplicate-URL entries are ignored. The
+mod does not read files from disk, require `-filePatching`, or use JSON as
+runtime lifecycle state. If no valid custom entry remains, `CfgRadioStations`
+is used as the fallback catalog.
+
 ## Requirements
 
 - Arma 3 (2.04+)

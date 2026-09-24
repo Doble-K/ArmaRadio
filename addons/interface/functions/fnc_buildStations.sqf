@@ -30,14 +30,23 @@ private _customStations = switch (true) do {
 };
 
 private _seenURLs = createHashMap;
+private _isValidStation = {
+    params ["_name", "_url"];
+    _name = trim _name;
+    _url = trim _url;
+    _name isNotEqualTo ""
+        && {_url isNotEqualTo ""}
+        && {private _scheme = toLower (_url select [0, (_url find "://") max 0]); _scheme in ["http", "https"]}
+        && {_url find "://" > 0}
+};
 
 // Normalize custom stations [name, url] -> [name, "", url], dedup by URL
 {
     if (_x isEqualType [] && {count _x >= 2} && {(_x select 0) isEqualType ""} && {(_x select 1) isEqualType ""}) then {
         _x params ["_name", "_url"];
-        if !(_seenURLs getOrDefault [_url, false]) then {
+        if ([_name, _url] call _isValidStation && {!(_seenURLs getOrDefault [_url, false])}) then {
             _seenURLs set [_url, true];
-            GVAR(stations) pushBack [_name, "", _url];
+            GVAR(stations) pushBack [trim _name, "", trim _url];
         };
     };
 } forEach _customStations;
@@ -56,9 +65,9 @@ if (GVAR(stations) isEqualTo []) then {
     // Combine with config sources, dedup by URL
     {
         _x params ["_name", "_picture", "_url"];
-        if !(_seenURLs getOrDefault [_url, false]) then {
+        if ([_name, _url] call _isValidStation && {!(_seenURLs getOrDefault [_url, false])}) then {
             _seenURLs set [_url, true];
-            GVAR(stations) pushBack _x;
+            GVAR(stations) pushBack [trim _name, _picture, trim _url];
         };
     } forEach _configStations;
 };
