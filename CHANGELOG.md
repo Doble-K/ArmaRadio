@@ -8,6 +8,23 @@ licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-24
+
+Local interference processing is now available for radio streams.
+
+### Added
+
+- Preloaded and decoded local interference resources with shared caching.
+- Per-source local mixing with independent quality and cone channels.
+- Gradual streaming filters, configurable fade-out and slow modulation.
+- Configurable cone settings, independent interference toggles and tower factors.
+- Local explosion interference peaks with distance and intensity falloff.
+- English and Spanish settings for the new interference controls.
+
+### Changed
+
+- General interference is sent through the local `source:interference` command.
+
 ### Pending
 - Add ZEN modules to attach an FM station to an arbitrary object and mark its
   radio as persistent.
