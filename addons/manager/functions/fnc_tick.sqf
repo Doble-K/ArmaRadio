@@ -61,7 +61,7 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         private _smoothed = _current + (_delta min _step max -_step);
         if (abs (_smoothed - _current) > 0.005) then {
             _y setVariable [QGVAR(quality), _smoothed];
-            EXT callExtension ["source:quality", [_x, _smoothed]];
+            EXT callExtension ["source:interference", [_x, _smoothed, 0, 0, 0, GVAR(streamFadeOut)]];
         };
 
         if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {

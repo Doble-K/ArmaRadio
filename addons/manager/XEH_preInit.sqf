@@ -64,6 +64,20 @@ EXT callExtension "";
 ] call CBA_fnc_addSetting;
 
 [
+    QGVAR(streamFadeOut),
+    "SLIDER",
+    [LLSTRING(StreamFadeOut), LLSTRING(StreamFadeOutDescription)],
+    LLSTRING(Category),
+    [0, 1, 1, 2, true],
+    1,
+    {
+        {
+            EXT callExtension ["source:interference", [_x, (_y getVariable [QGVAR(quality), 0]), 0, 0, 0, GVAR(streamFadeOut)]];
+        } forEach GVAR(sources);
+    }
+] call CBA_fnc_addSetting;
+
+[
     QGVAR(enablePersistentRadios),
     "CHECKBOX",
     [LLSTRING(EnablePersistentRadios), LLSTRING(EnablePersistentRadiosDescription)],

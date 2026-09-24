@@ -43,7 +43,7 @@ enum SoundCommand {
     SetPos(Vector3, Vector3),
     SetGain(f32),
     SetQuality(f32),
-    SetInterference([f32; 4]),
+    SetInterference([f32; 4], f32),
     RefreshGain,
     Destroy,
 }
@@ -53,6 +53,11 @@ struct LocalMixer {
     cursors: [f64; 4],
     current: [f32; 4],
     targets: [f32; 4],
+    stream_fade: f32,
+    stream_fade_target: f32,
+    high_pass_state: f32,
+    high_pass_input: f32,
+    low_pass_state: f32,
 }
 
 impl LocalMixer {
@@ -62,6 +67,11 @@ impl LocalMixer {
             cursors: [0.0; 4],
             current: [0.0; 4],
             targets: [0.0; 4],
+            stream_fade: 1.0,
+            stream_fade_target: 1.0,
+            high_pass_state: 0.0,
+            high_pass_input: 0.0,
+            low_pass_state: 0.0,
         })
     }
 
@@ -69,8 +79,9 @@ impl LocalMixer {
         self.targets[0] = quality.clamp(0.0, 1.0);
     }
 
-    fn set_targets(&mut self, targets: [f32; 4]) {
+    fn set_targets(&mut self, targets: [f32; 4], stream_fade: f32) {
         self.targets = targets.map(|target| target.clamp(0.0, 1.0));
+        self.stream_fade_target = stream_fade.clamp(0.0, 1.0);
     }
 
     fn mix(&mut self, mut samples: Vec<alto::Mono<f32>>, frequency: i32) -> Vec<alto::Mono<f32>> {
@@ -78,7 +89,15 @@ impl LocalMixer {
         for (current, target) in self.current.iter_mut().zip(self.targets) {
             *current += (target - *current) * 0.1;
         }
+        self.stream_fade += (self.stream_fade_target - self.stream_fade) * 0.1;
         let gains = self.current;
+        let interference = gains.iter().copied().fold(0.0_f32, f32::max);
+        let high_pass = 20.0 + 780.0 * interference;
+        let low_pass = 20_000.0 - 18_000.0 * interference;
+        let high_alpha = (std::f32::consts::TAU * high_pass / frequency as f32)
+            .min(1.0);
+        let low_alpha = (std::f32::consts::TAU * low_pass / frequency as f32)
+            .min(1.0);
         let clips = [
             &self.clips.resource_1,
             &self.clips.resource_3,
@@ -89,7 +108,14 @@ impl LocalMixer {
         for sample in &mut samples {
             let static_sample = clips[0].sample_at(self.cursors[0], frequency);
             let mixed = sample.center * (1.0 - gains[0] * 0.55) + static_sample * (gains[0] * 0.35);
-            sample.center = if gains[0] > 0.0 { soft_limit(mixed) } else { mixed };
+            let high_passed = high_alpha
+                * (self.high_pass_state + mixed - self.high_pass_input);
+            self.high_pass_input = mixed;
+            self.high_pass_state = high_passed;
+            self.low_pass_state += low_alpha * (high_passed - self.low_pass_state);
+            let stream_gain = 1.0 - interference * self.stream_fade;
+            let filtered = self.low_pass_state * stream_gain;
+            sample.center = if interference > 0.0 { soft_limit(filtered) } else { mixed };
             for (cursor, clip) in self.cursors.iter_mut().zip(clips) {
                 *cursor = clip.advance(*cursor, frequency);
             }
@@ -159,10 +185,10 @@ impl SoundSource {
                                 mixer.set_quality(new_quality);
                             }
                         }
-                        SoundCommand::SetInterference(targets) => {
+                        SoundCommand::SetInterference(targets, stream_fade) => {
                             debug!("Setting interference targets for {}: {:?}", id, targets);
                             if let Some(mixer) = mixer.as_mut() {
-                                mixer.set_targets(targets);
+                                mixer.set_targets(targets, stream_fade);
                             }
                         }
                         SoundCommand::SetGain(gain) => {
@@ -397,10 +423,10 @@ impl SoundSource {
         }
     }
 
-    pub fn set_interference(&self, targets: [f32; 4]) {
+    pub fn set_interference(&self, targets: [f32; 4], stream_fade: f32) {
         if self
             .channel
-            .send(SoundCommand::SetInterference(targets))
+            .send(SoundCommand::SetInterference(targets, stream_fade))
             .is_err()
         {
             error!("error sending interference update");
@@ -482,11 +508,12 @@ pub fn command_set_interference(
     cone_1: f32,
     cone_2: f32,
     cone_3: f32,
+    stream_fade: f32,
 ) {
     if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
         src.lock()
             .expect("not poisoned")
-            .set_interference([quality, cone_1, cone_2, cone_3]);
+            .set_interference([quality, cone_1, cone_2, cone_3], stream_fade);
     }
 }
 

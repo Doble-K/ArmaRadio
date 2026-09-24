@@ -117,6 +117,14 @@
             <English>Maximum distance at which the radio audio is heard. Set to 0 to disable the limit.</English>
             <Spanish>Distancia máxima a la que se escucha el audio de la radio. Poné 0 para desactivar el límite.</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Manager_StreamFadeOut">
+            <English>Streaming Fade-out at Maximum Interference</English>
+            <Spanish>Atenuación del streaming con interferencia máxima</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_StreamFadeOutDescription">
+            <English>Maximum streaming attenuation caused by interference. 0% keeps the stream audible; 100% fades it to silence.</English>
+            <Spanish>Atenuación máxima del streaming causada por la interferencia. 0% mantiene el streaming audible; 100% lo lleva al silencio.</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_StreamerMode">
             <English>Streamer Mode</English>
             <Spanish>Modo streamer</Spanish>
