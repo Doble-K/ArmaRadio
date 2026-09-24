@@ -43,6 +43,7 @@ enum SoundCommand {
     SetPos(Vector3, Vector3),
     SetGain(f32),
     SetQuality(f32),
+    SetInterference([f32; 4]),
     RefreshGain,
     Destroy,
 }
@@ -50,6 +51,8 @@ enum SoundCommand {
 struct LocalMixer {
     clips: Arc<InterferenceCache>,
     cursors: [f64; 4],
+    current: [f32; 4],
+    targets: [f32; 4],
 }
 
 impl LocalMixer {
@@ -57,13 +60,25 @@ impl LocalMixer {
         Audio::interference().ok().map(|clips| Self {
             clips,
             cursors: [0.0; 4],
+            current: [0.0; 4],
+            targets: [0.0; 4],
         })
     }
 
-    fn mix(&mut self, mut samples: Vec<alto::Mono<f32>>, frequency: i32, quality: f32) -> Vec<alto::Mono<f32>> {
+    fn set_quality(&mut self, quality: f32) {
+        self.targets[0] = quality.clamp(0.0, 1.0);
+    }
+
+    fn set_targets(&mut self, targets: [f32; 4]) {
+        self.targets = targets.map(|target| target.clamp(0.0, 1.0));
+    }
+
+    fn mix(&mut self, mut samples: Vec<alto::Mono<f32>>, frequency: i32) -> Vec<alto::Mono<f32>> {
         let frequency = frequency.max(1) as u32;
-        let quality = quality.clamp(0.0, 1.0);
-        let gains = [quality, 0.0, 0.0, 0.0];
+        for (current, target) in self.current.iter_mut().zip(self.targets) {
+            *current += (target - *current) * 0.1;
+        }
+        let gains = self.current;
         let clips = [
             &self.clips.resource_1,
             &self.clips.resource_3,
@@ -121,7 +136,6 @@ impl SoundSource {
                 )
                 .expect("Error setting gain");
             let mut specific_gain = gain;
-            let mut quality = 0.0_f32;
             let mut online = false;
             let mut reported = false;
             let mut mixer = LocalMixer::new();
@@ -141,7 +155,15 @@ impl SoundSource {
                         }
                         SoundCommand::SetQuality(new_quality) => {
                             debug!("Setting quality to {} for {}", new_quality, id);
-                            quality = new_quality.clamp(0.0, 1.0);
+                            if let Some(mixer) = mixer.as_mut() {
+                                mixer.set_quality(new_quality);
+                            }
+                        }
+                        SoundCommand::SetInterference(targets) => {
+                            debug!("Setting interference targets for {}: {:?}", id, targets);
+                            if let Some(mixer) = mixer.as_mut() {
+                                mixer.set_targets(targets);
+                            }
                         }
                         SoundCommand::SetGain(gain) => {
                             debug!("Setting gain to {} for {}", gain, id);
@@ -193,7 +215,7 @@ impl SoundSource {
                         match recv {
                             StreamPacket::Data(samples, freq) => {
                                 let samples = if let Some(mixer) = mixer.as_mut() {
-                                    mixer.mix(samples, freq, quality)
+                                    mixer.mix(samples, freq)
                                 } else {
                                     samples
                                 };
@@ -375,6 +397,16 @@ impl SoundSource {
         }
     }
 
+    pub fn set_interference(&self, targets: [f32; 4]) {
+        if self
+            .channel
+            .send(SoundCommand::SetInterference(targets))
+            .is_err()
+        {
+            error!("error sending interference update");
+        }
+    }
+
     pub fn refresh_gain(&self) {
         self.channel
             .send(SoundCommand::RefreshGain)
@@ -404,6 +436,7 @@ pub fn group() -> Group {
         .command("pos", command_set_position)
         .command("gain", command_set_gain)
         .command("quality", command_set_quality)
+        .command("interference", command_set_interference)
         .command("exists", command_source_exists)
         .command("global_gain", command_set_global_gain)
         .state(global_gain)
@@ -440,6 +473,20 @@ pub fn command_set_gain(id: String, gain: f32) {
 pub fn command_set_quality(id: String, quality: f32) {
     if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
         src.lock().expect("not poisoned").set_quality(quality);
+    }
+}
+
+pub fn command_set_interference(
+    id: String,
+    quality: f32,
+    cone_1: f32,
+    cone_2: f32,
+    cone_3: f32,
+) {
+    if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
+        src.lock()
+            .expect("not poisoned")
+            .set_interference([quality, cone_1, cone_2, cone_3]);
     }
 }
 
