@@ -17,6 +17,10 @@
 
 params ["_object"];
 
+if (_object isKindOf "Man") exitWith {
+    [_object] call FUNC(isCompatible)
+};
+
 if (_object isKindOf "Land_FMradio_F") exitWith {true};
 if !(missionNamespace getVariable [QGVAR(driverAndCommanderOnly), false]) exitWith {true};
 

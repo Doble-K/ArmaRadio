@@ -17,6 +17,12 @@
 
 params ["_object"];
 
+if (_object isKindOf "Man") exitWith {
+    private _haveSWRadio = missionNamespace getVariable ["TFAR_fnc_haveSWRadio", {}];
+    if !(_haveSWRadio isEqualType {}) exitWith {false};
+    call _haveSWRadio
+};
+
 if (_object isKindOf "Land_FMradio_F") exitWith {true};
 
 private _compatible = false;

@@ -21,6 +21,9 @@ if (hasInterface) then {
     [QGVAR(start), {
         params ["_id", "_url", "_source"];
 
+        // Personal radios are earphone-only and must never be heard by other clients.
+        if (_source isKindOf "Man" && {_source isNotEqualTo player}) exitWith {};
+
         // A fast station change can deliver start before the previous stop has
         // removed the old local source. Keep one OpenAL source per object.
         {
@@ -60,7 +63,7 @@ if (hasInterface) then {
         if (_active isNotEqualTo []) then {
             [QGVAR(start), [_active#0, _active#1, _x]] call CBA_fnc_localEvent;
         };
-    } forEach allMissionObjects "";
+    } forEach ([player] + allMissionObjects "");
 };
 
 if (isServer) then {
