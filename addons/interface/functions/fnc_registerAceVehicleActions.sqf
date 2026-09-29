@@ -7,9 +7,28 @@ if !(_type isKindOf "Car" || {_type isKindOf "Tank"} || {_type isKindOf "Helicop
 private _vehicleChildren = {
     params ["_target", "_player"];
     private _actions = [];
+    private _volumeChildren = {
+        params ["_target", "_player"];
+        private _actions = [];
+        {
+            _x params ["_suffix", "_label", "_volume"];
+            private _action = [
+                format ["%1%2", QGVAR(volumeRuntime), _suffix],
+                format ["%1 %2", localize LSTRING(SetVolume), _label],
+                "",
+                { params ["_target", "_player", "_params"]; _params params ["_volume"]; [_target, _volume] call EFUNC(manager,volume) },
+                { params ["_target"]; [_target] call FUNC(isCompatible) && {_target call FUNC(canOpen)} },
+                {},
+                [_volume]
+            ] call ace_interact_menu_fnc_createAction;
+            _actions pushBack [_action, [], _target];
+        } forEach [["0", "0%", 0], ["25", "25%", 0.25], ["50", "50%", 0.5], ["100", "100%", 1]];
+        _actions
+    };
+
     private _add = {
-        params ["_id", "_name", "_statement", "_condition", ["_params", []]];
-        private _action = [_id, _name, "", _statement, _condition, {}, _params] call ace_interact_menu_fnc_createAction;
+        params ["_id", "_name", "_statement", "_condition", ["_params", []], ["_insertChildren", {}]];
+        private _action = [_id, _name, "", _statement, _condition, _insertChildren, _params] call ace_interact_menu_fnc_createAction;
         _actions pushBack [_action, [], _target];
     };
 
@@ -25,16 +44,14 @@ private _vehicleChildren = {
         { params ["_target"]; [_target] call FUNC(power) },
         { params ["_target"]; [_target] call FUNC(isCompatible) && {_target call FUNC(canOpen)} }
     ] call _add;
-    {
-        _x params ["_suffix", "_label", "_volume"];
-        [
-            format ["%1%2", QGVAR(volumeRuntime), _suffix],
-            format ["%1 %2", localize LSTRING(SetVolume), _label],
-            { params ["_target", "_player", "_params"]; _params params ["_volume"]; [_target, _volume] call EFUNC(manager,volume) },
-            { params ["_target"]; [_target] call FUNC(isCompatible) && {_target call FUNC(canOpen)} },
-            _volume
-        ] call _add;
-    } forEach [["0", "0%", 0], ["25", "25%", 0.25], ["50", "50%", 0.5], ["100", "100%", 1]];
+    [
+        QGVAR(volumeRuntime),
+        localize LSTRING(SetVolume),
+        {},
+        { params ["_target"]; [_target] call FUNC(isCompatible) && {_target call FUNC(canOpen)} },
+        [],
+        _volumeChildren
+    ] call _add;
     [
         QGVAR(stationNextRuntime),
         localize LSTRING(StationNext),
