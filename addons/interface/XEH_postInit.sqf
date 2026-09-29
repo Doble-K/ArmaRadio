@@ -37,8 +37,8 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
     } forEach _staticRepairActions;
 
     private _personalActions = [
-        [localize LSTRING(FMRadioPersonal), { [player] call FUNC(open) }, 'player call live_radio_interface_fnc_isCompatible && {player call live_radio_interface_fnc_canOpen}'],
-        [localize LSTRING(FMRadioVehicle), { [vehicle player] call FUNC(open) }, 'vehicle player != player && {vehicle player call live_radio_interface_fnc_isCompatible && {vehicle player call live_radio_interface_fnc_canOpen}}']
+        [localize LSTRING(FMRadioPersonal), { [player] call FUNC(open) }, '[player] call live_radio_interface_fnc_debugPersonalAction'],
+        [localize LSTRING(FMRadioVehicle), { [vehicle player] call FUNC(open) }, '[player] call live_radio_interface_fnc_debugVehicleAction']
     ];
     {
         _x params ["_name", "_code", "_condition"];
@@ -85,6 +85,33 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
             5
         ]] call CBA_fnc_addPlayerAction;
     } forEach _vehicleRepairActions;
+};
+
+if (hasInterface) then {
+    if (GVAR(debugInteraction)) then {
+        diag_log format [
+            "[Live Radio][ACE] init ace=%1 tfar=%2 player=%3 playerSelf=%4 vehicle=%5 vehicleSelf=%6 vehicleActions=%7",
+            isClass (configFile >> "CfgPatches" >> "ace_interaction"),
+            isClass (configFile >> "CfgPatches" >> "tfar_core"),
+            typeOf player,
+            isClass (configOf player >> "ACE_SelfActions"),
+            typeOf vehicle player,
+            isClass (configOf (vehicle player) >> "ACE_SelfActions"),
+            isClass (configOf (vehicle player) >> "ACE_Actions")
+        ];
+    };
+
+    GVAR(debugInteractionLastVehicle) = vehicle player;
+    [
+        {
+            if (!GVAR(debugInteraction)) exitWith {};
+            private _vehicle = vehicle player;
+            if (_vehicle isEqualTo GVAR(debugInteractionLastVehicle)) exitWith {};
+            GVAR(debugInteractionLastVehicle) = _vehicle;
+            ["vehicleChanged", _vehicle, true, [typeOf player, assignedVehicleRole player]] call FUNC(debugInteraction);
+        },
+        0.2
+    ] call CBA_fnc_addPerFrameHandler;
 };
 
 [QEGVAR(manager,start), {

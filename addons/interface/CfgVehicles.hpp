@@ -95,12 +95,12 @@
         class GVAR(personalRadio) { \
             displayName = CSTRING(FMRadioPersonal); \
             statement = QUOTE(player call FUNC(open)); \
-            condition = QUOTE(player call FUNC(isCompatible) && {player call FUNC(canOpen)}); \
+            condition = QUOTE([player] call FUNC(debugPersonalAction)); \
         }; \
         class GVAR(vehicleRadio) { \
             displayName = CSTRING(FMRadioVehicle); \
             statement = QUOTE([vehicle player] call FUNC(open)); \
-            condition = QUOTE(vehicle player != player && {vehicle player call FUNC(isCompatible) && {vehicle player call FUNC(canOpen)}}); \
+            condition = QUOTE([player] call FUNC(debugVehicleAction)); \
         }; \
     };
 

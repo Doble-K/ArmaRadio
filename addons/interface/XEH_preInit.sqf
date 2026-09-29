@@ -7,6 +7,21 @@ ADDON = false;
 ADDON = true;
 
 GVAR(stations) = [];
+GVAR(debugInteractionLast) = createHashMap;
+
+[
+    QGVAR(debugInteraction),
+    "CHECKBOX",
+    [LLSTRING(DebugInteraction), LLSTRING(DebugInteractionDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryDebug)],
+    false,
+    1,
+    {
+        if (_this) then {
+            diag_log "[Live Radio][ACE] debug interaction enabled";
+        };
+    }
+] call CBA_fnc_addSetting;
 
 [
     QGVAR(customStations),

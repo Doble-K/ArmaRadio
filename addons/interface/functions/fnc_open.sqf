@@ -17,6 +17,19 @@
 
 params ["_object"];
 
+[
+    "open",
+    _object,
+    true,
+    [
+        _object isEqualTo player,
+        _object isEqualTo vehicle player,
+        _object getVariable [QEGVAR(manager,active), []],
+        _object getVariable [QGVAR(lastStation), ""],
+        _object getVariable [QEGVAR(manager,volume), DEFAULT_VOLUME]
+    ]
+] call FUNC(debugInteraction);
+
 if (!createDialog QGVAR(display)) exitWith {};
 
 private _display = uiNamespace getVariable QGVAR(display);

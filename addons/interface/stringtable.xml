@@ -17,6 +17,10 @@
             <English>Live Radio: Resynced</English>
             <Spanish>Live Radio: Resynced</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_CategoryDebug">
+            <English>Debug</English>
+            <Spanish>Depuración</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_CategoryRadioBehavior">
             <English>Radio Behavior</English>
             <Spanish>Comportamiento de radio</Spanish>
@@ -36,6 +40,14 @@
         <Key ID="STR_Live_Radio_Interface_CustomVehicleClassesDescription">
             <English>Additional vehicle classnames as SQF array, e.g. [""My_Heli""]. Combined with the enabled categories.</English>
             <Spanish>Clases de vehículo adicionales como array SQF, p.ej. [""Mi_Heli""]. Se combinan con las categorías habilitadas.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_DebugInteraction">
+            <English>Debug ACE Interaction</English>
+            <Spanish>Depurar interacción ACE</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_DebugInteractionDescription">
+            <English>Log ACE, TFAR, player, vehicle and radio action conditions to the RPT.</English>
+            <Spanish>Registra en el RPT las condiciones de ACE, TFAR, jugador, vehículo y acciones de radio.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Interface_DisplayName">
             <English>FM Radio</English>

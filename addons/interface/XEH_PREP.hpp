@@ -1,6 +1,9 @@
 PREP(canOpen);
 PREP(buildStations);
 PREP(canRepair);
+PREP(debugInteraction);
+PREP(debugPersonalAction);
+PREP(debugVehicleAction);
 PREP(handleListSelect);
 PREP(isBurned);
 PREP(isCompatible);
