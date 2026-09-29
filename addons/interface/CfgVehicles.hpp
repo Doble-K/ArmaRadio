@@ -90,59 +90,7 @@
         }; \
     };
 
-#define RADIO_PERSONAL_ACTIONS \
-    class ACE_SelfActions { \
-        class GVAR(personalRadio) { \
-            displayName = CSTRING(FMRadioPersonal); \
-            statement = QUOTE(player call FUNC(open)); \
-            condition = QUOTE([player] call FUNC(debugPersonalAction)); \
-        }; \
-    };
-
-#define RADIO_VEHICLE_ACTIONS \
-    class ACE_SelfActions { \
-        class GVAR(vehicleRadioSelf) { \
-            displayName = CSTRING(FMRadioVehicle); \
-            statement = QUOTE([vehicle _player] call FUNC(open)); \
-            condition = QUOTE([_player] call FUNC(debugVehicleAction)); \
-        }; \
-    }; \
-    class ACE_Actions { \
-        class ACE_MainActions { \
-            class GVAR(menu) { \
-                displayName = CSTRING(FMRadio); \
-                RADIO_QUICK_ACTIONS \
-            }; \
-            class GVAR(repairRadio) { \
-                displayName = CSTRING(Repair); \
-                statement = QUOTE([_target] call FUNC(repair)); \
-                condition = REPAIR_CONDITION; \
-                distance = 5; \
-            }; \
-        }; \
-    };
-
 class CfgVehicles {
-    class CAManBase {
-        RADIO_PERSONAL_ACTIONS
-    };
-
-    class Car {
-        RADIO_VEHICLE_ACTIONS
-    };
-    class Tank {
-        RADIO_VEHICLE_ACTIONS
-    };
-    class Helicopter {
-        RADIO_VEHICLE_ACTIONS
-    };
-    class Plane {
-        RADIO_VEHICLE_ACTIONS
-    };
-    class Ship {
-        RADIO_VEHICLE_ACTIONS
-    };
-
     class Items_base_F;
     class Land_FMradio_F: Items_base_F {
         RADIO_STATIC_ACTIONS

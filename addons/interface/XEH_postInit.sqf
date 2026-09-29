@@ -88,6 +88,10 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
 };
 
 if (hasInterface) then {
+    if (isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
+        call FUNC(registerAceActions);
+    };
+
     if (GVAR(debugInteraction)) then {
         diag_log format [
             "[Live Radio][ACE] init ace=%1 tfar=%2 player=%3 playerSelf=%4 vehicle=%5 vehicleSelf=%6 vehicleActions=%7",
