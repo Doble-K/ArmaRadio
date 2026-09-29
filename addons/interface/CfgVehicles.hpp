@@ -125,22 +125,19 @@ class CfgVehicles {
         RADIO_PERSONAL_ACTIONS
     };
 
-    class LandVehicle;
-    class Car: LandVehicle {
+    class Car {
         RADIO_VEHICLE_ACTIONS
     };
-    class Tank: LandVehicle {
+    class Tank {
         RADIO_VEHICLE_ACTIONS
     };
-    class Air;
-    class Helicopter: Air {
+    class Helicopter {
         RADIO_VEHICLE_ACTIONS
     };
-    class Plane: Air {
+    class Plane {
         RADIO_VEHICLE_ACTIONS
     };
-    class AllVehicles;
-    class Ship: AllVehicles {
+    class Ship {
         RADIO_VEHICLE_ACTIONS
     };
 
