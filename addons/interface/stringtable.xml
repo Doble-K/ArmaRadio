@@ -93,6 +93,14 @@
             <English>FM Radio</English>
             <Spanish>Radio FM</Spanish>
         </Key>
+        <Key ID="STR_Live_Radio_Interface_FMRadioPersonal">
+            <English>Personal FM Radio</English>
+            <Spanish>Radio FM personal</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Interface_FMRadioVehicle">
+            <English>Vehicle FM Radio</English>
+            <Spanish>Radio FM del vehículo</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Interface_MainGunnerAndCopilotCanControl">
             <English>Main Gunner and Co-pilot Can Control Radio</English>
             <Spanish>El artillero principal y el copiloto pueden controlar la radio</Spanish>

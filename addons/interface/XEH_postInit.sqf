@@ -36,6 +36,21 @@ if (!isClass (configFile >> "CfgPatches" >> "ace_interaction")) then {
         ]] call CBA_fnc_addPlayerAction;
     } forEach _staticRepairActions;
 
+    private _personalActions = [
+        [localize LSTRING(FMRadioPersonal), { [player] call FUNC(open) }, 'player call live_radio_interface_fnc_isCompatible && {player call live_radio_interface_fnc_canOpen}'],
+        [localize LSTRING(FMRadioVehicle), { [vehicle player] call FUNC(open) }, 'vehicle player != player && {vehicle player call live_radio_interface_fnc_isCompatible && {vehicle player call live_radio_interface_fnc_canOpen}}']
+    ];
+    {
+        _x params ["_name", "_code", "_condition"];
+        [[
+            _name,
+            _code,
+            "", 1, true, true, "",
+            _condition,
+            5
+        ]] call CBA_fnc_addPlayerAction;
+    } forEach _personalActions;
+
     private _vehicleActions = [
         [localize LSTRING(FMRadio), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(open) }],
         [localize LSTRING(Power), { [vehicle (call CBA_fnc_currentUnit)] call FUNC(power) }],
