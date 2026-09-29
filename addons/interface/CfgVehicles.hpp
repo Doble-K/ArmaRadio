@@ -97,14 +97,16 @@
             statement = QUOTE(player call FUNC(open)); \
             condition = QUOTE([player] call FUNC(debugPersonalAction)); \
         }; \
-        class GVAR(vehicleRadio) { \
-            displayName = CSTRING(FMRadioVehicle); \
-            statement = QUOTE([vehicle player] call FUNC(open)); \
-            condition = QUOTE([player] call FUNC(debugVehicleAction)); \
-        }; \
     };
 
 #define RADIO_VEHICLE_ACTIONS \
+    class ACE_SelfActions { \
+        class GVAR(vehicleRadioSelf) { \
+            displayName = CSTRING(FMRadioVehicle); \
+            statement = QUOTE([vehicle _player] call FUNC(open)); \
+            condition = QUOTE([_player] call FUNC(debugVehicleAction)); \
+        }; \
+    }; \
     class ACE_Actions { \
         class ACE_MainActions { \
             class GVAR(menu) { \
