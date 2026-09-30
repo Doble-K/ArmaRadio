@@ -22,7 +22,7 @@ private _vehicleChildren = {
                 [_volume]
             ] call ace_interact_menu_fnc_createAction;
             _actions pushBack [_action, [], _target];
-        } forEach [["0", "0%", 0], ["25", "25%", 0.25], ["50", "50%", 0.5], ["100", "100%", 1]];
+        } forEach [["0", "0%", 0], ["25", "25%", 0.5], ["50", "50%", 1], ["100", "100%", 2]];
         _actions
     };
 
