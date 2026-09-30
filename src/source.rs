@@ -124,23 +124,20 @@ impl LocalMixer {
                 self.fluctuation_intervals[channel] =
                     0.08 + self.fluctuation_rngs[channel].gen::<f32>() * 0.17;
             }
-            self.fluctuation_current[channel] +=
-                (self.fluctuation_targets[channel] - self.fluctuation_current[channel])
-                    * (block_duration / self.fluctuation_intervals[channel]).min(1.0);
+            self.fluctuation_current[channel] += (self.fluctuation_targets[channel]
+                - self.fluctuation_current[channel])
+                * (block_duration / self.fluctuation_intervals[channel]).min(1.0);
         }
         let gains: [f32; 4] = std::array::from_fn(|channel| {
             self.current[channel] * self.fluctuation_current[channel]
         });
         let interference = gains.iter().copied().fold(0.0_f32, f32::max);
-        let filter_interference = (interference
-            * (1.0 + (self.fluctuation_current[0] - 1.0) * 0.15))
-            .clamp(0.0, 1.0);
+        let filter_interference =
+            (interference * (1.0 + (self.fluctuation_current[0] - 1.0) * 0.15)).clamp(0.0, 1.0);
         let high_pass = 20.0 + 780.0 * filter_interference;
         let low_pass = 20_000.0 - 18_000.0 * filter_interference;
-        let high_alpha = (std::f32::consts::TAU * high_pass / frequency as f32)
-            .min(1.0);
-        let low_alpha = (std::f32::consts::TAU * low_pass / frequency as f32)
-            .min(1.0);
+        let high_alpha = (std::f32::consts::TAU * high_pass / frequency as f32).min(1.0);
+        let low_alpha = (std::f32::consts::TAU * low_pass / frequency as f32).min(1.0);
         let clips = [
             &self.clips.resource_1,
             &self.clips.resource_3,
@@ -157,8 +154,7 @@ impl LocalMixer {
                 })
                 .sum::<f32>();
             let mixed = sample.center * (1.0 - gains[0] * 0.55) + local * 0.35;
-            let high_passed = high_alpha
-                * (self.high_pass_state + mixed - self.high_pass_input);
+            let high_passed = high_alpha * (self.high_pass_state + mixed - self.high_pass_input);
             self.high_pass_input = mixed;
             self.high_pass_state = high_passed;
             self.low_pass_state += low_alpha * (high_passed - self.low_pass_state);
@@ -207,6 +203,7 @@ impl SoundSource {
             debug!("Starting source `{}`", id);
             let stream = Streams::listen(url);
             let Some(listener) = Listener::get() else {
+                error!("Source `{}` stopped: no OpenAL listener", id);
                 return;
             };
             let Ok(mut source) = listener.new_streaming_source() else {
@@ -295,7 +292,7 @@ impl SoundSource {
                             }
                         }
                         SoundCommand::Destroy => {
-                            debug!("Source `{}` has been told to destroy", id);
+                            debug!("Source `{}` destroy command received; stopping worker", id);
                             source.stop();
                             break 'outer;
                         }
@@ -317,10 +314,7 @@ impl SoundSource {
                                         .callback_data(
                                             "live_radio",
                                             "status",
-                                            Some(vec![
-                                                id.to_string(),
-                                                "online".to_string(),
-                                            ]),
+                                            Some(vec![id.to_string(), "online".to_string()]),
                                         )
                                         .is_err()
                                     {
@@ -360,7 +354,7 @@ impl SoundSource {
                                 };
                                 if let Err(e) = source.queue_buffer(buffer) {
                                     error!(
-                                        "killing thread, error queueing buffer for {}: {}",
+                                        "Source `{}` worker stopped: queueing buffer failed: {}",
                                         id, e
                                     );
                                     return;
@@ -386,6 +380,7 @@ impl SoundSource {
                                 }
                             }
                             StreamPacket::Close => {
+                                debug!("Source `{}` stream ended or disconnected", id);
                                 if online || !reported {
                                     reported = true;
                                     online = false;
@@ -393,10 +388,7 @@ impl SoundSource {
                                         .callback_data(
                                             "live_radio",
                                             "status",
-                                            Some(vec![
-                                                id.to_string(),
-                                                "offline".to_string(),
-                                            ]),
+                                            Some(vec![id.to_string(), "offline".to_string()]),
                                         )
                                         .is_err()
                                     {
@@ -416,7 +408,10 @@ impl SoundSource {
                         std::thread::sleep(std::time::Duration::from_millis(16));
                     }
                     Err(TryRecvError::Disconnected) => {
-                        error!("Stream receiver disconnected for {}", id);
+                        error!(
+                            "Source `{}` stream receiver disconnected; worker is stopping",
+                            id
+                        );
                         if online || !reported {
                             reported = true;
                             online = false;
@@ -424,10 +419,7 @@ impl SoundSource {
                                 .callback_data(
                                     "live_radio",
                                     "status",
-                                    Some(vec![
-                                        id.to_string(),
-                                        "offline".to_string(),
-                                    ]),
+                                    Some(vec![id.to_string(), "offline".to_string()]),
                                 )
                                 .is_err()
                             {
@@ -590,7 +582,11 @@ pub fn command_source_exists(id: String) -> String {
         .get(&id)
         .and_then(|source| source.lock().ok())
         .is_some_and(|source| source.alive.load(Ordering::Acquire));
-    if alive { "1".to_string() } else { "0".to_string() }
+    if alive {
+        "1".to_string()
+    } else {
+        "0".to_string()
+    }
 }
 
 pub fn command_set_global_gain(ctx: Context, gain: f32) {

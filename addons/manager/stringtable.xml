@@ -153,9 +153,13 @@
             <English>Interference resource volume at the outer radius of cone 3.</English>
             <Spanish>Volumen del recurso de interferencia en el radio exterior del cono 3.</Spanish>
         </Key>
-        <Key ID="STR_Live_Radio_Manager_DebugInterference">
-            <English>Debug Interference</English>
-            <Spanish>Depurar interferencia</Spanish>
+        <Key ID="STR_Live_Radio_Manager_DebugAudio">
+            <English>Debug Audio Lifecycle</English>
+            <Spanish>Depurar ciclo de vida del audio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_DebugAudioDescription">
+            <English>Write audio source creation, destruction, duplicate-source prevention, recovery and stale-worker diagnostics to the client RPT.</English>
+            <Spanish>Escribe en el RPT del cliente la creación, destrucción, prevención de fuentes duplicadas, recuperación y diagnóstico de workers obsoletos.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_DebugInterferenceDescription">
             <English>Write configured towers, detected towers, cone factors and source targets to the client RPT once per second.</English>

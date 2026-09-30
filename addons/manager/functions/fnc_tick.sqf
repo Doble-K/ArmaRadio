@@ -135,9 +135,18 @@ private _jamFactor = [_player] call FUNC(jamFactor);
 
         if (diag_tickTime - (_y getVariable [QGVAR(lastExistsCheck), 0]) > 2) then {
             _y setVariable [QGVAR(lastExistsCheck), diag_tickTime];
-            if (((EXT callExtension ["source:exists", [_x]]) select 0) isEqualTo "0") then {
+            private _exists = ((EXT callExtension ["source:exists", [_x]]) select 0) isNotEqualTo "0";
+            if (!_exists) then {
                 private _active = _y getVariable [QGVAR(active), []];
                 if (_active isNotEqualTo []) then {
+                    if (GVAR(debugAudio)) then {
+                        diag_log format [
+                            "[Live Radio][Audio] stale worker or missing source id=%1 object=%2 active=%3 action=recreate",
+                            _x,
+                            _y,
+                            _active
+                        ];
+                    };
                     EXT callExtension ["source:new", [_x, _active param [1, ""], _y getVariable [QGVAR(volume), 1]]];
                 };
             };

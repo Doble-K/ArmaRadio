@@ -9,6 +9,19 @@ GVAR(sourcesStatus) = createHashMap;
 GVAR(nearbyTowers) = [];
 GVAR(towersLastScan) = -999;
 GVAR(debugInterferenceLastLog) = -1;
+GVAR(debugAudioLastLog) = -1;
+
+[
+    QGVAR(debugAudio),
+    "CHECKBOX",
+    [LLSTRING(DebugAudio), LLSTRING(DebugAudioDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryDebug)],
+    false,
+    false,
+    {
+        diag_log format ["[Live Radio][Audio] debug %1", ["disabled", "enabled"] select _this];
+    }
+] call CBA_fnc_addSetting;
 
 // Make sure the extension has been loaded once
 EXT callExtension "";

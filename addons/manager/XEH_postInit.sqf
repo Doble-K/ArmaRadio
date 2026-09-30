@@ -21,12 +21,31 @@ if (hasInterface) then {
     [QGVAR(start), {
         params ["_id", "_url", "_source"];
 
+        if (GVAR(debugAudio)) then {
+            diag_log format [
+                "[Live Radio][Audio] local start id=%1 source=%2 type=%3 url=%4 existing=%5",
+                _id,
+                _source,
+                typeOf _source,
+                _url,
+                keys GVAR(sources)
+            ];
+        };
+
         // Personal radios are earphone-only and must never be heard by other clients.
         if (_source isKindOf "Man" && {_source isNotEqualTo player}) exitWith {};
 
         // A fast station change can deliver start before the previous stop has
         // removed the old local source. Keep one OpenAL source per object.
         {
+            if (GVAR(debugAudio)) then {
+                diag_log format [
+                    "[Live Radio][Audio] duplicate prevention id=%1 replacingId=%2 source=%3",
+                    _id,
+                    _x,
+                    _source
+                ];
+            };
             EXT callExtension ["source:destroy", [_x]];
             GVAR(sources) deleteAt _x;
         } forEach ((keys GVAR(sources)) select {
@@ -35,11 +54,18 @@ if (hasInterface) then {
 
         EXT callExtension ["source:new", [_id, _url, _source getVariable [QGVAR(volume), 1]]];
         GVAR(sources) set [_id, _source];
+        if (GVAR(debugAudio)) then {
+            diag_log format ["[Live Radio][Audio] local source created id=%1 activeSources=%2", _id, keys GVAR(sources)];
+        };
         [QGVAR(metadataUpdated), [_id, ""]] call CBA_fnc_localEvent;
     }] call CBA_fnc_addEventHandler;
 
     [QGVAR(stop), {
         params ["_id"];
+        private _known = GVAR(sources) getOrDefault [_id, objNull];
+        if (GVAR(debugAudio)) then {
+            diag_log format ["[Live Radio][Audio] local stop id=%1 known=%2 source=%3", _id, _known isNotEqualTo objNull, _known];
+        };
         EXT callExtension ["source:destroy", [_id]];
         GVAR(sources) deleteAt _id;
         GVAR(sourcesTitles) deleteAt _id;
@@ -111,7 +137,17 @@ addMissionEventHandler ["ExtensionCallback", {
         };
         case "status": {
             (parseSimpleArray _data) params ["_id", "_status"];
+            private _previousStatus = GVAR(sourcesStatus) getOrDefault [_id, "unknown"];
             GVAR(sourcesStatus) set [_id, _status];
+            if (GVAR(debugAudio) && {_status isNotEqualTo _previousStatus}) then {
+                diag_log format [
+                    "[Live Radio][Audio] status change id=%1 previous=%2 current=%3 activeSources=%4",
+                    _id,
+                    _previousStatus,
+                    _status,
+                    keys GVAR(sources)
+                ];
+            };
             [QGVAR(metadataUpdated), [_id, ""]] call CBA_fnc_localEvent;
         };
     };
