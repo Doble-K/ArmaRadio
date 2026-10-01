@@ -11,6 +11,20 @@ GVAR(towersLastScan) = -999;
 GVAR(debugInterferenceLastLog) = -1;
 GVAR(debugAudioLastLog) = -1;
 GVAR(streamFadeOut) = 1;
+GVAR(audioModeEffective) = 0;
+
+[
+    QGVAR(audioMode),
+    "LIST",
+    [LLSTRING(AudioMode), LLSTRING(AudioModeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryAudio)],
+    [[0, 1, 2], [LLSTRING(AudioModeLegacy), LLSTRING(AudioModeTfar), LLSTRING(AudioModeTfarRealtime)], 0],
+    1,
+    {
+        GVAR(audioModeEffective) = _this;
+        diag_log format ["[Live Radio][Audio] backend mode=%1", _this];
+    }
+] call CBA_fnc_addSetting;
 
 [
     QGVAR(debugAudio),
@@ -22,6 +36,15 @@ GVAR(streamFadeOut) = 1;
     {
         diag_log format ["[Live Radio][Audio] debug %1", ["disabled", "enabled"] select _this];
     }
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(debugTfarRealtime),
+    "CHECKBOX",
+    [LLSTRING(DebugTfarRealtime), LLSTRING(DebugTfarRealtimeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryDebug)],
+    false,
+    false
 ] call CBA_fnc_addSetting;
 
 [

@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="Live Radio">
     <Package name="Manager">
+        <Key ID="STR_Live_Radio_Manager_AudioMode">
+            <English>Audio backend</English>
+            <Spanish>Backend de audio</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AudioModeDescription">
+            <English>Choose how Live Radio integrates with TFAR. TFAR Realtime is experimental and currently uses the stable audio path until its native backend is ported.</English>
+            <Spanish>Elegí cómo Live Radio se integra con TFAR. TFAR Realtime es experimental y actualmente usa la ruta de audio estable hasta portar su backend nativo.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AudioModeLegacy">
+            <English>Legacy (without TFAR)</English>
+            <Spanish>Legacy (sin TFAR)</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AudioModeTfar">
+            <English>TFAR current integration</English>
+            <Spanish>Integracion TFAR actual</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_AudioModeTfarRealtime">
+            <English>TFAR Realtime</English>
+            <Spanish>TFAR Realtime</Spanish>
+        </Key>
         <Key ID="STR_Live_Radio_Manager_AutoOffRange">
             <English>Auto Off Range (m)</English>
             <Spanish>Rango de apagado automático (m)</Spanish>
@@ -168,6 +188,14 @@
         <Key ID="STR_Live_Radio_Manager_DebugInterferenceDescription">
             <English>Write configured towers, detected towers, cone factors and source targets to the client RPT once per second.</English>
             <Spanish>Escribe en el RPT del cliente las torres configuradas, detectadas, los factores de cono y los objetivos de cada fuente una vez por segundo.</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_DebugTfarRealtime">
+            <English>Debug TFAR Realtime</English>
+            <Spanish>Depurar TFAR Realtime</Spanish>
+        </Key>
+        <Key ID="STR_Live_Radio_Manager_DebugTfarRealtimeDescription">
+            <English>Write TFAR Realtime availability, requested backend and effective fallback to the client RPT.</English>
+            <Spanish>Escribe en el RPT del cliente la disponibilidad de TFAR Realtime, el backend solicitado y el fallback efectivo.</Spanish>
         </Key>
         <Key ID="STR_Live_Radio_Manager_EnableBurn">
             <English>Enable Burn</English>

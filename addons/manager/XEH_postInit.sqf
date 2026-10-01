@@ -1,5 +1,36 @@
 #include "script_component.hpp"
 
+private _requestedAudioMode = GVAR(audioMode);
+GVAR(audioModeEffective) = switch (_requestedAudioMode) do {
+    case 1: {
+        parseNumber (missionNamespace getVariable ["live_radio_tfarAvailable", false])
+    };
+    case 2: {
+        if !(missionNamespace getVariable ["live_radio_tfarAvailable", false]) then {
+            0
+        } else {
+            [1, 2] select (missionNamespace getVariable ["live_radio_tfarRealtimeAvailable", false])
+        }
+    };
+    default { 0 };
+};
+if (_requestedAudioMode != GVAR(audioModeEffective)) then {
+    diag_log format [
+        "[Live Radio][Audio] requested backend=%1 unavailable; using backend=%2",
+        _requestedAudioMode,
+        GVAR(audioModeEffective)
+    ];
+};
+if (GVAR(debugTfarRealtime)) then {
+    diag_log format [
+        "[Live Radio][TFAR Realtime] requested=%1 effective=%2 tfar=%3 realtimePbo=%4",
+        _requestedAudioMode,
+        GVAR(audioModeEffective),
+        missionNamespace getVariable ["live_radio_tfarAvailable", false],
+        missionNamespace getVariable ["live_radio_tfarRealtimeAvailable", false]
+    ];
+};
+
 if (hasInterface) then {
     [GVAR(volumeMultiplier)] call FUNC(applyGain);
 

@@ -36,7 +36,11 @@ if (GVAR(debugInterference) && {diag_tickTime - GVAR(debugInterferenceLastLog) >
 
 // Legacy Crows-EW jammer and optional external interference provider
 private _jamFactor = [_player] call FUNC(jamFactor);
-private _providerFactor = call FUNC(providerFactor);
+private _providerFactor = if (GVAR(audioModeEffective) > 0) then {
+    call FUNC(providerFactor)
+} else {
+    0
+};
 
 {
     if (alive _y) then {

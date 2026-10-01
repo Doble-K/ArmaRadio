@@ -5,6 +5,7 @@
 if (!isClass (configFile >> "CfgPatches" >> "tfar_core")) exitWith {};
 
 diag_log "[Live Radio][TFAR] Standalone detected; interference provider enabled";
+missionNamespace setVariable ["live_radio_tfarAvailable", true];
 
 missionNamespace setVariable ["live_radio_interferenceProvider", {
     private _receivingDistance = player getVariable ["tf_receivingDistanceMultiplicator", 1];
