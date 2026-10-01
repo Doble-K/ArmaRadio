@@ -53,6 +53,7 @@ if (hasInterface) then {
         });
 
         EXT callExtension ["source:new", [_id, _url, _source getVariable [QGVAR(volume), 1]]];
+        _source setVariable [QGVAR(interferenceNeedsInit), true];
         GVAR(sources) set [_id, _source];
         if (GVAR(debugAudio)) then {
             diag_log format ["[Live Radio][Audio] local source created id=%1 activeSources=%2", _id, keys GVAR(sources)];

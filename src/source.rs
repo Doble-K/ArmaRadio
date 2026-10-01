@@ -49,6 +49,7 @@ enum SoundCommand {
     SetGain(f32),
     SetQuality(f32),
     SetInterference([f32; 4], f32),
+    SetMixConfig(bool, f32, f32, f32, f32),
     RefreshGain,
     Destroy,
 }
@@ -60,9 +61,15 @@ struct LocalMixer {
     targets: [f32; 4],
     stream_fade: f32,
     stream_fade_target: f32,
-    high_pass_state: f32,
-    high_pass_input: f32,
-    low_pass_state: f32,
+    filters_enabled: bool,
+    stream_initial: f32,
+    stream_final: f32,
+    interference_initial: f32,
+    interference_final: f32,
+    high_pass_state: [f32; 2],
+    high_pass_input: [f32; 2],
+    low_pass_state: [f32; 2],
+    filter_current: f32,
     fluctuation_rngs: [StdRng; 4],
     fluctuation_current: [f32; 4],
     fluctuation_targets: [f32; 4],
@@ -88,9 +95,15 @@ impl LocalMixer {
             targets: [0.0; 4],
             stream_fade: 1.0,
             stream_fade_target: 1.0,
-            high_pass_state: 0.0,
-            high_pass_input: 0.0,
-            low_pass_state: 0.0,
+            filters_enabled: true,
+            stream_initial: 1.0,
+            stream_final: 0.3,
+            interference_initial: 0.0,
+            interference_final: 0.75,
+            high_pass_state: [0.0; 2],
+            high_pass_input: [0.0; 2],
+            low_pass_state: [0.0; 2],
+            filter_current: 0.0,
             fluctuation_rngs,
             fluctuation_current: [1.0; 4],
             fluctuation_targets: [1.0; 4],
@@ -108,10 +121,36 @@ impl LocalMixer {
         self.stream_fade_target = stream_fade.clamp(0.0, 1.0);
     }
 
-    fn mix(&mut self, mut samples: Vec<alto::Mono<f32>>, frequency: i32) -> Vec<alto::Mono<f32>> {
+    fn set_mix_config(
+        &mut self,
+        filters_enabled: bool,
+        stream_initial: f32,
+        stream_final: f32,
+        interference_initial: f32,
+        interference_final: f32,
+    ) {
+        self.filters_enabled = filters_enabled;
+        self.stream_initial = stream_initial.clamp(0.0, 1.0);
+        self.stream_final = stream_final.clamp(0.0, 1.0);
+        self.interference_initial = interference_initial.clamp(0.0, 2.0);
+        self.interference_final = interference_final.clamp(0.0, 2.0);
+    }
+
+    fn mix(&mut self, mut samples: Vec<alto::Stereo<f32>>, frequency: i32) -> Vec<alto::Stereo<f32>> {
         let frequency = frequency.max(1) as u32;
         for (current, target) in self.current.iter_mut().zip(self.targets) {
             *current += (target - *current) * 0.1;
+        }
+        let filter_target = self.targets[1..]
+            .iter()
+            .copied()
+            .sum::<f32>()
+            .clamp(0.0, 1.0);
+        if filter_target <= 0.0001 {
+            self.current[1..].fill(0.0);
+            self.filter_current = 0.0;
+        } else {
+            self.filter_current += (filter_target - self.filter_current) * 0.03;
         }
         self.stream_fade += (self.stream_fade_target - self.stream_fade) * 0.1;
         let block_duration = samples.len() as f32 / frequency as f32;
@@ -131,9 +170,10 @@ impl LocalMixer {
         let gains: [f32; 4] = std::array::from_fn(|channel| {
             self.current[channel] * self.fluctuation_current[channel]
         });
-        let interference = gains.iter().copied().fold(0.0_f32, f32::max);
-        let filter_interference =
-            (interference * (1.0 + (self.fluctuation_current[0] - 1.0) * 0.15)).clamp(0.0, 1.0);
+        // The general channel can add static, but the hi/low-pass filter is
+        // controlled only by the summed cone channels. Outside every cone the
+        // program remains unfiltered.
+        let filter_interference = self.filter_current;
         let high_pass = 20.0 + 780.0 * filter_interference;
         let low_pass = 20_000.0 - 18_000.0 * filter_interference;
         let high_alpha = (std::f32::consts::TAU * high_pass / frequency as f32).min(1.0);
@@ -146,25 +186,51 @@ impl LocalMixer {
         ];
 
         for sample in &mut samples {
-            let local = clips
-                .iter()
-                .enumerate()
-                .map(|(channel, clip)| {
-                    clip.sample_at(self.cursors[channel], frequency) * gains[channel]
-                })
-                .sum::<f32>();
-            let mixed = sample.center * (1.0 - gains[0] * 0.55) + local * 0.35;
-            let high_passed = high_alpha * (self.high_pass_state + mixed - self.high_pass_input);
-            self.high_pass_input = mixed;
-            self.high_pass_state = high_passed;
-            self.low_pass_state += low_alpha * (high_passed - self.low_pass_state);
-            let stream_gain = 1.0 - filter_interference * self.stream_fade;
-            let filtered = self.low_pass_state * stream_gain;
-            sample.center = if filter_interference > 0.0 {
-                soft_limit(filtered)
+            let local = [0, 1].map(|output_channel| {
+                clips
+                    .iter()
+                    .enumerate()
+                    .map(|(channel, clip)| {
+                        clip.sample_at(self.cursors[channel], frequency, output_channel)
+                            * gains[channel]
+                    })
+                    .sum::<f32>()
+            });
+            // Attenuate the program progressively while keeping a clearly
+            // audible procedural static bed at maximum quality loss.
+            // Keep 30% of the program at maximum interference. The same
+            // distance-derived factor controls both fade and filter amount.
+            let stream_factor = self.stream_initial
+                + (self.stream_final - self.stream_initial) * filter_interference;
+            let program_gain = (stream_factor * self.stream_fade).clamp(0.0, 1.0);
+            let mixed = [
+                sample.left * program_gain + local[0] * 0.25,
+                sample.right * program_gain + local[1] * 0.25,
+            ];
+            let filtered = [0, 1].map(|channel| {
+                let high_passed = high_alpha
+                    * (self.high_pass_state[channel]
+                        + mixed[channel]
+                        - self.high_pass_input[channel]);
+                self.high_pass_input[channel] = mixed[channel];
+                self.high_pass_state[channel] = high_passed;
+                self.low_pass_state[channel] +=
+                    low_alpha * (high_passed - self.low_pass_state[channel]);
+                self.low_pass_state[channel]
+            });
+            let interference_level = self.interference_initial
+                + (self.interference_final - self.interference_initial) * filter_interference;
+            let filtered_output = [
+                soft_limit(filtered[0] + local[0] * 0.65 * interference_level),
+                soft_limit(filtered[1] + local[1] * 0.65 * interference_level),
+            ];
+            let filter_mix = if self.filters_enabled {
+                filter_interference
             } else {
-                mixed
+                0.0
             };
+            sample.left = mixed[0] * (1.0 - filter_mix) + filtered_output[0] * filter_mix;
+            sample.right = mixed[1] * (1.0 - filter_mix) + filtered_output[1] * filter_mix;
             for (cursor, clip) in self.cursors.iter_mut().zip(clips) {
                 *cursor = clip.advance(*cursor, frequency);
             }
@@ -175,6 +241,39 @@ impl LocalMixer {
 
 fn soft_limit(sample: f32) -> f32 {
     sample / (1.0 + sample.abs())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::LocalMixer;
+
+    #[test]
+    fn maximum_interference_keeps_procedural_static_audible() {
+        let mut mixer = LocalMixer::new("maximum-interference-test")
+            .expect("interference assets should load");
+        mixer.set_targets([0.0, 1.0, 0.0, 0.0], 1.0);
+
+        let mut output = Vec::new();
+        for _ in 0..100 {
+            output = mixer.mix(
+                vec![alto::Stereo { left: 1.0, right: 1.0 }; 1024],
+                48_000,
+            );
+        }
+
+        let peak = output
+            .iter()
+            .map(|sample| sample.left.abs().max(sample.right.abs()))
+            .fold(0.0_f32, f32::max);
+        let rms = (output
+            .iter()
+            .map(|sample| (sample.left * sample.left + sample.right * sample.right) * 0.5)
+            .sum::<f32>()
+            / output.len() as f32)
+            .sqrt();
+        assert!(peak > 0.001, "maximum interference became silent: {peak}");
+        assert!(rms > 0.02, "maximum interference static is too quiet: {rms}");
+    }
 }
 
 #[derive(Debug)]
@@ -251,6 +350,23 @@ impl SoundSource {
                             debug!("Setting interference targets for {}: {:?}", id, targets);
                             if let Some(mixer) = mixer.as_mut() {
                                 mixer.set_targets(targets, stream_fade);
+                            }
+                        }
+                        SoundCommand::SetMixConfig(
+                            filters_enabled,
+                            stream_initial,
+                            stream_final,
+                            interference_initial,
+                            interference_final,
+                        ) => {
+                            if let Some(mixer) = mixer.as_mut() {
+                                mixer.set_mix_config(
+                                    filters_enabled,
+                                    stream_initial,
+                                    stream_final,
+                                    interference_initial,
+                                    interference_final,
+                                );
                             }
                         }
                         SoundCommand::SetGain(gain) => {
@@ -491,6 +607,29 @@ impl SoundSource {
         }
     }
 
+    pub fn set_mix_config(
+        &self,
+        filters_enabled: bool,
+        stream_initial: f32,
+        stream_final: f32,
+        interference_initial: f32,
+        interference_final: f32,
+    ) {
+        if self
+            .channel
+            .send(SoundCommand::SetMixConfig(
+                filters_enabled,
+                stream_initial,
+                stream_final,
+                interference_initial,
+                interference_final,
+            ))
+            .is_err()
+        {
+            error!("error sending mix configuration update");
+        }
+    }
+
     pub fn refresh_gain(&self) {
         self.channel
             .send(SoundCommand::RefreshGain)
@@ -521,6 +660,7 @@ pub fn group() -> Group {
         .command("gain", command_set_gain)
         .command("quality", command_set_quality)
         .command("interference", command_set_interference)
+        .command("mix_config", command_set_mix_config)
         .command("exists", command_source_exists)
         .command("global_gain", command_set_global_gain)
         .state(global_gain)
@@ -572,6 +712,25 @@ pub fn command_set_interference(
         src.lock()
             .expect("not poisoned")
             .set_interference([quality, cone_1, cone_2, cone_3], stream_fade);
+    }
+}
+
+pub fn command_set_mix_config(
+    id: String,
+    filters_enabled: bool,
+    stream_initial: f32,
+    stream_final: f32,
+    interference_initial: f32,
+    interference_final: f32,
+) {
+    if let Some(src) = Sources::get().read().expect("not poisoned").get(&id) {
+        src.lock().expect("not poisoned").set_mix_config(
+            filters_enabled,
+            stream_initial,
+            stream_final,
+            interference_initial,
+            interference_final,
+        );
     }
 }
 

@@ -115,7 +115,16 @@ private _providerFactor = call FUNC(providerFactor);
             0
         };
         private _targets = [_smoothed, _cone1, _cone2, _cone3];
+        private _mixConfig = [
+            GVAR(enableFilters),
+            GVAR(streamInitialVolume),
+            GVAR(streamFinalVolume),
+            GVAR(interferenceInitialVolume),
+            GVAR(interferenceFinalVolume)
+        ];
         private _previousTargets = _y getVariable [QGVAR(interferenceTargets), [0, 0, 0, 0]];
+        private _previousMixConfig = _y getVariable [QGVAR(mixConfig), []];
+        private _needsInit = _y getVariable [QGVAR(interferenceNeedsInit), false];
         private _targetsChanged = false;
         {
             if (abs ((_targets select _forEachIndex) - (_previousTargets select _forEachIndex)) > 0.005) exitWith {
@@ -123,11 +132,15 @@ private _providerFactor = call FUNC(providerFactor);
             };
         } forEach _targets;
         private _fadeChanged = abs ((_y getVariable [QGVAR(interferenceFade), -1]) - GVAR(streamFadeOut)) > 0.005;
-        if (_fadeChanged || {_targetsChanged}) then {
+        private _mixConfigChanged = _mixConfig isNotEqualTo _previousMixConfig;
+        if (_fadeChanged || {_targetsChanged} || {_needsInit} || {_mixConfigChanged}) then {
             _y setVariable [QGVAR(quality), _smoothed];
             _y setVariable [QGVAR(interferenceTargets), _targets];
             _y setVariable [QGVAR(interferenceFade), GVAR(streamFadeOut)];
+            _y setVariable [QGVAR(mixConfig), _mixConfig];
+            _y setVariable [QGVAR(interferenceNeedsInit), false];
             EXT callExtension ["source:interference", [_x, _smoothed, _cone1, _cone2, _cone3, GVAR(streamFadeOut)]];
+            EXT callExtension ["source:mix_config", [_x] + _mixConfig];
             if (GVAR(debugInterference)) then {
                 diag_log format [
                     "[Live Radio] interference debug: source=%1 targets=%2 fade=%3",
@@ -153,6 +166,7 @@ private _providerFactor = call FUNC(providerFactor);
                         ];
                     };
                     EXT callExtension ["source:new", [_x, _active param [1, ""], _y getVariable [QGVAR(volume), 1]]];
+                    _y setVariable [QGVAR(interferenceNeedsInit), true];
                 };
             };
         };

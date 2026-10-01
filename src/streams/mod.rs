@@ -73,12 +73,14 @@ impl Stream {
                 match decoding_result {
                     Err(_) => {} // error!("Error: {:?}", e),
                     Ok(frame) => {
-                        let mut samples: Vec<alto::Mono<f32>> = Vec::new();
+                        let mut samples: Vec<alto::Stereo<f32>> = Vec::new();
                         for i in 0..frame.samples[0].len() {
-                            samples.push(alto::Mono {
-                                center: (frame.samples[0][i].to_f32()
-                                    + frame.samples[1][i].to_f32())
-                                    / 2.0_f32,
+                            samples.push(alto::Stereo {
+                                left: frame.samples[0][i].to_f32(),
+                                right: frame.samples.get(1).map_or(
+                                    frame.samples[0][i].to_f32(),
+                                    |channel| channel[i].to_f32(),
+                                ),
                             });
                         }
                         let mut delete = false;
@@ -118,7 +120,7 @@ fn send_close(senders: &Senders) {
 }
 
 pub enum StreamPacket {
-    Data(Vec<alto::Mono<f32>>, i32),
+    Data(Vec<alto::Stereo<f32>>, i32),
     Title(String),
     Close,
     Check,

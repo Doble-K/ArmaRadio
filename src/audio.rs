@@ -21,7 +21,7 @@ pub struct InterferenceCache {
 }
 
 pub struct DecodedClip {
-    samples: Arc<[f32]>,
+    samples: Arc<[[f32; 2]]>,
     sample_rate: u32,
 }
 
@@ -32,7 +32,7 @@ impl DecodedClip {
 
     pub fn samples_at_rate(&self, sample_rate: u32) -> Vec<f32> {
         if sample_rate == 0 || sample_rate == self.sample_rate || self.samples.is_empty() {
-            return self.samples.to_vec();
+            return self.samples.iter().map(|sample| (sample[0] + sample[1]) * 0.5).collect();
         }
 
         let length = ((self.samples.len() as u64 * sample_rate as u64) / self.sample_rate as u64)
@@ -44,12 +44,14 @@ impl DecodedClip {
                 let left = position.floor() as usize;
                 let right = (left + 1).min(self.samples.len() - 1);
                 let fraction = position - left as f64;
-                self.samples[left] * (1.0 - fraction as f32) + self.samples[right] * fraction as f32
+                ((self.samples[left][0] + self.samples[left][1]) * 0.5) * (1.0 - fraction as f32)
+                    + ((self.samples[right][0] + self.samples[right][1]) * 0.5)
+                        * fraction as f32
             })
             .collect()
     }
 
-    pub(crate) fn sample_at(&self, position: f64, sample_rate: u32) -> f32 {
+    pub(crate) fn sample_at(&self, position: f64, sample_rate: u32, channel: usize) -> f32 {
         if self.samples.is_empty() || sample_rate == 0 {
             return 0.0;
         }
@@ -57,7 +59,8 @@ impl DecodedClip {
         let left = position.floor() as usize;
         let right = (left + 1) % self.samples.len();
         let fraction = position - left as f64;
-        self.samples[left] * (1.0 - fraction as f32) + self.samples[right] * fraction as f32
+        self.samples[left][channel] * (1.0 - fraction as f32)
+            + self.samples[right][channel] * fraction as f32
     }
 
     pub(crate) fn advance(&self, position: f64, sample_rate: u32) -> f64 {
@@ -101,7 +104,9 @@ impl Audio {
         unsafe {
             if !INIT {
                 SINGLETON.write(Arc::new({
+                    #[cfg(windows)]
                     let openal = std::path::Path::new("OpenAL32.dll");
+                    #[cfg(windows)]
                     if !openal.exists() {
                         let dll = Assets::get("OpenAL32.dll").expect("Failed to get OpenAL32.dll");
                         debug!("Creating OpenAL.dll");
@@ -127,7 +132,7 @@ fn decode_clip(path: &str) -> Result<DecodedClip, String> {
     let asset = Assets::get(path).ok_or_else(|| format!("Missing audio resource: {path}"))?;
     let decoder = Decoder::decode(Cursor::new(asset.data.to_vec()))
         .map_err(|_| String::from("Failed to initialize decoder"))?;
-    let mut samples = Vec::new();
+    let mut samples: Vec<[f32; 2]> = Vec::new();
     let mut sample_rate = None;
 
     for frame in decoder {
@@ -139,15 +144,13 @@ fn decode_clip(path: &str) -> Result<DecodedClip, String> {
             continue;
         }
         sample_rate.get_or_insert(frame.sample_rate);
-        let channels = frame.samples.len() as f32;
         for index in 0..frame.samples[0].len() {
-            let mono = frame
-                .samples
-                .iter()
-                .map(|channel| channel[index].to_f32())
-                .sum::<f32>()
-                / channels;
-            samples.push(mono);
+            samples.push([
+                frame.samples[0][index].to_f32(),
+                frame.samples.get(1).map_or(frame.samples[0][index].to_f32(), |channel| {
+                    channel[index].to_f32()
+                }),
+            ]);
         }
     }
 
@@ -155,10 +158,13 @@ fn decode_clip(path: &str) -> Result<DecodedClip, String> {
     let peak = samples
         .iter()
         .copied()
-        .map(f32::abs)
+        .map(|sample| sample[0].abs().max(sample[1].abs()))
         .fold(0.0_f32, f32::max);
     if peak > 0.0 {
-        samples.iter_mut().for_each(|sample| *sample /= peak);
+        samples.iter_mut().for_each(|sample| {
+            sample[0] /= peak;
+            sample[1] /= peak;
+        });
     }
 
     Ok(DecodedClip {

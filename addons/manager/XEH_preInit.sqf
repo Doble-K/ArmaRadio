@@ -10,6 +10,7 @@ GVAR(nearbyTowers) = [];
 GVAR(towersLastScan) = -999;
 GVAR(debugInterferenceLastLog) = -1;
 GVAR(debugAudioLastLog) = -1;
+GVAR(streamFadeOut) = 1;
 
 [
     QGVAR(debugAudio),
@@ -21,6 +22,51 @@ GVAR(debugAudioLastLog) = -1;
     {
         diag_log format ["[Live Radio][Audio] debug %1", ["disabled", "enabled"] select _this];
     }
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(enableFilters),
+    "CHECKBOX",
+    [LLSTRING(EnableFilters), LLSTRING(EnableFiltersDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
+    true,
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(streamInitialVolume),
+    "SLIDER",
+    [LLSTRING(StreamInitialVolume), LLSTRING(StreamInitialVolumeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
+    [0, 1, 1, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(streamFinalVolume),
+    "SLIDER",
+    [LLSTRING(StreamFinalVolume), LLSTRING(StreamFinalVolumeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
+    [0, 1, 0.3, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(interferenceInitialVolume),
+    "SLIDER",
+    [LLSTRING(InterferenceInitialVolume), LLSTRING(InterferenceInitialVolumeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
+    [0, 2, 0, 2, true],
+    1
+] call CBA_fnc_addSetting;
+
+[
+    QGVAR(interferenceFinalVolume),
+    "SLIDER",
+    [LLSTRING(InterferenceFinalVolume), LLSTRING(InterferenceFinalVolumeDescription)],
+    [LLSTRING(Category), LLSTRING(CategoryInterference)],
+    [0, 2, 0.75, 2, true],
+    1
 ] call CBA_fnc_addSetting;
 
 // Make sure the extension has been loaded once
@@ -84,15 +130,6 @@ EXT callExtension "";
     [LLSTRING(Category), LLSTRING(CategoryDebug)],
     false,
     false
-] call CBA_fnc_addSetting;
-
-[
-    QGVAR(streamFadeOut),
-    "SLIDER",
-    [LLSTRING(StreamFadeOut), LLSTRING(StreamFadeOutDescription)],
-    [LLSTRING(Category), LLSTRING(CategoryInterference)],
-    [0, 1, 1, 2, true],
-    1
 ] call CBA_fnc_addSetting;
 
 [
