@@ -34,8 +34,9 @@ if (GVAR(debugInterference) && {diag_tickTime - GVAR(debugInterferenceLastLog) >
     ];
 };
 
-// Crows-EW / TFAR radio jammer interference
+// Legacy Crows-EW jammer and optional external interference provider
 private _jamFactor = [_player] call FUNC(jamFactor);
+private _providerFactor = call FUNC(providerFactor);
 
 {
     if (alive _y) then {
@@ -67,7 +68,11 @@ private _jamFactor = [_player] call FUNC(jamFactor);
         };
         private _storm = if (GVAR(enableWeatherInterference)) then { 0.2 * rain } else { 0 };
         private _explosion = 0;
-        private _jam = [0, _jamFactor] select GVAR(enableJammerInterference);
+        private _jam = if (GVAR(enableJammerInterference)) then {
+            _jamFactor max _providerFactor
+        } else {
+            0
+        };
         private _burn = if (GVAR(enableBurnInterference)) then { [_y] call FUNC(burn) } else { 0 };
         private _target = if (GVAR(enableStatic)) then {
             (_damage + _storm + _explosion + _jam + _burn) min 1

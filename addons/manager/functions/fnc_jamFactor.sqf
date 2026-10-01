@@ -1,9 +1,8 @@
 #include "script_component.hpp"
 /*
  * Author: Doble-K
- * Computes the radio jam interference factor from Crows-Electronic-Warfare
- * (VoiceCommsJammer) or, as a generic fallback, from the TFAR variable
- * tf_receivingDistanceMultiplicator (covers Antistasi and other jammers).
+ * Computes the legacy radio jam interference factor from
+ * Crows-Electronic-Warfare (VoiceCommsJammer).
  *
  * Arguments:
  * 0: Player <OBJECT>
@@ -24,8 +23,12 @@ if (missionNamespace getVariable ["crowsew_main_zeus_jam_immune", false] && {!is
 
 private _jamMap = missionNamespace getVariable ["crowsew_main_jamMap", nil];
 if (isNil "_jamMap") exitWith {
-    // Generic fallback: TFAR receiving distance multiplier (Antistasi, etc.)
+    // Preserve the legacy fallback when the optional provider is absent.
+    private _provider = missionNamespace getVariable ["live_radio_interferenceProvider", {}];
+    if (_provider isEqualType {}) exitWith { 0 };
+
     private _rx = _player getVariable ["tf_receivingDistanceMultiplicator", 1];
+    if !(_rx isEqualType 0) exitWith { 0 };
     if (_rx <= 1) exitWith { 0 };
     (_rx - 1) min 1
 };

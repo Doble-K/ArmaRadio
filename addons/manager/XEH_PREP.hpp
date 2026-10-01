@@ -3,6 +3,7 @@ PREP(burn);
 PREP(heartbeat);
 PREP(jamFactor);
 PREP(play);
+PREP(providerFactor);
 PREP(tick);
 PREP(towerFactor);
 PREP(volume);
