@@ -1,26 +1,16 @@
 Live Radio — fork license
 =========================
 
-This repository is a fork of BrettMayson/ArmaRadio (https://github.com/BrettMayson/ArmaRadio)
-and contains two kinds of code:
+This repository is a fork of BrettMayson/ArmaRadio (https://github.com/BrettMayson/ArmaRadio):
 
-1. Code derived from the upstream project (v0.9.1), authored by BrettMayson,
-   mharis001 and matidp4 (Matías Di Palma). That code remains licensed under the
-   MIT license; see LICENSE-MIT.
-
-2. Original contributions made in this fork by Doble-K (the feature set, fixes,
+1. Original contributions made in this fork by Doble-K (the feature set, fixes,
    settings, ACE/Zeus/ZEN integration, documentation and related work). These
    contributions are licensed under the GNU General Public License v3.0
    (GPL-3.0-or-later), reproduced below.
 
-Because the upstream MIT code is compatible with GPL-3.0, the combined work in
-this repository is distributed under the GPL-3.0 terms below, while the upstream
-portions keep their MIT license and copyright notices (preserved in LICENSE-MIT).
-
-A copy of the upstream MIT notice is included in the file LICENSE-MIT in the
-root of this repository.
-
 SPDX-License-Identifier: GPL-3.0-or-later
+
+Estado del proyecto: STANDBY (congelado hasta nuevo aviso).
 
 
                     GNU GENERAL PUBLIC LICENSE

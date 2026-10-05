@@ -3,10 +3,55 @@
 All notable changes to this fork are documented in this file.
 
 This repository is a working fork of [BrettMayson/ArmaRadio](https://github.com/BrettMayson/ArmaRadio),
-based on upstream **v0.9.1** (MIT). The fork's original contributions are
-licensed GPL-3.0 (see [LICENSE](LICENSE) and [LICENSE-MIT](LICENSE-MIT)).
+based on upstream **v0.9.1**. The fork's original contributions are
+licensed GPL-3.0-or-later (see [LICENSE](LICENSE)).
+
+## [STANDBY]
+
+Status: **STANDBY — congelado hasta nuevo aviso.** Upstream cambió a una
+licencia restrictiva; no se incorporarán más cambios de upstream bajo esa
+licencia y el fork queda congelado a partir de esta entrada.
 
 ## [Unreleased]
+
+### Added
+
+- Optional interference diagnostics with detected tower classes, distances and
+  current channel factors.
+- Explicit default tower class coverage for the vanilla communication-tower
+  variants.
+- First handheld FM prototype for TFAR SW radios through ACE self actions. The
+  personal source is local to its owner and does not read TFAR frequencies,
+  channels, PTT or power.
+
+### Changed
+
+- Keep personal and vehicle FM radio actions available from ACE self-interaction
+  while the player is inside a vehicle; the two interfaces now resolve their
+  respective player and vehicle targets independently.
+- Refactored the client stream pool so OpenAL source lifetime and shared HTTP
+  stream lifetime are tracked separately, with a 30-second idle grace period.
+- `source:exists` now checks whether the local source worker is alive before SQF
+  decides to recreate it.
+- Grouped CBA settings by audio, interference, tower interference, behavior and
+  debug categories.
+- Hardened custom station validation for names, HTTP(S) URLs and duplicate URLs.
+- Release packaging is 64-bit only (`live_radio_x64.dll`), matching current
+  Arma 3 support.
+
+### Removed
+
+- Removed the unsupported explosion object-handler scheduler. The Explosion
+  Interference setting remains visible, but the current runtime contribution is
+  zero until a supported event source is implemented.
+
+### Documentation
+
+- Define the current product as positional Internet radio rather than real FM.
+- Document the exact scope of Crows-EW, TFAR and Antistasi compatibility inputs.
+- Separate current runtime behavior from historical and future roadmap work.
+- Document the relationship with upstream and the policy for selectively porting
+  generic upstream improvements.
 
 ## [1.2.0] - 2026-09-24
 
@@ -25,24 +70,16 @@ Local interference processing is now available for radio streams.
 
 - General interference is sent through the local `source:interference` command.
 
-### Pending
-- Add ZEN modules to attach an FM station to an arbitrary object and mark its
-  radio as persistent.
-- Add a CBA setting that enables persistent radios; persistent radios cannot be
-  powered off while the setting and object flag are enabled.
-- Improve per-source static with smoothed noise, gradual program attenuation and
-  slow modulation based on the existing quality factor.
-- Prevent duplicate streams during concurrent URL lookup/insertion and report
-  normal decoder EOF as an offline transition.
-- Verify in-game: ACE quick controls, repair, gunner and passenger control, the
-  combined ZEN module and the settings tooltips (manual QA).
-- Make the ACE menu always visible and move radio burn to optional settings per
-  cause (water, damage, radio/climate/EMP interference).
-- Radio burn is disabled by default via `enableBurn` / `burnByWater` /
-  `burnByDamage`; the damage/atmospheric quality feedback remains enabled.
-- Diagnose the spontaneous power-off bug before re-enabling auto power-off.
-- Handheld and backpack radios; persistent per-profile volume; Antistasi
-  heal/garage integration for burned radios.
+### Known limitations at release
+
+- The explosion-peak implementation depended on object handlers that were not
+  viable for generic nearby explosions. It was removed after the release; the
+  feature is currently inactive.
+- ACE controls, repair, crew permissions and combined ZEN controls still require
+  full manual in-game QA.
+- Handheld/backpack radios, per-profile volume and Antistasi garage/repair
+  integration were not included. They remain tracked in `roadmap.md` and
+  `docs/STATUS.md`.
 
 ## [1.1.0] - 2026-09-23
 
@@ -73,8 +110,7 @@ First fork release. Everything below is relative to upstream **v0.9.1**.
   - Volume Multiplier (slider, default 30%).
   - Streamer Mode (mutes all radio sources, including new ones).
   - Sound Range (m) — sources outside the range are muted (0 disables).
-  - Auto Off Range / Auto Off Time for idle radios (disabled by default pending
-    a spontaneous power-off bug).
+  - Auto Off Range / Auto Off Time for idle radios (30 m / 120 s defaults).
   - Driver and Commander Only (default ON).
   - All Gunners Can Control Radio (main gunner, Tank/Helicopter/Plane only).
   - Configurable vehicle compatibility: enable per category (Cars, Armored,
@@ -83,8 +119,8 @@ First fork release. Everything below is relative to upstream **v0.9.1**.
     primary station source, deduplicated by URL, combined with
     `CfgRadioStations` from config/campaign/mission; the default stations are
     kept as fallback.
-  - Radio tower interference (TFAR/Antistasi): tower classnames, radius,
-    strength and optional enemy-side filter.
+  - Generic radio-tower interference: object classnames, radius, strength and
+    an optional enemy-side filter that can read `A3A_side`.
   - Crows-EW / TFAR radio jammer interference.
   - Burned radio: engine damage threshold (`radioMotorDamageThreshold`) and
     underwater burn time (`underwaterBurnTime`).
@@ -102,8 +138,9 @@ First fork release. Everything below is relative to upstream **v0.9.1**.
 - **Burned radio state:** progressive static from engine damage/submersion, the
   radio burns out and stops working until repaired by an engineer with a
   toolkit (repair delay, saved station restored).
-- **Interference:** from vehicle damage, rain, recent explosions, radio towers
-  and radio jammers, with gradual (faded) transitions instead of hard cuts.
+- **Interference:** from vehicle damage, rain, the initial explosion path, radio
+  towers and radio jammers, with gradual transitions. The explosion path was
+  subsequently replaced and then removed; it is inactive in current code.
 - **ACE hearing integration:** earplugs/deafness volume factors scale the
   radio's global gain.
 - **Extension (Rust):** `source:quality` interference command and online/offline
@@ -149,12 +186,16 @@ First fork release. Everything below is relative to upstream **v0.9.1**.
 
 ### Removed
 
-- **Auto power-off** disabled by default (settings default to 0) pending
-  diagnosis of the spontaneous power-off bug.
 - **Decoder enhancements reverted** to upstream v0.9.1 to eliminate the audio
   loop: stream auto-reconnect, continuous offline static, 4 s static pre-roll
   and fast underrun recovery. Re-implementation is documented as pending in the
   roadmap.
+
+### Known limitation
+
+- Auto power-off shipped with 30 m / 120 s defaults despite an unresolved
+  spontaneous-shutdown report in hosted play. Setting either value to `0`
+  disables the handler.
 
 ## Contributors
 
@@ -167,8 +208,4 @@ First fork release. Everything below is relative to upstream **v0.9.1**.
 
 ## License
 
-- Upstream code (BrettMayson/ArmaRadio): **MIT** (see `LICENSE-MIT`).
-- Fork contributions by Doble-K: **GPL-3.0-or-later** (see `LICENSE`).
-
-The combined work is distributed under GPL-3.0, with the upstream MIT portions
-keeping their license and copyright notices.
+Fork contributions by Doble-K: **GPL-3.0-or-later** (see `LICENSE`).
